@@ -12,11 +12,18 @@ foundation
 collections
     Immutable domain collections.
 
+builders
+    Builder objects used to construct immutable domain objects.
+
+domain
+    Business concepts representing the SuperEnalotto domain.
+
 The Kernel must remain independent from infrastructure,
 analytics and persistence layers.
 """
 
 from .collections import Combination
+from .domain import Draw, DrawDate, DrawId
 from .exceptions import (
     DomainValidationError,
     InvalidCombinationError,
@@ -34,4 +41,7 @@ __all__ = [
     "InvalidCombinationError",
     "Number",
     "Combination",
+    "DrawId",
+    "DrawDate",
+    "Draw",
 ]

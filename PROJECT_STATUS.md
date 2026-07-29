@@ -13,7 +13,7 @@ Current Version:
 | Area       | Status         |
 | ---------- | -------------- |
 | Repository | 🟡 Engineering |
-| Kernel     | 🟡 In Progress |
+| Kernel     | 🟢 Frozen      |
 | Analytics  | ⏳ Planned     |
 | CLI        | ⏳ Planned     |
 | Research   | ⏳ Planned     |
@@ -22,12 +22,14 @@ Current Version:
 
 # Functional Milestones
 
-| Milestone          | Status         |
-| ------------------ | -------------- |
-| M0                 | ✅ Frozen      |
-| M1.1 — Number      | ✅ Frozen      |
-| M1.2 — Combination | 🟡 Implemented |
-| M1.3 — Builders    | ⏳ Planned     |
+| Milestone          | Status     |
+| ------------------ | ---------- |
+| M0                 | ✅ Frozen  |
+| M1.1 — Number      | ✅ Frozen  |
+| M1.2 — Combination | ✅ Frozen  |
+| M1.3 — Builders    | ✅ Frozen  |
+| M1.4 — Domain      | ✅ Frozen  |
+| M1.5 — Dataset     | ⏳ Planned |
 
 ---
 
@@ -42,13 +44,13 @@ Current Version:
 
 # Kernel Components
 
-| Component   | Status         |
-| ----------- | -------------- |
-| Foundation  | ✅ Frozen      |
-| Number      | ✅ Frozen      |
-| Collections | 🟡 In Progress |
-| Combination | 🟡 Implemented |
-| Builders    | ⏳ Planned     |
+| Component   | Status     |
+| ----------- | ---------- |
+| Foundation  | ✅ Frozen  |
+| Collections | ✅ Frozen  |
+| Builders    | ✅ Frozen  |
+| Domain      | ✅ Frozen  |
+| Dataset     | ⏳ Planned |
 
 ---
 
@@ -56,22 +58,20 @@ Current Version:
 
 | Gate          | Status |
 | ------------- | ------ |
-| Ruff          | 🟡     |
+| Ruff          | ✅     |
 | MyPy          | ⏳     |
-| Pytest        | 🟡     |
+| Pytest        | ✅     |
 | Coverage      | ⏳     |
-| Documentation | 🟡     |
+| Documentation | ✅     |
 
 ---
 
 # Current Focus
 
-Complete Engineering Milestone **E1**.
-
-Repository consolidation before starting Builders.
+Start Dataset Layer (M1.5).
 
 ---
 
 Last update:
 
-Engineering Milestone E1
+Domain Consistency Review (DCR-002) completed.

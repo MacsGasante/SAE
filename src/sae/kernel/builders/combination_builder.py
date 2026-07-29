@@ -1,31 +1,28 @@
 """
-Combination Builder.
+CombinationBuilder.
 
-Provides a convenient API for constructing immutable Combination
-instances.
-
-Builders never perform domain validation.
-
-Validation is entirely delegated to Combination.
+Fluent Builder for immutable Combination objects.
 """
 
 from __future__ import annotations
 
 from collections.abc import Iterable
 
-from ..collections.combination import Combination
-from ..foundation.base import ValueObject
-from ..foundation.number import Number
+from ..collections import Combination
+from ..foundation import Number
 from .base_builder import BaseBuilder
 
 
-class CombinationBuilder(BaseBuilder):
+class CombinationBuilder(BaseBuilder[Combination]):
     """
-    Builder for immutable Combination objects.
+    Builder for immutable Combination instances.
 
-    The builder stores temporary construction state while delegating
-    every validation rule to Combination.
+    The builder preserves insertion order until build() is called.
+
+    Validation is delegated to Combination.
     """
+
+    _numbers: list[Number]
 
     def __init__(self) -> None:
         self.reset()
@@ -33,22 +30,22 @@ class CombinationBuilder(BaseBuilder):
     @property
     def numbers(self) -> tuple[Number, ...]:
         """
-        Return the current builder content.
+        Return the currently accumulated numbers.
 
-        This property is intended for inspection and testing.
+        A tuple is returned to prevent external mutation.
         """
-        return self._numbers
+        return tuple(self._numbers)
 
     def add(self, number: Number) -> CombinationBuilder:
         """
-        Append a Number to the builder.
+        Append one Number.
 
         Returns
         -------
         CombinationBuilder
-            The builder itself to support fluent usage.
+            The builder itself.
         """
-        self._numbers = (*self._numbers, number)
+        self._numbers.append(number)
         return self
 
     def extend(
@@ -63,7 +60,7 @@ class CombinationBuilder(BaseBuilder):
         CombinationBuilder
             The builder itself.
         """
-        self._numbers = (*self._numbers, *tuple(numbers))
+        self._numbers.extend(numbers)
         return self
 
     @classmethod
@@ -78,24 +75,25 @@ class CombinationBuilder(BaseBuilder):
         builder.extend(numbers)
         return builder
 
-    def reset(self) -> None:
+    def build(self) -> Combination:
         """
-        Reset the builder.
-        """
-        self._numbers: tuple[Number, ...] = ()
+        Build an immutable Combination.
 
-    def build(self) -> ValueObject:
-        """
-        Build a Combination.
-
-        Returns
-        -------
-        ValueObject
-
-        Raises
-        ------
-        InvalidCombinationError
-            Propagated directly from Combination whenever the current
-            builder state is invalid.
+        Validation is entirely delegated to Combination.
         """
         return Combination(*self._numbers)
+
+    def clear(self) -> CombinationBuilder:
+        """
+        Clear accumulated numbers.
+
+        Alias for reset() supporting fluent chaining.
+        """
+        self.reset()
+        return self
+
+    def reset(self) -> None:
+        """
+        Reset the builder to its initial empty state.
+        """
+        self._numbers = []

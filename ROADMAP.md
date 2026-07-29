@@ -9,10 +9,11 @@ This document describes the long-term evolution of the project.
 ## Kernel
 
 - M1.1 Number ✅
-- M1.2 Combination
-- M1.3 Builders
-- M1.4 Draw
-- M1.5 Statistics
+- M1.2 Combination ✅
+- M1.3 Builders ✅
+- M1.4 Domain ✅
+- M1.5 Dataset
+- M1.6 Analytics
 
 ---
 

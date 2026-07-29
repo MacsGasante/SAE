@@ -6,23 +6,23 @@ Documentation is organized by purpose rather than by directory.
 
 ---
 
-# Vision
+# Project Documentation
 
-These documents describe why the project exists.
+Repository-level documentation.
 
-- 000_MANIFESTO.md
-- 001_PROJECT_SPEC.md
+* README.md
+* DOCUMENTATION.md
+* KERNEL_GUIDELINES.md
+* PROJECT_STATUS.md
+* ROADMAP.md
+* CHANGELOG.md
+* CONTRIBUTING.md
 
 ---
 
 # Architecture
 
-These documents describe how the software is designed.
-
-- 002_ARCHITECTURE.md
-- 003_DOMAIN_MODEL.md
-
-Additional architectural documentation is available under:
+Architecture-related documentation is available under:
 
 docs/architecture/
 
@@ -32,9 +32,9 @@ docs/architecture/
 
 Development practices are documented here.
 
-- DEV-001 — Coding Standards
-- DEV-002 — Testing Strategy
-- DEV-003 — Release Process
+* DEV-001 — Coding Standards
+* DEV-002 — Testing Strategy
+* DEV-003 — Release Process
 
 Location:
 
@@ -42,14 +42,13 @@ docs/development/
 
 ---
 
-# Governance
+# Quality
 
-Repository governance documents.
+Quality standards and engineering gates.
 
-- PROJECT_STATUS.md
-- ROADMAP.md
-- CHANGELOG.md
-- CONTRIBUTING.md
+Location:
+
+docs/quality/
 
 ---
 
@@ -65,6 +64,8 @@ docs/decisions/
 
 Shared terminology used throughout the project.
 
+Location:
+
 docs/glossary/
 
 ---
@@ -72,6 +73,8 @@ docs/glossary/
 # User Documentation
 
 Documentation intended for end users.
+
+Location:
 
 docs/user-guide/
 
@@ -81,11 +84,17 @@ docs/user-guide/
 
 Package-level documentation is available inside:
 
-src/sae/kernel/foundation/
+* src/sae/kernel/foundation/
+* src/sae/kernel/collections/
+* src/sae/kernel/builders/
 
-src/sae/kernel/collections/
+---
 
-src/sae/kernel/builders/
+# Specifications
+
+Kernel specifications are available under:
+
+specifications/kernel/
 
 ---
 
@@ -93,9 +102,10 @@ src/sae/kernel/builders/
 
 Documentation follows these principles:
 
-- Single Responsibility
-- Explicit ownership
-- Version controlled
-- Incremental evolution
+* Single Responsibility
+* Explicit ownership
+* Version controlled
+* Incremental evolution
+* Repository is the single source of truth
 
 Documentation is considered part of the software and evolves together with the code.

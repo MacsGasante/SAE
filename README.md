@@ -8,11 +8,11 @@ The objective of the project is **not** to predict future draws.
 
 The objective is to provide a rigorous framework for:
 
-- statistical analysis
-- probabilistic research
-- hypothesis generation
-- hypothesis validation
-- reproducible experiments
+* statistical analysis
+* probabilistic research
+* hypothesis generation
+* hypothesis validation
+* reproducible experiments
 
 ---
 
@@ -22,20 +22,30 @@ The objective is to provide a rigorous framework for:
 
 The project is currently under active development.
 
-Architecture is frozen.
+The Kernel Foundation has been completed and certified.
 
-Kernel implementation has started.
+Completed milestones:
+
+* M1.1 — Number
+* M1.2 — Combination
+* M1.3 — Builder Layer
+
+Current focus:
+
+* M1.4 — Domain Model Foundations
 
 ---
 
 ## Design Principles
 
-- Scientific approach
-- Domain-Driven Design (DDD)
-- Clean Architecture
-- Immutable Value Objects
-- Test-first development
-- Reproducible research
+* Scientific approach
+* Domain-Driven Design (DDD)
+* Clean Architecture
+* Immutable Value Objects
+* Test-first development
+* Reproducible research
+* Repository Certification
+* Documentation as Code
 
 ---
 
@@ -86,12 +96,13 @@ make check
 
 ## Roadmap
 
-- Repository Bootstrap
-- Kernel Foundation
-- Domain Model
-- Dataset Engine
-- Analytics Engine
-- Research Modules
+* M1.1 Kernel Foundation ✅
+* M1.2 Collections ✅
+* M1.3 Builder Layer ✅
+* M1.4 Domain Model Foundations
+* M1.5 Draw Domain
+* Analytics Engine
+* Research Modules
 
 ---
 
