@@ -28,7 +28,7 @@ class DrawId(ValueObject):
         """
         Validate the underlying value type.
         """
-        if not isinstance(self.value, int):
+        if type(self.value) is not int:
             raise InvalidDrawIdError(
                 f"DrawId value must be an integer, got {type(self.value).__name__}."
             )

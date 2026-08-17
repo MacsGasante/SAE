@@ -73,6 +73,15 @@ class Combination(ValueObject):
         """Return the largest number."""
         return self._numbers[-1]
 
+    @property
+    def numbers_set(
+        self,
+    ) -> frozenset[Number]:
+        """
+        Return the Numbers as an immutable set.
+        """
+        return frozenset(self._numbers)
+
     def __iter__(self) -> Iterator[Number]:
         return iter(self._numbers)
 

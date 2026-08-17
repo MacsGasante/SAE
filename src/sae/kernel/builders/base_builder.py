@@ -7,12 +7,10 @@ Defines the common lifecycle shared by all builders.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Generic, Self, TypeVar
-
-T = TypeVar("T")
+from typing import Self
 
 
-class BaseBuilder(ABC, Generic[T]):
+class BaseBuilder[T](ABC):
     """
     Abstract base class for fluent builders.
 

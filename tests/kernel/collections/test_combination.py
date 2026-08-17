@@ -50,7 +50,10 @@ def test_unsorted_input_is_sorted() -> None:
 
 
 def test_duplicate_numbers() -> None:
-    with pytest.raises(InvalidCombinationError):
+    with pytest.raises(
+        InvalidCombinationError,
+        match="Duplicate",
+    ):
         Combination(
             Number(1),
             Number(2),
@@ -62,7 +65,10 @@ def test_duplicate_numbers() -> None:
 
 
 def test_wrong_cardinality() -> None:
-    with pytest.raises(InvalidCombinationError):
+    with pytest.raises(
+        InvalidCombinationError,
+        match="exactly 6 numbers",
+    ):
         Combination(
             Number(1),
             Number(2),
@@ -190,6 +196,7 @@ def test_same_numbers_different_order() -> None:
     )
 
     assert a == b
+    assert hash(a) == hash(b)
 
 
 def test_hashable() -> None:
@@ -213,3 +220,102 @@ def test_hashable() -> None:
     }
 
     assert len(values) == 1
+
+
+def test_numbers_property_returns_sorted_tuple() -> None:
+    combination = Combination(
+        Number(90),
+        Number(1),
+        Number(50),
+        Number(2),
+        Number(30),
+        Number(10),
+    )
+
+    assert combination.numbers == (
+        Number(1),
+        Number(2),
+        Number(10),
+        Number(30),
+        Number(50),
+        Number(90),
+    )
+
+
+def test_numbers_set_contains_all_numbers() -> None:
+    combination = Combination(
+        Number(1),
+        Number(2),
+        Number(3),
+        Number(4),
+        Number(5),
+        Number(6),
+    )
+
+    assert combination.numbers_set == {
+        Number(1),
+        Number(2),
+        Number(3),
+        Number(4),
+        Number(5),
+        Number(6),
+    }
+
+
+def test_numbers_set() -> None:
+    combination = Combination(
+        Number(1),
+        Number(2),
+        Number(3),
+        Number(4),
+        Number(5),
+        Number(6),
+    )
+
+    assert combination.numbers_set == frozenset(
+        {
+            Number(1),
+            Number(2),
+            Number(3),
+            Number(4),
+            Number(5),
+            Number(6),
+        }
+    )
+
+
+def test_numbers_set_is_immutable() -> None:
+    combination = Combination(
+        Number(1),
+        Number(2),
+        Number(3),
+        Number(4),
+        Number(5),
+        Number(6),
+    )
+
+    assert isinstance(
+        combination.numbers_set,
+        frozenset,
+    )
+
+
+def test_combination_is_immutable() -> None:
+    combination = Combination(
+        Number(1),
+        Number(2),
+        Number(3),
+        Number(4),
+        Number(5),
+        Number(6),
+    )
+
+    with pytest.raises(AttributeError):
+        combination._numbers = (  # type: ignore[misc]
+            Number(10),
+            Number(20),
+            Number(30),
+            Number(40),
+            Number(50),
+            Number(60),
+        )

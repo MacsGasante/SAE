@@ -28,7 +28,7 @@ class DrawDate(ValueObject):
         """
         Validate the underlying value type.
         """
-        if not isinstance(self.value, date):
+        if type(self.value) is not date:
             raise InvalidDrawDateError(
                 f"DrawDate value must be a date, got {type(self.value).__name__}."
             )
@@ -54,6 +54,22 @@ class DrawDate(ValueObject):
             return cls(date(year, month, day))
         except ValueError as exc:
             raise InvalidDrawDateError(str(exc)) from exc
+
+    @classmethod
+    def from_ymd(
+        cls,
+        year: int,
+        month: int,
+        day: int,
+    ) -> DrawDate:
+        """
+        Backward-compatible alias for from_parts().
+        """
+        return cls.from_parts(
+            year,
+            month,
+            day,
+        )
 
     @property
     def year(self) -> int:

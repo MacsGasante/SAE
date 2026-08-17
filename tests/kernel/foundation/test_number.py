@@ -22,7 +22,10 @@ def test_valid_boundary_values(value: int) -> None:
 
 @pytest.mark.parametrize("value", [0, -1, 91, 100])
 def test_invalid_range(value: int) -> None:
-    with pytest.raises(InvalidNumberError):
+    with pytest.raises(
+        InvalidNumberError,
+        match="between 1 and 90",
+    ):
         Number(value)
 
 
@@ -56,6 +59,7 @@ def test_hashability() -> None:
     values = {Number(5), Number(5), Number(8)}
 
     assert len(values) == 2
+    assert hash(Number(5)) == hash(Number(5))
 
 
 def test_string_representation() -> None:

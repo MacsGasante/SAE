@@ -56,7 +56,7 @@ def test_invalid_type(value: object) -> None:
         DrawId(value)  # type: ignore[arg-type]
 
 
-def test_to_int() -> None:
+def test_to_int_returns_underlying_value() -> None:
     draw_id = DrawId(123)
 
     assert draw_id.to_int() == 123
@@ -80,11 +80,22 @@ def test_hashability() -> None:
     }
 
     assert len(draw_ids) == 2
+    assert DrawId(1) in draw_ids
+    assert DrawId(2) in draw_ids
 
 
-def test_string_representation() -> None:
+def test_str_returns_numeric_value() -> None:
     draw_id = DrawId(123)
 
     assert str(draw_id) == "123"
 
+
+def test_repr_returns_debug_representation() -> None:
+    draw_id = DrawId(123)
+
     assert repr(draw_id) == "DrawId(123)"
+
+
+def test_bool_is_rejected() -> None:
+    with pytest.raises(InvalidDrawIdError):
+        DrawId(True)

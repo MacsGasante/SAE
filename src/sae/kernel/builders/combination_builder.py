@@ -83,15 +83,6 @@ class CombinationBuilder(BaseBuilder[Combination]):
         """
         return Combination(*self._numbers)
 
-    def clear(self) -> CombinationBuilder:
-        """
-        Clear accumulated numbers.
-
-        Alias for reset() supporting fluent chaining.
-        """
-        self.reset()
-        return self
-
     def reset(self) -> None:
         """
         Reset the builder to its initial empty state.

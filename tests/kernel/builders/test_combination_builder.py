@@ -16,6 +16,7 @@ def test_create_empty_builder() -> None:
     builder = CombinationBuilder()
 
     assert builder.numbers == ()
+    assert len(builder.numbers) == 0
 
 
 def test_add_number() -> None:
@@ -63,7 +64,9 @@ def test_reset_builder() -> None:
 
     builder.reset()
 
-    assert builder.numbers == ()
+    builder.add(Number(30))
+
+    assert builder.numbers == (Number(30),)
 
 
 def test_from_numbers() -> None:
@@ -132,7 +135,10 @@ def test_build_invalid_combination_raises() -> None:
 
     builder.add(Number(1))
 
-    with pytest.raises(InvalidCombinationError):
+    with pytest.raises(
+        InvalidCombinationError,
+        match="exactly 6 numbers",
+    ):
         builder.build()
 
 
@@ -146,7 +152,10 @@ def test_duplicate_numbers_raise() -> None:
     builder.add(Number(40))
     builder.add(Number(50))
 
-    with pytest.raises(InvalidCombinationError):
+    with pytest.raises(
+        InvalidCombinationError,
+        match="Duplicate",
+    ):
         builder.build()
 
 
@@ -183,4 +192,26 @@ def test_combination_is_sorted_after_build() -> None:
         Number(30),
         Number(50),
         Number(90),
+    )
+
+
+def test_build_does_not_modify_builder() -> None:
+    builder = CombinationBuilder.from_numbers(
+        Number(1),
+        Number(2),
+        Number(3),
+        Number(4),
+        Number(5),
+        Number(6),
+    )
+
+    _ = builder.build()
+
+    assert builder.numbers == (
+        Number(1),
+        Number(2),
+        Number(3),
+        Number(4),
+        Number(5),
+        Number(6),
     )
