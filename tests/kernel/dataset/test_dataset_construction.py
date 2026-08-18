@@ -129,3 +129,39 @@ def test_dataset_sorts_multiple_draws(
         draw2,
         draw3,
     )
+
+
+def test_create_dataset_from_generator(
+    make_draw: DrawFactory,
+) -> None:
+    """
+    A Dataset can be created from a one-shot iterable.
+    """
+    draw1 = make_draw(
+        1,
+        2024,
+        1,
+        1,
+        (1, 2, 3, 4, 5, 6),
+    )
+
+    draw2 = make_draw(
+        2,
+        2024,
+        2,
+        1,
+        (10, 11, 12, 13, 14, 15),
+    )
+
+    dataset = Dataset(
+        draw
+        for draw in (
+            draw2,
+            draw1,
+        )
+    )
+
+    assert dataset.draws == (
+        draw1,
+        draw2,
+    )

@@ -7,20 +7,18 @@ SuperEnalotto draws.
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
-from operator import attrgetter
 from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from sae.kernel.query import DatasetQuery
-
-from collections.abc import Callable
-
-from ..domain import Draw, DrawDate, DrawId
+from ..domain import Draw
 from ..foundation.base import AggregateRoot
 from .exceptions import InvalidDatasetError
 from .protocol import DatasetProtocolMixin
+from .validators import normalize_draws, validate_dataset
+
+if TYPE_CHECKING:
+    from sae.kernel.query import DatasetQuery
 
 
 @dataclass(frozen=True, slots=True, init=False)
@@ -48,81 +46,15 @@ class Dataset(
         """
         Create a Dataset from an iterable of Draw objects.
         """
-        normalized = self._normalize_draws(draws)
+        normalized = normalize_draws(draws)
 
-        self._validate_draws(normalized)
+        validate_dataset(normalized)
 
         object.__setattr__(
             self,
             "_draws",
             normalized,
         )
-
-    @staticmethod
-    def _normalize_draws(
-        draws: Iterable[Draw],
-    ) -> tuple[Draw, ...]:
-        """
-        Normalize draws into an immutable chronologically ordered tuple.
-        """
-        normalized = tuple(draws)
-
-        for draw in normalized:
-            if not isinstance(draw, Draw):
-                raise InvalidDatasetError("Dataset accepts only Draw instances.")
-
-        return tuple(
-            sorted(
-                normalized,
-                key=attrgetter("date"),
-            )
-        )
-
-    @staticmethod
-    def _validate_draws(
-        draws: tuple[Draw, ...],
-    ) -> None:
-        """
-        Validate all Dataset invariants.
-        """
-        ids: set[DrawId] = set()
-        dates: set[DrawDate] = set()
-
-        for draw in draws:
-            Dataset._validate_id_uniqueness(
-                draw,
-                ids,
-            )
-            Dataset._validate_date_uniqueness(
-                draw,
-                dates,
-            )
-
-    @staticmethod
-    def _validate_id_uniqueness(
-        draw: Draw,
-        ids: set[DrawId],
-    ) -> None:
-        """
-        Validate DrawId uniqueness.
-        """
-        if draw.id in ids:
-            raise InvalidDatasetError("Duplicate DrawId values are not allowed.")
-
-        ids.add(draw.id)
-
-    @staticmethod
-    def _validate_date_uniqueness(
-        draw: Draw,
-        dates: set[DrawDate],
-    ) -> None:
-        """
-        Validate DrawDate uniqueness.
-        """
-        if draw.date in dates:
-            raise InvalidDatasetError("Duplicate DrawDate values are not allowed.")
-
-        dates.add(draw.date)
 
     @property
     def draws(self) -> tuple[Draw, ...]:

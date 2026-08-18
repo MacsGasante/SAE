@@ -18,6 +18,9 @@ def normalize_draws(
 ) -> tuple[Draw, ...]:
     """
     Normalize draws into an immutable chronologically ordered tuple.
+
+    The input is materialized and every element is validated as a
+    Draw before chronological ordering is applied.
     """
     normalized = tuple(draws)
 
@@ -37,12 +40,14 @@ def validate_dataset(
 ) -> None:
     """
     Validate every Dataset invariant.
+
+    Draw types are expected to have been validated by
+    normalize_draws().
     """
     ids: set[DrawId] = set()
     dates: set[DrawDate] = set()
 
     for draw in draws:
-        validate_draw_type(draw)
         validate_draw_id(draw, ids)
         validate_draw_date(draw, dates)
 
