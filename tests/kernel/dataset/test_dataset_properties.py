@@ -4,6 +4,8 @@ Dataset property tests.
 
 from __future__ import annotations
 
+import pytest
+
 from sae.kernel.dataset import Dataset
 from tests.kernel.types import DrawFactory
 
@@ -153,3 +155,23 @@ def test_is_empty_reflects_content(
     dataset = Dataset([draw])
 
     assert not dataset.is_empty
+
+
+def test_draws_cannot_be_modified(
+    make_draw: DrawFactory,
+) -> None:
+    """
+    Dataset storage cannot be modified through the public API.
+    """
+    draw = make_draw(
+        1,
+        2024,
+        1,
+        1,
+        (1, 2, 3, 4, 5, 6),
+    )
+
+    dataset = Dataset([draw])
+
+    with pytest.raises(TypeError):
+        dataset.draws[0] = draw
