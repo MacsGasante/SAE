@@ -13,6 +13,7 @@ Evidence and Pattern engines.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from dataclasses import dataclass
 
 from sae.kernel.foundation import Number
@@ -116,7 +117,7 @@ class MatchResult:
         """
         return self.matched
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[Number]:
         """
         Iterate over the matching Numbers.
         """

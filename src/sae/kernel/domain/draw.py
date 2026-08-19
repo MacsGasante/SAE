@@ -27,6 +27,10 @@ class Draw(AggregateRoot):
     Equality is identity-based (DrawId).
     """
 
+    _id: DrawId
+    _date: DrawDate
+    _combination: Combination
+
     __slots__ = (
         "_id",
         "_date",
