@@ -36,8 +36,9 @@ This document describes the long-term evolution of the project.
 ## Research
 
 - Experimental Algorithms
-- Machine Learning
-- Prediction Models
+- Statistical and Probabilistic Models
+- Machine Learning Research
+- Predictive Model Research
 
 ---
 

@@ -31,9 +31,9 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/<username>/SAE"
-Repository = "https://github.com/<username>/SAE"
-Issues = "https://github.com/<username>/SAE/issues"
+Homepage = "https://github.com/MacsGasante/SAE"
+Repository = "https://github.com/MacsGasante/SAE"
+Issues = "https://github.com/MacsGasante/SAE/issues"
 
 [project.optional-dependencies]
 dev = [

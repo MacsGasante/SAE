@@ -16,6 +16,24 @@ The objective is to provide a rigorous framework for:
 
 ---
 
+## What SAE Is
+
+SAE treats SuperEnalotto as a structured research domain rather than as a prediction or betting problem.
+
+The engine is designed to support reproducible exploration of historical data through statistics, probability, combinatorics, hypothesis generation, and hypothesis validation.
+
+The project combines analytical research with disciplined software engineering, using a structured domain model and an evolvable architecture.
+
+---
+
+## What SAE Is Not
+
+SAE is not a system for predicting winning numbers, guaranteeing outcomes, or recommending bets.
+
+Any predictive or machine-learning techniques explored by the project are considered research subjects and experimental tools, not guarantees of future outcomes.
+
+---
+
 ## Project Status
 
 **Pre-Alpha**
@@ -29,10 +47,11 @@ Completed milestones:
 * M1.1 — Number
 * M1.2 — Combination
 * M1.3 — Builder Layer
+* M1.4 — Domain Model Foundations
 
 Current focus:
 
-* M1.4 — Domain Model Foundations
+* M1.5 — Dataset Layer
 
 ---
 
@@ -99,9 +118,9 @@ make check
 * M1.1 Kernel Foundation ✅
 * M1.2 Collections ✅
 * M1.3 Builder Layer ✅
-* M1.4 Domain Model Foundations
-* M1.5 Draw Domain
-* Analytics Engine
+* M1.4 Domain Model Foundations ✅
+* M1.5 Dataset Layer
+* M1.6 Analytics
 * Research Modules
 
 ---
