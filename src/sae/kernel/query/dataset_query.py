@@ -28,27 +28,13 @@ from ._number import (
     contains_all,
     contains_any,
 )
-from ._predicates import (
-    after as after_predicate,
-)
-from ._predicates import (
-    before as before_predicate,
-)
-from ._predicates import (
-    between as between_predicate,
-)
-from ._predicates import (
-    by_day as by_day_predicate,
-)
-from ._predicates import (
-    by_draw_id as by_draw_id_predicate,
-)
-from ._predicates import (
-    by_month as by_month_predicate,
-)
-from ._predicates import (
-    by_year as by_year_predicate,
-)
+from ._predicates import after as after_predicate
+from ._predicates import before as before_predicate
+from ._predicates import between as between_predicate
+from ._predicates import by_day as by_day_predicate
+from ._predicates import by_draw_id as by_draw_id_predicate
+from ._predicates import by_month as by_month_predicate
+from ._predicates import by_year as by_year_predicate
 
 if TYPE_CHECKING:
     from sae.kernel.dataset import Dataset
