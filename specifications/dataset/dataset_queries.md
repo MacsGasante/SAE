@@ -1,244 +1,312 @@
-# Dataset Fluent API
+# Dataset Query Specification
 
-Version: 1.0 (Draft)
+Version: 1.0
+
+Status: Approved
 
 ---
 
 # Purpose
 
-The Dataset Aggregate exposes an immutable fluent API.
+The Dataset Query Layer provides read-oriented query operations over a
+Dataset.
 
-Every operation:
+Queries never modify the Dataset Aggregate.
 
-- never modifies the current Dataset;
-- returns a new Dataset;
-- preserves all Dataset invariants;
-- preserves chronological ordering;
-- is deterministic.
+The Query Layer is responsible for expressing search and filtering
+behaviour while preserving Dataset immutability and invariants.
 
-The Fluent API belongs to the Kernel Domain Model.
+The Query Layer belongs to the Kernel.
 
 It is not part of:
 
-- Analytics;
-- Persistence;
-- Infrastructure.
+- persistence;
+- infrastructure;
+- analytics;
+- repository implementations.
 
 ---
 
 # Design Principles
 
-The Dataset is an immutable Aggregate.
-
-Every fluent operation returns another valid Dataset.
+Queries operate on an existing Dataset.
 
 The original Dataset is never modified.
 
-Operations must be composable.
+Every query operation produces a new Dataset or a query result according
+to its public contract.
 
-Example:
+All returned Dataset instances remain valid Dataset Aggregate Roots.
 
-```python
-dataset \
-    .after(date) \
-    .take(20) \
-    .skip(5)
+Therefore:
+
+- Dataset invariants remain enforced;
+- chronological ordering is preserved;
+- storage remains immutable;
+- query operations are deterministic.
+
+---
+
+# Query Facade
+
+The Dataset exposes the Query Layer through:
+
+```
+dataset.query
+```
+
+which returns:
+
+```
+DatasetQuery
+```
+
+The public Query Layer entry point is:
+
+```
+from sae.kernel.query import DatasetQuery
 ```
 
 ---
 
-# General Rules
+# Query Responsibilities
 
-Every fluent operation:
+The Query Layer provides operations for:
 
-- returns Dataset;
-- never returns list;
-- never returns tuple;
-- never returns Iterable.
+- generic predicates;
+- date-based selection;
+- Number-based selection;
+- Combination-based matching;
+- query composition.
 
-The Dataset remains the only public collection abstraction.
+The Query Layer does not:
 
----
-
-# Fluent Operations
-
-## take
-
-```python
-dataset.take(count)
-```
-
-Returns a Dataset containing the first *count* draws.
-
-Rules:
-
-- count <= 0 returns an empty Dataset.
-- count >= dataset size returns the current Dataset.
-
-Complexity:
-
-O(n)
+- modify Dataset storage;
+- perform persistence;
+- load CSV files;
+- implement repository behaviour;
+- calculate statistics;
+- perform probability calculations.
 
 ---
 
-## skip
+# Query Operations
 
-```python
-dataset.skip(count)
+## filter
+
+```
+dataset.query.filter(predicate)
 ```
 
-Returns a Dataset after discarding the first *count* draws.
+Returns a query result containing the draws satisfying the supplied
+predicate.
 
-Rules:
-
-- count <= 0 returns the current Dataset.
-- count >= dataset size returns an empty Dataset.
-
-Complexity:
-
-O(n)
+The predicate operates on `Draw` objects.
 
 ---
 
 ## before
 
-```python
-dataset.before(date)
+```
+dataset.query.before(date)
 ```
 
-Returns every draw strictly before the specified date.
-
-Complexity:
-
-O(n)
+Returns draws whose date is strictly before the specified date.
 
 ---
 
 ## after
 
-```python
-dataset.after(date)
+```
+dataset.query.after(date)
 ```
 
-Returns every draw strictly after the specified date.
-
-Complexity:
-
-O(n)
+Returns draws whose date is strictly after the specified date.
 
 ---
 
 ## between
 
-```python
-dataset.between(
+```
+dataset.query.between(
     start,
     end,
 )
 ```
 
-Returns every draw whose date satisfies
+Returns draws whose date satisfies:
 
 ```
 start <= draw.date <= end
 ```
 
-Complexity:
+---
 
-O(n)
+# Number Queries
+
+The Query Layer provides Number-oriented queries over Draw objects.
+
+Examples include:
+
+```
+dataset.query.containing(number)
+```
+
+and:
+
+```
+dataset.query.excluding(number)
+```
+
+These operations return a Dataset containing the matching draws.
+
+---
+
+# Combination Queries
+
+The Query Layer provides Combination-oriented queries.
+
+Examples include:
+
+```
+dataset.query.contains_exactly(combination)
+```
+
+```
+dataset.query.intersects(combination)
+```
+
+```
+dataset.query.matches(
+    combination,
+    at_least=3,
+)
+```
+
+The query semantics are based on the Number matches between the Draw
+and the supplied Combination.
+
+---
+
+# Query Composition
+
+Query operations are composable.
+
+A query may be refined through successive operations without modifying
+the original Dataset.
+
+Example:
+
+```
+result = (
+    dataset.query
+    .after(start_date)
+    .before(end_date)
+    .containing(number)
+)
+```
+
+Each intermediate query remains deterministic.
 
 ---
 
 # Ordering
 
-Every returned Dataset preserves chronological ordering.
+Dataset results preserve chronological ordering.
 
-Sorting is never executed during fluent operations.
+The Query Layer must not introduce a different ordering unless such
+ordering is explicitly part of a future public query contract.
 
-The Dataset invariant already guarantees ordering.
+Dataset construction already guarantees chronological storage.
 
 ---
 
 # Immutability
 
-The original Dataset is never modified.
+Query operations never mutate the original Dataset.
 
 Example:
 
-```python
-filtered = dataset.take(10)
-
-assert filtered is not dataset
 ```
+result = dataset.query.filter(predicate)
+
+assert result.dataset is not dataset
+```
+
+The original Dataset remains unchanged.
 
 ---
 
-# Composability
+# Invariants
 
-Every fluent operation returns another Dataset.
+Every Dataset returned by the Query Layer must satisfy all Dataset
+invariants:
 
-Therefore operations may be chained.
+- every element is a Draw;
+- DrawId values are unique;
+- DrawDate values are unique;
+- draws are chronologically ordered;
+- storage is immutable.
 
-Example:
+---
 
-```python
-dataset \
-    .after(date) \
-    .take(50)
+# Complexity
+
+Unless otherwise specified, query operations are linear in the number
+of draws:
+
 ```
+O(n)
+```
+
+The Query Layer does not require an indexing strategy.
+
+Indexing is an infrastructure or future optimization concern and must
+not alter the Dataset Aggregate contract.
+
+---
+
+# Public API Stability
+
+Only the public Query Layer types and methods are considered stable.
+
+Private implementation modules such as:
+
+```
+_combination.py
+_helpers.py
+_number.py
+_predicates.py
+```
+
+are implementation details.
+
+They must not be imported by external layers as public API.
 
 ---
 
 # Future Extensions
 
-The following operations are considered candidates for future versions.
+Possible future query capabilities may include:
 
-## containing
+- additional Number predicates;
+- additional Combination predicates;
+- optimized query execution;
+- metadata-aware queries.
 
-```python
-dataset.containing(number)
-```
+Any new public query operation requires:
 
-Returns every draw containing the specified Number.
-
----
-
-## excluding
-
-```python
-dataset.excluding(number)
-```
-
-Returns every draw not containing the specified Number.
-
----
-
-## matching
-
-```python
-dataset.matching(combination)
-```
-
-Returns every draw matching a Combination predicate.
-
----
-
-## filter
-
-```python
-dataset.filter(predicate)
-```
-
-Generic immutable filtering.
+- specification update;
+- tests;
+- documentation update;
+- architecture review when the change affects Kernel boundaries.
 
 ---
 
 # Freeze
 
-The following operations are frozen for Dataset Fluent API v1:
+The Dataset Query Layer contract is frozen at Version 1.0.
 
-- take
-- skip
-- before
-- after
-- between
+Future changes must preserve Dataset immutability and Aggregate
+invariants unless explicitly superseded by an Architecture Decision
+Record.

@@ -1,14 +1,14 @@
 # ADR-0004
 
-Title
+## Title
 
 Dataset Aggregate Root
 
-Status
+## Status
 
 Accepted
 
-Date
+## Date
 
 2026-08-01
 
@@ -16,91 +16,136 @@ Date
 
 # Context
 
-During the design of the Dataset Layer an intermediate DrawCollection abstraction was proposed.
+During the design of the Dataset Layer an intermediate
+`DrawCollection` abstraction was proposed.
 
-Architecture:
+Previous architecture:
 
 Dataset
-    ↓
+↓
 DrawCollection
-    ↓
+↓
 tuple[Draw]
 
-A design review showed that DrawCollection introduced no additional domain behaviour.
+A design review showed that `DrawCollection` introduced no additional
+domain behaviour.
 
-Its responsibilities would have duplicated those of Dataset.
+Its responsibilities would have duplicated those of Dataset and would
+have added unnecessary forwarding methods and abstraction.
 
 ---
 
 # Decision
 
-The DrawCollection abstraction is removed.
+The `DrawCollection` abstraction is removed.
 
-The Dataset becomes the Aggregate Root.
+The Dataset becomes the Aggregate Root responsible for the immutable
+collection of historical Draw objects.
 
-Architecture:
+Current architecture:
 
 Dataset
-    ↓
+↓
 tuple[Draw]
+
+The Dataset directly owns its immutable storage.
 
 ---
 
 # Consequences
 
-Positive
+## Positive
 
-- fewer abstractions
-- simpler API
-- fewer forwarding methods
-- clearer Aggregate ownership
-- lower maintenance cost
+- fewer abstractions;
+- simpler API;
+- fewer forwarding methods;
+- clearer Aggregate ownership;
+- lower maintenance cost;
+- clearer separation between Dataset integrity and Query behaviour.
 
-Negative
+## Negative
 
-- Dataset becomes responsible for collection invariants
+- Dataset is directly responsible for collection invariants.
 
 This responsibility is considered appropriate for an Aggregate Root.
 
 ---
 
+# Query Layer Separation
+
+Query behaviour is deliberately separated from the Dataset Aggregate.
+
+The Dataset exposes:
+
+```
+dataset.query
+```
+
+which provides access to the dedicated `DatasetQuery` facade.
+
+The Query Layer is responsible for read-oriented operations such as:
+
+- filtering;
+- date selection;
+- Number queries;
+- Combination queries;
+- query composition.
+
+The Dataset remains responsible for:
+
+- immutable storage;
+- chronological ordering;
+- DrawId uniqueness;
+- DrawDate uniqueness;
+- collection semantics.
+
+This separation prevents query behaviour from expanding the Aggregate
+Root beyond its integrity responsibilities.
+
+---
+
 # Alternatives Considered
 
-Alternative A
+## Alternative A
 
 Dataset
-    ↓
+↓
 DrawCollection
-    ↓
+↓
 tuple[Draw]
 
 Rejected.
 
 Reason:
 
-Unnecessary abstraction.
+`DrawCollection` introduces no independent domain behaviour and creates
+an unnecessary abstraction layer.
 
 ---
 
 # Future Evolution
 
-Metadata will be introduced through a dedicated DatasetMetadata Value Object.
+Future metadata may be introduced through a dedicated
+`DatasetMetadata` Value Object.
 
-Architecture:
+Possible architecture:
 
 Dataset
-│
+
 ├── tuple[Draw]
+
 └── DatasetMetadata
 
-No DrawCollection layer shall be introduced.
+No `DrawCollection` layer shall be reintroduced unless a future
+Architecture Decision Record demonstrates a distinct domain
+responsibility requiring it.
 
 ---
 
 # Related Documents
 
-005_DATASET_GUIDELINES.md
-
-Dataset Specification
-
-004_KERNEL_GUIDELINES.md
+- `DATASET_GUIDELINES.md`
+- `specifications/dataset/dataset.md`
+- `specifications/dataset/dataset_structure.md`
+- `specifications/dataset/dataset_queries.md`
+- `docs/testing/TESTING_GUIDELINES.md`

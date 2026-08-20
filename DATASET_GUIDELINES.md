@@ -46,7 +46,8 @@ The Dataset is responsible for:
 - storing Draw objects;
 - preserving chronological ordering;
 - guaranteeing all domain invariants;
-- exposing immutable read-only access.
+- exposing immutable read-only access;
+- exposing the Dataset Query facade.
 
 The Dataset is NOT responsible for:
 
@@ -54,11 +55,14 @@ The Dataset is NOT responsible for:
 - probability calculations;
 - searching;
 - filtering;
+- query implementation;
 - indexing strategies;
 - persistence;
 - serialization;
 - CSV parsing;
 - repository behaviour.
+
+Query behaviour belongs to the dedicated Query Layer.
 
 ---
 
@@ -82,8 +86,8 @@ No intermediate DrawCollection abstraction exists.
 
 The Dataset internally stores:
 
-```python
-tuple[Draw]
+```
+tuple[Draw, ...]
 ```
 
 The internal representation is considered an implementation detail.
@@ -110,7 +114,7 @@ Duplicate DrawId values are forbidden.
 
 Violation raises:
 
-InvalidDatasetError
+`InvalidDatasetError`
 
 ---
 
@@ -122,7 +126,7 @@ Duplicate DrawDate values are forbidden.
 
 Violation raises:
 
-InvalidDatasetError
+`InvalidDatasetError`
 
 ---
 
@@ -152,8 +156,11 @@ The following API is considered stable.
 
 - draws
 - size
+- count
+- is_empty
 - first
 - last
+- query
 
 ## Python Collection Protocol
 
@@ -162,17 +169,41 @@ The following API is considered stable.
 - draw in dataset
 - dataset[index]
 
-No additional behaviours shall be introduced without an Architecture Decision Record.
+The Dataset itself remains the only public collection abstraction.
+
+---
+
+# Query Layer
+
+Query behaviour is implemented outside the Dataset Aggregate.
+
+The Dataset exposes the Query Layer through:
+
+```
+dataset.query
+```
+
+which returns a `DatasetQuery`.
+
+The Query Layer is responsible for:
+
+- generic filtering;
+- date-based queries;
+- Number queries;
+- Combination queries;
+- query composition.
+
+Query operations must never mutate the Dataset.
 
 ---
 
 # Construction
 
-The Dataset constructor accepts any Iterable[Draw].
+The Dataset constructor accepts any `Iterable[Draw]`.
 
 Examples:
 
-```python
+```
 Dataset(draws)
 
 Dataset(list_of_draws)
@@ -185,9 +216,11 @@ Dataset(generator)
 The constructor is responsible for:
 
 - validating the archive;
-- sorting draws;
+- sorting draws chronologically;
 - enforcing uniqueness;
 - creating immutable storage.
+
+Input ordering is irrelevant.
 
 ---
 
@@ -197,14 +230,15 @@ The Dataset shall never implement:
 
 - statistical algorithms;
 - probability calculations;
-- filtering;
-- searching;
+- analytics;
+- query algorithms;
 - repository behaviour;
 - persistence;
 - CSV import/export;
 - serialization.
 
-These responsibilities belong to higher layers of the architecture.
+These responsibilities belong to appropriate higher or adjacent layers
+of the architecture.
 
 ---
 
@@ -212,9 +246,9 @@ These responsibilities belong to higher layers of the architecture.
 
 Future versions of SAE may introduce:
 
-DatasetMetadata
+`DatasetMetadata`
 
-without modifying the public Dataset API.
+without modifying the fundamental Dataset Aggregate ownership model.
 
 Possible future architecture:
 
@@ -249,13 +283,16 @@ New behaviour may only be added when it belongs to one of the following categori
 - immutable navigation;
 - archive consistency.
 
-Any feature related to analytics, querying or persistence shall be implemented outside the Dataset Aggregate.
+Query behaviour belongs to the dedicated Query Layer.
+
+Features related to analytics or persistence belong to higher layers.
 
 ---
 
 # Architecture Notes
 
-The DrawCollection abstraction was intentionally removed during the architectural review of M1.5.
+The DrawCollection abstraction was intentionally removed during the
+architectural review of the Dataset Layer.
 
 The Aggregate Root owns the immutable collection directly.
 
@@ -275,14 +312,15 @@ Dataset
     ↓
 tuple[Draw]
 
-This simplification removes an unnecessary abstraction while preserving all domain invariants.
+This simplification removes an unnecessary abstraction while preserving
+all domain invariants.
 
 ---
 
 # References
 
-KERNEL_GUIDELINES.md
-
-ADR-0004 — Dataset Aggregate Root
-
-Dataset Specification
+- `docs/architecture/adr/ADR-0004-dataset-aggregate-root.md`
+- `specifications/dataset/dataset.md`
+- `specifications/dataset/dataset_structure.md`
+- `specifications/dataset/dataset_queries.md`
+- `docs/testing/TESTING_GUIDELINES.md`
