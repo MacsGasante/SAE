@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import pytest
 
 from sae.kernel.collections import Combination
@@ -59,6 +57,12 @@ def test_contains_missing_number() -> None:
     draw = build_draw()
 
     assert not draw.contains(Number(90))
+
+
+def test_contains_rejects_non_number() -> None:
+    draw = build_draw()
+
+    assert not draw.contains(4)  # type: ignore[arg-type]
 
 
 def test_invalid_draw_id() -> None:
@@ -123,6 +127,29 @@ def test_different_id_is_not_equal() -> None:
     assert build_draw(1) != build_draw(2)
 
 
+def test_hash_uses_draw_id() -> None:
+    draw1 = build_draw(10)
+
+    draw2 = Draw(
+        id=DrawId(10),
+        date=DrawDate.from_ymd(
+            2030,
+            1,
+            1,
+        ),
+        combination=Combination(
+            Number(10),
+            Number(20),
+            Number(30),
+            Number(40),
+            Number(50),
+            Number(60),
+        ),
+    )
+
+    assert hash(draw1) == hash(draw2)
+
+
 def test_hashable() -> None:
     draws = {
         build_draw(1),
@@ -148,6 +175,45 @@ def test_matches_returns_match_result() -> None:
 
     assert result.count == 6
     assert result.is_exact
+
+
+def test_matches_preserves_draw_order() -> None:
+    draw = Draw(
+        id=DrawId(1),
+        date=DrawDate.from_ymd(
+            2026,
+            1,
+            7,
+        ),
+        combination=Combination(
+            Number(30),
+            Number(10),
+            Number(50),
+            Number(20),
+            Number(40),
+            Number(60),
+        ),
+    )
+
+    combination = Combination(
+        Number(10),
+        Number(20),
+        Number(30),
+        Number(40),
+        Number(50),
+        Number(60),
+    )
+
+    result = draw.matches(combination)
+
+    assert result.numbers == (
+        Number(10),
+        Number(20),
+        Number(30),
+        Number(40),
+        Number(50),
+        Number(60),
+    )
 
 
 def test_draw_is_immutable() -> None:

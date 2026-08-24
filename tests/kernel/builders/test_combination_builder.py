@@ -215,3 +215,30 @@ def test_build_does_not_modify_builder() -> None:
         Number(5),
         Number(6),
     )
+
+
+def test_numbers_property_is_immutable() -> None:
+    builder = CombinationBuilder()
+
+    builder.add(Number(10))
+
+    numbers = builder.numbers
+
+    assert isinstance(numbers, tuple)
+
+    with pytest.raises(AttributeError):
+        numbers.append(Number(20))  # type: ignore[attr-defined]
+
+
+def test_extend_accepts_generator() -> None:
+    builder = CombinationBuilder()
+
+    numbers = (Number(value) for value in (1, 2, 3))
+
+    builder.extend(numbers)
+
+    assert builder.numbers == (
+        Number(1),
+        Number(2),
+        Number(3),
+    )

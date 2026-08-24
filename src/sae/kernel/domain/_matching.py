@@ -7,13 +7,10 @@ and a Combination.
 The public API is exposed by Draw.matches().
 """
 
-from __future__ import annotations
-
 from typing import TYPE_CHECKING
 
-from sae.kernel.collections import Combination
-from sae.kernel.foundation import Number
-
+from ..collections import Combination
+from ..foundation import Number
 from .match_result import MatchResult
 
 if TYPE_CHECKING:
@@ -21,7 +18,7 @@ if TYPE_CHECKING:
 
 
 def matching_numbers(
-    draw: Draw,
+    draw: "Draw",
     combination: Combination,
 ) -> tuple[Number, ...]:
     """
@@ -35,7 +32,7 @@ def matching_numbers(
 
 
 def compute_match(
-    draw: Draw,
+    draw: "Draw",
     combination: Combination,
 ) -> MatchResult:
     """

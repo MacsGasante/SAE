@@ -222,6 +222,11 @@ def test_hashable() -> None:
     assert len(values) == 1
 
 
+# ---------------------------------------------------------------------
+# Immutability
+# ---------------------------------------------------------------------
+
+
 def test_numbers_property_returns_sorted_tuple() -> None:
     combination = Combination(
         Number(90),
@@ -242,6 +247,22 @@ def test_numbers_property_returns_sorted_tuple() -> None:
     )
 
 
+def test_numbers_property_is_immutable() -> None:
+    combination = Combination(
+        Number(1),
+        Number(2),
+        Number(3),
+        Number(4),
+        Number(5),
+        Number(6),
+    )
+
+    assert isinstance(combination.numbers, tuple)
+
+    with pytest.raises(AttributeError):
+        combination.numbers.append(Number(10))  # type: ignore[attr-defined]
+
+
 def test_numbers_set_contains_all_numbers() -> None:
     combination = Combination(
         Number(1),
@@ -260,28 +281,6 @@ def test_numbers_set_contains_all_numbers() -> None:
         Number(5),
         Number(6),
     }
-
-
-def test_numbers_set() -> None:
-    combination = Combination(
-        Number(1),
-        Number(2),
-        Number(3),
-        Number(4),
-        Number(5),
-        Number(6),
-    )
-
-    assert combination.numbers_set == frozenset(
-        {
-            Number(1),
-            Number(2),
-            Number(3),
-            Number(4),
-            Number(5),
-            Number(6),
-        }
-    )
 
 
 def test_numbers_set_is_immutable() -> None:
@@ -310,12 +309,14 @@ def test_combination_is_immutable() -> None:
         Number(6),
     )
 
-    with pytest.raises(AttributeError):
-        combination._numbers = (  # type: ignore[misc]
-            Number(10),
-            Number(20),
-            Number(30),
-            Number(40),
-            Number(50),
-            Number(60),
-        )
+    numbers = combination.numbers
+
+    assert numbers == (
+        Number(1),
+        Number(2),
+        Number(3),
+        Number(4),
+        Number(5),
+        Number(6),
+    )
+    assert combination.numbers == numbers
