@@ -9,7 +9,7 @@ Status: Approved
 # Purpose
 
 The Dataset Query Layer provides read-oriented query operations over a
-Dataset.
+`Dataset`.
 
 Queries never modify the Dataset Aggregate.
 
@@ -29,12 +29,12 @@ It is not part of:
 
 # Design Principles
 
-Queries operate on an existing Dataset.
+Queries operate on an existing `Dataset`.
 
 The original Dataset is never modified.
 
 Every query operation produces a new `DatasetQuery` wrapping a new
-Dataset containing the query result.
+`Dataset` containing the query result.
 
 All returned Dataset instances remain valid Dataset Aggregate Roots.
 
@@ -44,7 +44,10 @@ Therefore:
 * chronological ordering is preserved;
 * storage remains immutable;
 * query operations are deterministic;
-* query operations are composable.
+* query operations are composable;
+* separate query operations produce independent results.
+
+The Query Layer does not bypass Dataset construction or validation.
 
 ---
 
@@ -70,6 +73,9 @@ from sae.kernel.query import DatasetQuery
 
 `DatasetQuery` is a fluent facade over Dataset query operations.
 
+The facade contains no query business logic itself. Query operations
+delegate to the corresponding query implementation.
+
 Each query operation returns a new `DatasetQuery` instance.
 
 The resulting Dataset is accessible through:
@@ -77,6 +83,9 @@ The resulting Dataset is accessible through:
 ```text
 query.dataset
 ```
+
+The `dataset` property returns the Dataset associated with the query
+instance.
 
 ---
 
@@ -99,7 +108,8 @@ The Query Layer does not:
 * load CSV files;
 * implement repository behaviour;
 * calculate statistics;
-* perform probability calculations.
+* perform probability calculations;
+* provide analytics.
 
 ---
 
@@ -114,6 +124,8 @@ dataset.query.before(date)
 Returns a new `DatasetQuery` containing draws whose date is strictly
 before the specified date.
 
+The specified date is not included in the result.
+
 ---
 
 ## after
@@ -124,6 +136,8 @@ dataset.query.after(date)
 
 Returns a new `DatasetQuery` containing draws whose date is strictly
 after the specified date.
+
+The specified date is not included in the result.
 
 ---
 
@@ -192,6 +206,9 @@ dataset.query.by_draw_id(identifier)
 Returns a new `DatasetQuery` containing the Draw identified by the
 specified `DrawId`.
 
+Because Dataset enforces `DrawId` uniqueness, the result contains at
+most one Draw.
+
 If no Draw has the specified identifier, the result is an empty
 Dataset.
 
@@ -221,7 +238,8 @@ dataset.query.contains(number)
 
 Returns draws containing the specified `Number`.
 
-`contains(number)` is semantically equivalent to `by_number(number)`.
+`contains(number)` is semantically equivalent to
+`by_number(number)`.
 
 ---
 
@@ -291,12 +309,16 @@ Combination.
 ```text
 dataset.query.matches(
     combination,
-    at_least=3,
+    *,
+    at_least,
 )
 ```
 
 Returns draws containing at least the requested number of matching
 Numbers with the supplied Combination.
+
+The `at_least` parameter is required and must be supplied as a
+keyword-only argument.
 
 The `at_least` parameter must be between 1 and 6 inclusive.
 
@@ -308,13 +330,23 @@ The boundary conditions are therefore:
 at_least=1
 ```
 
-is valid, and is equivalent to `intersects(combination)`.
+is valid, and is equivalent to:
+
+```text
+intersects(combination)
+```
 
 ```text
 at_least=6
 ```
 
-is valid, and is equivalent to `contains_exactly(combination)`.
+is valid, and is equivalent to:
+
+```text
+contains_exactly(combination)
+```
+
+There is no default value for `at_least`.
 
 ---
 
@@ -355,6 +387,9 @@ dataset.query.where(predicate)
 
 produce equivalent results.
 
+The public `filter` attribute is implemented as an alias of the
+`where` method.
+
 ---
 
 # Query Composition
@@ -389,6 +424,12 @@ categories, including:
 * Combination queries;
 * generic predicates.
 
+The final Dataset is available through:
+
+```text
+result.dataset
+```
+
 ---
 
 # Query Independence
@@ -404,6 +445,7 @@ For example:
 query = dataset.query
 
 by_2024 = query.by_year(2024)
+
 by_2025 = query.by_year(2025)
 ```
 
@@ -411,6 +453,8 @@ by_2025 = query.by_year(2025)
 distinct result Datasets.
 
 Executing one query does not alter the state or result of another query.
+
+The source Dataset remains unchanged.
 
 ---
 
@@ -425,6 +469,9 @@ Dataset construction already guarantees chronological storage.
 
 Every Dataset produced by a query therefore retains the ordering
 guarantee of the Dataset Aggregate.
+
+Query operations select Draw objects; they do not define an alternative
+ordering strategy.
 
 ---
 
@@ -445,8 +492,11 @@ The original Dataset remains unchanged.
 The original Dataset storage is not replaced, reordered, or otherwise
 modified by query execution.
 
-All query results are new Dataset Aggregate Roots with their own
-validated immutable storage.
+Every query result is created as a new `Dataset` and therefore owns its
+own validated immutable storage.
+
+The Query Layer does not mutate or reuse the source Dataset's aggregate
+storage as the result Dataset's storage.
 
 ---
 
@@ -463,6 +513,9 @@ invariants:
 
 The Query Layer therefore cannot bypass Dataset construction or
 validation when producing query results.
+
+Query results are valid Dataset Aggregate Roots even when the result is
+empty.
 
 ---
 
@@ -489,6 +542,8 @@ assert result.dataset.is_empty
 An empty result remains a valid Dataset Aggregate Root and continues to
 satisfy all Dataset invariants.
 
+A query result is independent from the source Dataset.
+
 ---
 
 # Complexity
@@ -514,26 +569,46 @@ API:
 
 ```text
 before()
+
 after()
+
 between()
 
 by_year()
+
 by_month()
+
 by_day()
+
 by_draw_id()
 
 by_number()
+
 contains()
+
 contains_any()
+
 contains_all()
 
 matches()
+
 intersects()
+
 contains_exactly()
 
 where()
+
 filter()
 ```
+
+The `matches()` method requires:
+
+```text
+matches(combination, *, at_least)
+```
+
+where `at_least` is a required keyword-only parameter in the inclusive
+range 1 through 6.
 
 Only the public Query Layer types and methods are considered stable.
 
@@ -541,8 +616,11 @@ Private implementation modules such as:
 
 ```text
 _combination.py
+
 _helpers.py
+
 _number.py
+
 _predicates.py
 ```
 
