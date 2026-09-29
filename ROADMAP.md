@@ -12,16 +12,16 @@ This document describes the long-term evolution of the project.
 - M1.2 Combination ✅
 - M1.3 Builders ✅
 - M1.4 Domain ✅
-- M1.5 Dataset
-- M1.6 Analytics
+- M1.5 Dataset ✅
+- M1.6 Analytics ✅
 
 ---
 
 ## Analytics
 
-- A1 Frequency Engine
-- A2 Delay Engine
-- A3 Probability Engine
+- A1 Frequency Engine ✅
+- A2 Delay Engine ✅
+- A3 Probability Engine ✅
 
 ---
 

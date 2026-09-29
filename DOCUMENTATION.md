@@ -13,6 +13,7 @@ Repository-level documentation.
 * README.md
 * DOCUMENTATION.md
 * KERNEL_GUIDELINES.md
+* DATASET_GUIDELINES.md
 * PROJECT_STATUS.md
 * ROADMAP.md
 * CHANGELOG.md
@@ -25,6 +26,8 @@ Repository-level documentation.
 Architecture-related documentation is available under:
 
 docs/architecture/
+
+The architecture section includes the architectural overview and Architecture Decision Records (ADRs).
 
 ---
 
@@ -56,7 +59,9 @@ docs/quality/
 
 All Architectural Decision Records (ADR) are indexed under:
 
-docs/decisions/
+docs/architecture/adr/
+
+Accepted ADRs are immutable historical records.
 
 ---
 
@@ -87,14 +92,34 @@ Package-level documentation is available inside:
 * src/sae/kernel/foundation/
 * src/sae/kernel/collections/
 * src/sae/kernel/builders/
+* src/sae/kernel/domain/
+* src/sae/kernel/dataset/
+
+---
+
+# Analytics Documentation
+
+Analytics components are implemented under:
+
+* src/sae/analytics/frequency/
+* src/sae/analytics/delay/
+* src/sae/analytics/probability/
+
+Analytics specifications and architecture rules remain separate from the Kernel.
 
 ---
 
 # Specifications
 
-Kernel specifications are available under:
+Specifications are organized by architectural and functional scope.
 
-specifications/kernel/
+Locations:
+
+* specifications/kernel/
+* specifications/domain/
+* specifications/dataset/
+
+Analytics currently follows the established architecture and implementation contracts documented by the corresponding source modules and tests.
 
 ---
 

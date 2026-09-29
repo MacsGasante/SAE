@@ -48,10 +48,16 @@ Completed milestones:
 * M1.2 — Combination
 * M1.3 — Builder Layer
 * M1.4 — Domain Model Foundations
+* M1.5 — Dataset Layer
+* M1.6 — Analytics
+  * A1 — Frequency Engine
+  * A2 — Delay Engine
+  * A3 — Probability Engine
 
 Current focus:
 
-* M1.5 — Dataset Layer
+* Documentation alignment following M1.6
+* Next functional milestone: C1 — Basic Commands
 
 ---
 
@@ -119,8 +125,14 @@ make check
 * M1.2 Collections ✅
 * M1.3 Builder Layer ✅
 * M1.4 Domain Model Foundations ✅
-* M1.5 Dataset Layer
-* M1.6 Analytics
+* M1.5 Dataset Layer ✅
+* M1.6 Analytics ✅
+  * A1 Frequency Engine ✅
+  * A2 Delay Engine ✅
+  * A3 Probability Engine ✅
+* C1 Basic Commands
+* C2 Import Tools
+* C3 Reporting
 * Research Modules
 
 ---

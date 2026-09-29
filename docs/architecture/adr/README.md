@@ -76,6 +76,5 @@ Project rules belong to the Guidelines.
 
 ## References
 
-004_KERNEL_GUIDELINES.md
-
-Architecture Documentation
+- `KERNEL_GUIDELINES.md`
+- Architecture Documentation

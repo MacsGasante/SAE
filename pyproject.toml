@@ -35,6 +35,9 @@ Homepage = "https://github.com/MacsGasante/SAE"
 Repository = "https://github.com/MacsGasante/SAE"
 Issues = "https://github.com/MacsGasante/SAE/issues"
 
+[project.scripts]
+sae = "sae.cli.main:main"
+
 [project.optional-dependencies]
 dev = [
     "black>=24.0",

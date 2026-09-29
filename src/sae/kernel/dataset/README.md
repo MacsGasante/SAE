@@ -49,8 +49,15 @@ Properties
 
 - draws
 - size
+- count
+- is_empty
 - first
 - last
+
+Query API
+
+- query
+- filter(...) compatibility facade
 
 Python Collection Protocol
 
@@ -82,6 +89,10 @@ throughout the Kernel:
 - deterministic behaviour
 - reproducibility
 - infrastructure independence
+
+The Dataset does not perform statistical or probabilistic analysis.
+Analytics are implemented in the Analytics layer and consume Dataset
+instances through their public API.
 
 ---
 
