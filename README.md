@@ -53,11 +53,11 @@ Completed milestones:
   * A1 — Frequency Engine
   * A2 — Delay Engine
   * A3 — Probability Engine
+* C1 — Basic Commands
 
 Current focus:
 
-* Documentation alignment following M1.6
-* Next functional milestone: C1 — Basic Commands
+* C2 — Import Tools
 
 ---
 

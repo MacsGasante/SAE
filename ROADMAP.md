@@ -27,7 +27,7 @@ This document describes the long-term evolution of the project.
 
 ## CLI
 
-- C1 Basic Commands
+- C1 Basic Commands ✅
 - C2 Import Tools
 - C3 Reporting
 

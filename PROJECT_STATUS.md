@@ -15,7 +15,7 @@ Current Version:
 | Repository | 🟡 Engineering |
 | Kernel     | 🟢 Frozen      |
 | Analytics  | 🟢 Implemented |
-| CLI        | ⏳ Planned     |
+| CLI        | 🟢 Implemented |
 | Research   | ⏳ Planned     |
 
 ---
@@ -70,7 +70,7 @@ Current Version:
 | Gate          | Status |
 | ------------- | ------ |
 | Ruff          | ✅     |
-| MyPy          | ⏳     |
+| MyPy          | ✅     |
 | Pytest        | ✅     |
 | Coverage      | ⏳     |
 | Documentation | ✅     |
@@ -79,14 +79,12 @@ Current Version:
 
 # Current Focus
 
-Documentation alignment following completion of M1.6 Analytics.
+C1 — Basic Commands has been implemented and certified.
 
 Next functional milestone:
 
-C1 — Basic Commands.
-
----
+C2 — Import Tools.
 
 Last update:
 
-M1.6 Analytics completed with A1 Frequency Engine, A2 Delay Engine, and A3 Probability Engine.
+C1 Basic Commands implemented and certified, including CLI parser, --version, info, --help, command validation, package entry point, and CLI test coverage.

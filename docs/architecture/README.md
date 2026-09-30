@@ -14,7 +14,7 @@ SAE is organized into the following principal areas:
 
 - **Kernel** — domain foundations, collections, builders, domain objects, and Dataset.
 - **Analytics** — analytical engines operating on the Dataset, including Frequency, Delay, and Probability.
-- **CLI** — planned application-facing command layer, beginning with C1 Basic Commands.
+- **CLI** — application-facing command layer, currently providing C1 Basic Commands.
 - **Infrastructure / Research** — future areas that must remain separated from the Kernel and analytical domain logic.
 
 The current implemented analytical components are:
@@ -22,6 +22,12 @@ The current implemented analytical components are:
 - A1 — Frequency Engine
 - A2 — Delay Engine
 - A3 — Probability Engine
+
+The current implemented CLI components are:
+
+- C1 — Basic Commands
+
+The CLI provides the application-facing entry point for SAE and currently exposes basic informational commands.
 
 Analytics consume domain data through explicit APIs and must not introduce dependencies from the Kernel back into Analytics.
 
