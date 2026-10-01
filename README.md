@@ -76,16 +76,33 @@ Current focus:
 
 ## Repository Structure
 
+### Current Repository Structure
+
+The repository currently contains the following principal areas:
+
 ```text
 SAE/
 ├── docs/
 ├── engineering/
-├── research/
 ├── specifications/
 ├── src/
-├── tests/
+└── tests/
+```
+
+These directories represent the current implemented repository structure.
+
+### Planned / Future Structure
+
+Additional areas are planned for future development:
+
+```text
+SAE/
+├── research/
 └── workspace/
 ```
+
+These directories are not currently part of the repository and are not
+created until their respective responsibilities are formally introduced.
 
 ---
 
