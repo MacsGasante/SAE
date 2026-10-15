@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import csv
 import re
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 from typing import TextIO
 
@@ -21,10 +21,12 @@ from sae.infrastructure.importers.exceptions import (
     CSVFieldError,
     CSVFileAccessError,
     CSVHeaderError,
+    CSVJollyError,
     CSVMainNumberError,
     CSVMalformedError,
     CSVRepeatedMainNumberError,
     CSVStreamPositionError,
+    CSVSuperstarError,
 )
 from sae.kernel import Combination, Draw, DrawDate, DrawId, Number
 from sae.kernel.dataset import Dataset, InvalidDatasetError
@@ -62,6 +64,7 @@ FIELD_NAMES = (
 
 INTEGER_PATTERN = re.compile(r"[0-9]+")
 DATE_PATTERN = re.compile(r"[0-9]{2}/[0-9]{2}/[0-9]{4}")
+SUPERSTAR_INTRODUCTION_DATE = date(2006, 3, 28)
 
 
 class CSVImporter:
@@ -197,14 +200,6 @@ class CSVImporter:
                         f"field '{FIELD_NAMES[index]}': {value!r}."
                     )
 
-            for index in (8, 9):
-                if row[index] == "":
-                    raise CSVFieldError(
-                        f"Missing required value at CSV record "
-                        f"{record_number}, "
-                        f"field '{FIELD_NAMES[index]}'."
-                    )
-
             contest_value = row[0]
 
             if INTEGER_PATTERN.fullmatch(contest_value) is None:
@@ -248,6 +243,60 @@ class CSVImporter:
                     f"Invalid draw date at CSV record {record_number}, "
                     f"field 'Data': {date_value!r}."
                 ) from exc
+
+            jolly_value = row[8]
+
+            if INTEGER_PATTERN.fullmatch(jolly_value) is None:
+                raise CSVJollyError(
+                    f"Invalid Jolly at CSV record {record_number}, "
+                    f"field 'Jolly': {jolly_value!r}."
+                )
+
+            try:
+                jolly_number = int(jolly_value)
+            except ValueError as exc:
+                raise CSVJollyError(
+                    f"Invalid Jolly at CSV record {record_number}, "
+                    f"field 'Jolly': {jolly_value!r}."
+                ) from exc
+
+            if not 1 <= jolly_number <= 90:
+                raise CSVJollyError(
+                    f"Jolly at CSV record {record_number}, "
+                    f"field 'Jolly' must be between 1 and 90; "
+                    f"received {jolly_value!r}."
+                )
+
+            superstar_value = row[9]
+
+            if parsed_date < SUPERSTAR_INTRODUCTION_DATE:
+                if superstar_value != "-":
+                    raise CSVSuperstarError(
+                        f"Superstar at CSV record {record_number}, "
+                        f"field 'Superstar' must be '-' before "
+                        f"28/03/2006; received {superstar_value!r}."
+                    )
+            else:
+                if INTEGER_PATTERN.fullmatch(superstar_value) is None:
+                    raise CSVSuperstarError(
+                        f"Invalid Superstar at CSV record {record_number}, "
+                        f"field 'Superstar': {superstar_value!r}."
+                    )
+
+                try:
+                    superstar_number = int(superstar_value)
+                except ValueError as exc:
+                    raise CSVSuperstarError(
+                        f"Invalid Superstar at CSV record {record_number}, "
+                        f"field 'Superstar': {superstar_value!r}."
+                    ) from exc
+
+                if not 1 <= superstar_number <= 90:
+                    raise CSVSuperstarError(
+                        f"Superstar at CSV record {record_number}, "
+                        f"field 'Superstar' must be between 1 and 90; "
+                        f"received {superstar_value!r}."
+                    )
 
             try:
                 draw_id = DrawId.from_official(

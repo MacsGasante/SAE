@@ -18,6 +18,8 @@ __all__ = [
     "CSVContestNumberError",
     "CSVDateError",
     "CSVMainNumberError",
+    "CSVJollyError",
+    "CSVSuperstarError",
     "CSVRepeatedMainNumberError",
     "CSVDuplicateDrawIdError",
     "CSVDuplicateDrawDateError",
@@ -88,6 +90,18 @@ class CSVDateError(CSVFieldError):
 class CSVMainNumberError(CSVFieldError):
     """
     Raised when a main draw number is invalid.
+    """
+
+
+class CSVJollyError(CSVFieldError):
+    """
+    Raised when the Jolly number is invalid.
+    """
+
+
+class CSVSuperstarError(CSVFieldError):
+    """
+    Raised when the Superstar value is invalid for the draw date.
     """
 
 

@@ -8,14 +8,18 @@ from pathlib import Path
 
 import pytest
 
-from sae.infrastructure.importers.exceptions import CSVStreamPositionError
+from sae.infrastructure.importers.exceptions import (
+    CSVJollyError,
+    CSVStreamPositionError,
+    CSVSuperstarError,
+)
 from sae.kernel import Number
 
 VALID_HEADER = "Concorso,Data,N1,N2,N3,N4,N5,N6,Jolly,Superstar"
 
 
 def test_import_dataset_from_valid_stream() -> None:
-    stream = StringIO(f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,8\n")
+    stream = StringIO(f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,-\n")
 
     from sae.infrastructure.importers.csv_importer import CSVImporter
 
@@ -38,7 +42,7 @@ def test_import_dataset_from_valid_stream() -> None:
 
 
 def test_import_dataset_does_not_retain_jolly_or_superstar() -> None:
-    stream = StringIO(f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,8\n")
+    stream = StringIO(f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,-\n")
 
     from sae.infrastructure.importers.csv_importer import CSVImporter
 
@@ -58,10 +62,128 @@ def test_import_dataset_does_not_retain_jolly_or_superstar() -> None:
     assert draw.contains(Number(8)) is False
 
 
+@pytest.mark.parametrize(
+    "jolly_value",
+    ["1", "90"],
+)
+def test_import_dataset_accepts_jolly_boundaries(
+    jolly_value: str,
+) -> None:
+    from sae.infrastructure.importers.csv_importer import CSVImporter
+
+    stream = StringIO(f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,{jolly_value},-\n")
+
+    dataset = CSVImporter.import_dataset(stream)
+
+    assert dataset.size == 1
+
+
+@pytest.mark.parametrize(
+    "jolly_value",
+    ["", "abc", "1.5", "0", "91", "-1", "９"],
+)
+def test_import_dataset_rejects_invalid_jolly(
+    jolly_value: str,
+) -> None:
+    from sae.infrastructure.importers.csv_importer import CSVImporter
+    from sae.infrastructure.importers.exceptions import CSVJollyError
+
+    stream = StringIO(f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,{jolly_value},-\n")
+
+    with pytest.raises(CSVJollyError):
+        CSVImporter.import_dataset(stream)
+
+
+@pytest.mark.parametrize(
+    ("date_value", "superstar_value"),
+    [
+        ("27/03/2006", "-"),
+        ("28/03/2006", "1"),
+        ("28/03/2006", "90"),
+    ],
+)
+def test_import_dataset_accepts_superstar_for_draw_date(
+    date_value: str,
+    superstar_value: str,
+) -> None:
+    from sae.infrastructure.importers.csv_importer import CSVImporter
+
+    stream = StringIO(
+        f"{VALID_HEADER}\n1,{date_value},1,2,3,4,5,6,7,{superstar_value}\n"
+    )
+
+    dataset = CSVImporter.import_dataset(stream)
+
+    assert dataset.size == 1
+
+
+@pytest.mark.parametrize(
+    ("date_value", "superstar_value"),
+    [
+        ("27/03/2006", "1"),
+        ("27/03/2006", ""),
+        ("28/03/2006", "-"),
+        ("28/03/2006", ""),
+        ("28/03/2006", "abc"),
+        ("28/03/2006", "1.5"),
+        ("28/03/2006", "0"),
+        ("28/03/2006", "91"),
+        ("28/03/2006", "９"),
+    ],
+)
+def test_import_dataset_rejects_invalid_superstar_for_draw_date(
+    date_value: str,
+    superstar_value: str,
+) -> None:
+    from sae.infrastructure.importers.csv_importer import CSVImporter
+    from sae.infrastructure.importers.exceptions import CSVSuperstarError
+
+    stream = StringIO(
+        f"{VALID_HEADER}\n1,{date_value},1,2,3,4,5,6,7,{superstar_value}\n"
+    )
+
+    with pytest.raises(CSVSuperstarError):
+        CSVImporter.import_dataset(stream)
+
+
+@pytest.mark.parametrize(
+    ("field_name", "field_value"),
+    [
+        ("Jolly", "9" * 5000),
+        ("Superstar", "9" * 5000),
+    ],
+)
+def test_import_dataset_rejects_excessively_long_discarded_numbers(
+    field_name: str,
+    field_value: str,
+) -> None:
+    from sae.infrastructure.importers.csv_importer import CSVImporter
+    from sae.infrastructure.importers.exceptions import (
+        CSVJollyError,
+        CSVSuperstarError,
+    )
+
+    jolly_value = field_value if field_name == "Jolly" else "7"
+    superstar_value = field_value if field_name == "Superstar" else "8"
+    date_value = "01/01/2024"
+
+    if field_name == "Jolly":
+        expected_exception = CSVJollyError
+    else:
+        expected_exception = CSVSuperstarError
+
+    stream = StringIO(
+        f"{VALID_HEADER}\n1,{date_value},1,2,3,4,5,6,{jolly_value},{superstar_value}\n"
+    )
+
+    with pytest.raises(expected_exception):
+        CSVImporter.import_dataset(stream)
+
+
 def test_import_dataset_from_path(tmp_path: Path) -> None:
     csv_file = tmp_path / "draws.csv"
     csv_file.write_text(
-        f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,8\n",
+        f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,-\n",
         encoding="utf-8",
     )
 
@@ -76,7 +198,7 @@ def test_import_dataset_from_path(tmp_path: Path) -> None:
 def test_import_dataset_from_string_path(tmp_path: Path) -> None:
     csv_file = tmp_path / "draws.csv"
     csv_file.write_text(
-        f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,8\n",
+        f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,-\n",
         encoding="utf-8",
     )
 
@@ -89,7 +211,7 @@ def test_import_dataset_from_string_path(tmp_path: Path) -> None:
 
 
 def test_import_dataset_rejects_stream_not_at_beginning() -> None:
-    stream = StringIO(f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,8\n")
+    stream = StringIO(f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,-\n")
     stream.read(5)
 
     from sae.infrastructure.importers.csv_importer import CSVImporter
@@ -101,7 +223,7 @@ def test_import_dataset_rejects_stream_not_at_beginning() -> None:
 
 
 def test_import_dataset_does_not_close_caller_stream() -> None:
-    stream = StringIO(f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,8\n")
+    stream = StringIO(f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,-\n")
 
     from sae.infrastructure.importers.csv_importer import CSVImporter
 
@@ -121,7 +243,7 @@ def test_import_dataset_rejects_invalid_contest_number(
     from sae.infrastructure.importers.csv_importer import CSVImporter
     from sae.infrastructure.importers.exceptions import CSVContestNumberError
 
-    stream = StringIO(f"{VALID_HEADER}\n{contest_number},03/01/1998,1,2,3,4,5,6,7,8\n")
+    stream = StringIO(f"{VALID_HEADER}\n{contest_number},03/01/1998,1,2,3,4,5,6,7,-\n")
 
     with pytest.raises(CSVContestNumberError):
         CSVImporter.import_dataset(stream)
@@ -158,8 +280,8 @@ def test_import_dataset_accepts_contest_number_boundaries() -> None:
 
     stream = StringIO(
         f"{VALID_HEADER}\n"
-        "1,03/01/1998,1,2,3,4,5,6,7,8\n"
-        "999,04/01/1998,11,12,13,14,15,16,7,8\n"
+        "1,03/01/1998,1,2,3,4,5,6,7,-\n"
+        "999,04/01/1998,11,12,13,14,15,16,7,-\n"
     )
 
     dataset = CSVImporter.import_dataset(stream)
@@ -215,7 +337,7 @@ def test_import_dataset_rejects_invalid_main_numbers(
     from sae.infrastructure.importers.csv_importer import CSVImporter
     from sae.infrastructure.importers.exceptions import CSVMainNumberError
 
-    csv_content = f"{VALID_HEADER}\n1,03/01/1998,{number_value},2,3,4,5,6,7,8\n"
+    csv_content = f"{VALID_HEADER}\n1,03/01/1998,{number_value},2,3,4,5,6,7,-\n"
 
     with pytest.raises(CSVMainNumberError):
         CSVImporter.import_dataset(StringIO(csv_content))
@@ -237,7 +359,7 @@ def test_import_dataset_rejects_repeated_main_numbers(
         CSVRepeatedMainNumberError,
     )
 
-    csv_content = f"{VALID_HEADER}\n1,03/01/1998,{main_numbers},7,8\n"
+    csv_content = f"{VALID_HEADER}\n1,03/01/1998,{main_numbers},7,-\n"
 
     with pytest.raises(CSVRepeatedMainNumberError):
         CSVImporter.import_dataset(StringIO(csv_content))
@@ -256,7 +378,7 @@ def test_import_dataset_rejects_invalid_headers(header: str) -> None:
     from sae.infrastructure.importers.csv_importer import CSVImporter
     from sae.infrastructure.importers.exceptions import CSVHeaderError
 
-    stream = StringIO(f"{header}\n1,03/01/1998,1,2,3,4,5,6,7,8\n")
+    stream = StringIO(f"{header}\n1,03/01/1998,1,2,3,4,5,6,7,-\n")
 
     with pytest.raises(CSVHeaderError):
         CSVImporter.import_dataset(stream)
@@ -265,7 +387,7 @@ def test_import_dataset_rejects_invalid_headers(header: str) -> None:
 def test_import_dataset_accepts_utf8_bom_in_stream() -> None:
     from sae.infrastructure.importers.csv_importer import CSVImporter
 
-    stream = StringIO(f"\ufeff{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,8\n")
+    stream = StringIO(f"\ufeff{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,-\n")
 
     dataset = CSVImporter.import_dataset(stream)
 
@@ -275,7 +397,7 @@ def test_import_dataset_accepts_utf8_bom_in_stream() -> None:
 def test_import_dataset_ignores_fully_empty_rows() -> None:
     from sae.infrastructure.importers.csv_importer import CSVImporter
 
-    stream = StringIO(f"{VALID_HEADER}\n\n1,03/01/1998,1,2,3,4,5,6,7,8\n\n")
+    stream = StringIO(f"{VALID_HEADER}\n\n1,03/01/1998,1,2,3,4,5,6,7,-\n\n")
 
     dataset = CSVImporter.import_dataset(stream)
 
@@ -286,32 +408,31 @@ def test_import_dataset_rejects_separator_only_row() -> None:
     from sae.infrastructure.importers.csv_importer import CSVImporter
     from sae.infrastructure.importers.exceptions import CSVFieldError
 
-    stream = StringIO(f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,8\n,,,,,,,,,\n")
+    stream = StringIO(f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,-\n,,,,,,,,,\n")
 
     with pytest.raises(CSVFieldError):
         CSVImporter.import_dataset(stream)
 
 
 @pytest.mark.parametrize(
-    ("field_index", "field_name"),
+    ("field_index", "field_name", "exception_type"),
     [
-        (8, "Jolly"),
-        (9, "Superstar"),
+        (8, "Jolly", CSVJollyError),
+        (9, "Superstar", CSVSuperstarError),
     ],
 )
 def test_import_dataset_rejects_empty_required_discarded_fields(
     field_index: int,
     field_name: str,
+    exception_type: type[Exception],
 ) -> None:
     from sae.infrastructure.importers.csv_importer import CSVImporter
-    from sae.infrastructure.importers.exceptions import CSVFieldError
 
-    fields = ["1", "03/01/1998", "1", "2", "3", "4", "5", "6", "7", "8"]
+    fields = ["1", "03/01/1998", "1", "2", "3", "4", "5", "6", "7", "-"]
     fields[field_index] = ""
 
     stream = StringIO(f"{VALID_HEADER}\n{','.join(fields)}\n")
-
-    with pytest.raises(CSVFieldError, match=field_name):
+    with pytest.raises(exception_type, match=field_name):
         CSVImporter.import_dataset(stream)
 
 
@@ -362,7 +483,7 @@ def test_import_dataset_rejects_surrounding_whitespace(
         "N5": "5",
         "N6": "6",
         "Jolly": "7",
-        "Superstar": "8",
+        "Superstar": "-",
     }
     values[field] = value
     row = ",".join(
@@ -393,8 +514,8 @@ def test_import_dataset_rejects_duplicate_draw_id() -> None:
 
     stream = StringIO(
         f"{VALID_HEADER}\n"
-        "1,03/01/1998,1,2,3,4,5,6,7,8\n"
-        "1,04/01/1998,11,12,13,14,15,16,17,18\n"
+        "1,03/01/1998,1,2,3,4,5,6,7,-\n"
+        "1,04/01/1998,11,12,13,14,15,16,17,-\n"
     )
 
     with pytest.raises(CSVDuplicateDrawIdError):
@@ -409,8 +530,8 @@ def test_import_dataset_rejects_duplicate_draw_date() -> None:
 
     stream = StringIO(
         f"{VALID_HEADER}\n"
-        "1,03/01/1998,1,2,3,4,5,6,7,8\n"
-        "2,03/01/1998,11,12,13,14,15,16,17,18\n"
+        "1,03/01/1998,1,2,3,4,5,6,7,-\n"
+        "2,03/01/1998,11,12,13,14,15,16,17,-\n"
     )
 
     with pytest.raises(CSVDuplicateDrawDateError):
@@ -422,9 +543,9 @@ def test_import_dataset_sorts_draws_chronologically() -> None:
 
     stream = StringIO(
         f"{VALID_HEADER}\n"
-        "3,05/01/1998,21,22,23,24,25,26,27,28\n"
-        "1,03/01/1998,1,2,3,4,5,6,7,8\n"
-        "2,04/01/1998,11,12,13,14,15,16,17,18\n"
+        "3,05/01/1998,21,22,23,24,25,26,27,-\n"
+        "1,03/01/1998,1,2,3,4,5,6,7,-\n"
+        "2,04/01/1998,11,12,13,14,15,16,17,-\n"
     )
 
     dataset = CSVImporter.import_dataset(stream)
@@ -497,8 +618,8 @@ def test_import_dataset_reports_record_and_field_for_invalid_value() -> None:
 
     stream = StringIO(
         f"{VALID_HEADER}\n"
-        "1,03/01/1998,1,2,3,4,5,6,7,8\n"
-        "2,04/01/1998,91,12,13,14,15,16,17,18\n"
+        "1,03/01/1998,1,2,3,4,5,6,7,-\n"
+        "2,04/01/1998,91,12,13,14,15,16,17,-\n"
     )
 
     with pytest.raises(CSVMainNumberError) as exc_info:
@@ -517,7 +638,7 @@ def test_import_dataset_rejects_non_readable_stream() -> None:
         def readable(self) -> bool:
             return False
 
-    stream = NonReadableStream(f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,8\n")
+    stream = NonReadableStream(f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,-\n")
 
     with pytest.raises(CSVMalformedError):
         CSVImporter.import_dataset(stream)
@@ -532,7 +653,7 @@ def test_import_dataset_rejects_stream_without_determinable_position() -> None:
         def tell(self) -> int:
             raise OSError("position unavailable")
 
-    stream = UnknownPositionStream(f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,8\n")
+    stream = UnknownPositionStream(f"{VALID_HEADER}\n1,03/01/1998,1,2,3,4,5,6,7,-\n")
 
     with pytest.raises(CSVStreamPositionError):
         CSVImporter.import_dataset(stream)
@@ -546,8 +667,8 @@ def test_import_dataset_does_not_return_partial_dataset_on_late_error() -> None:
 
     stream = StringIO(
         f"{VALID_HEADER}\n"
-        "1,03/01/1998,1,2,3,4,5,6,7,8\n"
-        "2,04/01/1998,11,12,91,14,15,16,17,18\n"
+        "1,03/01/1998,1,2,3,4,5,6,7,-\n"
+        "2,04/01/1998,11,12,91,14,15,16,17,-\n"
     )
 
     with pytest.raises(CSVMainNumberError):

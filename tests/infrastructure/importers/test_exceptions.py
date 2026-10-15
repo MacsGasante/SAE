@@ -14,10 +14,12 @@ from sae.infrastructure.importers.exceptions import (
     CSVFileAccessError,
     CSVHeaderError,
     CSVImportError,
+    CSVJollyError,
     CSVMainNumberError,
     CSVMalformedError,
     CSVRepeatedMainNumberError,
     CSVStreamPositionError,
+    CSVSuperstarError,
 )
 
 
@@ -45,6 +47,8 @@ def test_field_exceptions_derive_from_csv_field_error() -> None:
         CSVDateError,
         CSVMainNumberError,
         CSVRepeatedMainNumberError,
+        CSVJollyError,
+        CSVSuperstarError,
     )
 
     for exception_type in field_exception_types:
