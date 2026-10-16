@@ -54,10 +54,11 @@ Completed milestones:
   * A2 — Delay Engine
   * A3 — Probability Engine
 * C1 — Basic Commands
+* C2 — Import Tools
 
 Current focus:
 
-* C2 — Import Tools
+* C3 — Reporting
 
 ---
 
@@ -147,8 +148,8 @@ make check
   * A1 Frequency Engine ✅
   * A2 Delay Engine ✅
   * A3 Probability Engine ✅
-* C1 Basic Commands
-* C2 Import Tools
+* C1 Basic Commands ✅
+* C2 Import Tools ✅
 * C3 Reporting
 * Research Modules
 

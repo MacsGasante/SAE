@@ -29,7 +29,7 @@ Current Version:
 | M1.2 — Combination | ✅ Frozen     |
 | M1.3 — Builders    | ✅ Frozen     |
 | M1.4 — Domain      | ✅ Frozen     |
-| M1.5 — Dataset     | ✅ Verified    |
+| M1.5 — Dataset     | ✅ Verified   |
 | M1.6 — Analytics   | ✅ Implemented |
 
 ---
@@ -41,6 +41,16 @@ Current Version:
 | A1 — Frequency     | ✅ Implemented |
 | A2 — Delay         | ✅ Implemented |
 | A3 — Probability   | ✅ Implemented |
+
+---
+
+# CLI Milestones
+
+| Milestone          | Status        |
+| ------------------ | ------------- |
+| C1 — Basic Commands | ✅ Implemented |
+| C2 — Import Tools   | ✅ Implemented |
+| C3 — Reporting      | ⏳ Planned     |
 
 ---
 
@@ -79,12 +89,12 @@ Current Version:
 
 # Current Focus
 
-C1 — Basic Commands has been implemented and certified.
+C2 — Import Tools has been implemented and certified.
 
 Next functional milestone:
 
-C2 — Import Tools.
+C3 — Reporting.
 
 Last update:
 
-C1 Basic Commands implemented and certified, including CLI parser, --version, info, --help, command validation, package entry point, and CLI test coverage.
+C2 Import Tools implemented and certified, including the CSV Dataset Importer, CSV validation, external-to-domain mapping, Jolly/Superstar field validation and discard semantics, atomic Dataset construction, importer exception hierarchy, and importer test coverage.

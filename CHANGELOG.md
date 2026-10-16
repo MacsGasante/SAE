@@ -28,6 +28,12 @@ Initial engineering release.
 - Domain documentation
 - Domain specifications
 - Domain test suite
+- CSV Dataset Importer for file-path and stream sources
+- CSV validation for the official dataset format
+- Mapping from external contest data to DrawId, DrawDate, and Combination
+- Validation of Jolly and Superstar fields with discard semantics at the domain boundary
+- Atomic construction of imported Dataset instances
+- Dedicated CSV importer exception hierarchy
 
 ### Changed
 
@@ -43,3 +49,5 @@ Initial engineering release.
 - Collections Layer frozen
 - Builder Layer frozen
 - Domain Layer frozen
+- C2 Import Tools completed and certified
+- CSV Dataset Importer test suite completed
