@@ -22,22 +22,22 @@ Current Version:
 
 # Functional Milestones
 
-| Milestone          | Status        |
-| ------------------ | ------------- |
-| M0                 | ✅ Frozen     |
-| M1.1 — Number      | ✅ Frozen     |
-| M1.2 — Combination | ✅ Frozen     |
-| M1.3 — Builders    | ✅ Frozen     |
-| M1.4 — Domain      | ✅ Frozen     |
-| M1.5 — Dataset     | ✅ Verified   |
+| Milestone          | Status         |
+| ------------------ | -------------- |
+| M0                 | ✅ Frozen      |
+| M1.1 — Number      | ✅ Frozen      |
+| M1.2 — Combination | ✅ Frozen      |
+| M1.3 — Builders    | ✅ Frozen      |
+| M1.4 — Domain      | ✅ Frozen      |
+| M1.5 — Dataset     | ✅ Verified    |
 | M1.6 — Analytics   | ✅ Implemented |
 
 ---
 
 # Analytics Components
 
-| Component          | Status        |
-| ------------------ | ------------- |
+| Component          | Status         |
+| ------------------ | -------------- |
 | A1 — Frequency     | ✅ Implemented |
 | A2 — Delay         | ✅ Implemented |
 | A3 — Probability   | ✅ Implemented |
@@ -46,8 +46,8 @@ Current Version:
 
 # CLI Milestones
 
-| Milestone          | Status        |
-| ------------------ | ------------- |
+| Milestone           | Status         |
+| ------------------- | -------------- |
 | C1 — Basic Commands | ✅ Implemented |
 | C2 — Import Tools   | ✅ Implemented |
 | C3 — Reporting      | ⏳ Planned     |
