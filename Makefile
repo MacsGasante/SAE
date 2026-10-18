@@ -14,16 +14,15 @@ lint:
 	ruff check .
 
 format:
-	black .
-	isort .
+	ruff format .
+	ruff check --fix .
 
 typecheck:
 	mypy src
 
 check:
 	ruff check .
-	black --check .
-	isort --check-only .
+	ruff format --check .
 	mypy src
 	pytest
 
