@@ -40,8 +40,6 @@ sae = "sae.cli.main:main"
 
 [project.optional-dependencies]
 dev = [
-    "black>=24.0",
-    "isort>=5.13",
     "mypy>=1.11",
     "pre-commit>=3.8",
     "pytest>=8.3",
@@ -75,13 +73,6 @@ select = [
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
-
-[tool.black]
-line-length = 88
-target-version = ["py312"]
-
-[tool.isort]
-profile = "black"
 
 [tool.mypy]
 python_version = "3.12"
