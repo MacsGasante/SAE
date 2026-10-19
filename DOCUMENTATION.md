@@ -105,7 +105,9 @@ Analytics components are implemented under:
 * src/sae/analytics/delay/
 * src/sae/analytics/probability/
 
-Analytics specifications and architecture rules remain separate from the Kernel.
+The functional contract for these components is defined in:
+
+* specifications/analytics/analytics.md
 
 ---
 
@@ -118,8 +120,9 @@ Locations:
 * specifications/kernel/
 * specifications/domain/
 * specifications/dataset/
+* specifications/analytics/
 
-Analytics currently follows the established architecture and implementation contracts documented by the corresponding source modules and tests.
+Analytics specifications define the calculations, public result semantics, and boundary cases independently from the Kernel implementation.
 
 ---
 
