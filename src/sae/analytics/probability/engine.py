@@ -22,8 +22,7 @@ class ProbabilityEngine:
             return ProbabilityResult(
                 draw_count=0,
                 probabilities={
-                    Number(value): 0.0
-                    for value in range(MIN_NUMBER, MAX_NUMBER + 1)
+                    Number(value): 0.0 for value in range(MIN_NUMBER, MAX_NUMBER + 1)
                 },
             )
 
@@ -34,7 +33,9 @@ class ProbabilityEngine:
                 occurrences[number] += 1
 
         draw_count = dataset.size
-        probabilities = {number: count / draw_count for number, count in occurrences.items()}
+        probabilities = {
+            number: count / draw_count for number, count in occurrences.items()
+        }
 
         return ProbabilityResult(
             draw_count=draw_count,
