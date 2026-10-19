@@ -1,12 +1,22 @@
+"""Compute empirical occurrence counts for each valid SuperEnalotto number."""
+
 from sae.analytics.frequency.result import FrequencyResult
 from sae.kernel.dataset import Dataset
 from sae.kernel.foundation import Number
+from sae.kernel.foundation.constants import MAX_NUMBER, MIN_NUMBER
 
 
 class FrequencyEngine:
+    """Calculate how often each number occurs in a dataset."""
+
     @staticmethod
     def analyze(dataset: Dataset) -> FrequencyResult:
-        frequencies = {Number(value): 0 for value in range(1, 91)}
+        """Return occurrence counts for every valid number in the dataset.
+
+        Numbers absent from the dataset have a frequency of zero. The returned
+        result includes the number of draws analyzed and an immutable mapping.
+        """
+        frequencies = {Number(value): 0 for value in range(MIN_NUMBER, MAX_NUMBER + 1)}
 
         for draw in dataset:
             for number in draw.numbers:

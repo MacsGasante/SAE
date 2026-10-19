@@ -1,13 +1,24 @@
+"""Compute the number of draws since each number last appeared."""
+
 from sae.analytics.delay.result import DelayResult
 from sae.kernel.dataset import Dataset
 from sae.kernel.foundation import Number
+from sae.kernel.foundation.constants import MAX_NUMBER, MIN_NUMBER
 
 
 class DelayEngine:
+    """Calculate recency-based delays for each valid number."""
+
     @staticmethod
     def analyze(dataset: Dataset) -> DelayResult:
+        """Return each number's delay within the supplied dataset.
+
+        A delay of zero means the number appears in the latest draw; one means
+        it appears in the draw immediately before that, and so on. None means
+        the number was not observed anywhere in the analyzed dataset.
+        """
         delays: dict[Number, int | None] = {
-            Number(value): None for value in range(1, 91)
+            Number(value): None for value in range(MIN_NUMBER, MAX_NUMBER + 1)
         }
 
         for delay, draw in enumerate(reversed(dataset.draws)):
