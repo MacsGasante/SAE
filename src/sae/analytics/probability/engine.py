@@ -2,7 +2,8 @@
 
 from sae.analytics.probability.result import ProbabilityResult
 from sae.kernel.dataset import Dataset
-from sae.kernel.foundation import MAX_NUMBER, MIN_NUMBER, Number
+from sae.kernel.foundation import Number
+from sae.kernel.foundation.constants import MAX_NUMBER, MIN_NUMBER
 
 
 class ProbabilityEngine:
@@ -26,18 +27,14 @@ class ProbabilityEngine:
                 },
             )
 
-        occurrences = {
-            Number(value): 0 for value in range(MIN_NUMBER, MAX_NUMBER + 1)
-        }
+        occurrences = {Number(value): 0 for value in range(MIN_NUMBER, MAX_NUMBER + 1)}
 
         for draw in dataset:
             for number in draw.numbers:
                 occurrences[number] += 1
 
         draw_count = dataset.size
-        probabilities = {
-            number: count / draw_count for number, count in occurrences.items()
-        }
+        probabilities = {number: count / draw_count for number, count in occurrences.items()}
 
         return ProbabilityResult(
             draw_count=draw_count,
