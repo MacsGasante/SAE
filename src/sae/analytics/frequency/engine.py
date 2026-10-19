@@ -2,7 +2,8 @@
 
 from sae.analytics.frequency.result import FrequencyResult
 from sae.kernel.dataset import Dataset
-from sae.kernel.foundation import MAX_NUMBER, MIN_NUMBER, Number
+from sae.kernel.foundation import Number
+from sae.kernel.foundation.constants import MAX_NUMBER, MIN_NUMBER
 
 
 class FrequencyEngine:
@@ -15,9 +16,7 @@ class FrequencyEngine:
         Numbers absent from the dataset have a frequency of zero. The returned
         result includes the number of draws analyzed and an immutable mapping.
         """
-        frequencies = {
-            Number(value): 0 for value in range(MIN_NUMBER, MAX_NUMBER + 1)
-        }
+        frequencies = {Number(value): 0 for value in range(MIN_NUMBER, MAX_NUMBER + 1)}
 
         for draw in dataset:
             for number in draw.numbers:
