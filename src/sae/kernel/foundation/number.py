@@ -31,7 +31,7 @@ class Number(ValueObject):
 
     def _validate_type(self) -> None:
         """Validate the underlying value type."""
-        if not isinstance(self.value, int):
+        if type(self.value) is not int:
             raise InvalidNumberError(
                 f"Number value must be an integer, got {type(self.value).__name__}."
             )
