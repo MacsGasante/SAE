@@ -67,3 +67,9 @@ def test_string_representation() -> None:
 
     assert str(number) == "7"
     assert repr(number) == "Number(7)"
+
+
+@pytest.mark.parametrize("value", [True, False])
+def test_invalid_boolean_type(value: bool) -> None:
+    with pytest.raises(InvalidNumberError):
+        Number(value)
