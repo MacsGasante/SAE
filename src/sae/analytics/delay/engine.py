@@ -2,7 +2,8 @@
 
 from sae.analytics.delay.result import DelayResult
 from sae.kernel.dataset import Dataset
-from sae.kernel.foundation import MAX_NUMBER, MIN_NUMBER, Number
+from sae.kernel.foundation import Number
+from sae.kernel.foundation.constants import MAX_NUMBER, MIN_NUMBER
 
 
 class DelayEngine:
@@ -17,8 +18,7 @@ class DelayEngine:
         the number was not observed anywhere in the analyzed dataset.
         """
         delays: dict[Number, int | None] = {
-            Number(value): None
-            for value in range(MIN_NUMBER, MAX_NUMBER + 1)
+            Number(value): None for value in range(MIN_NUMBER, MAX_NUMBER + 1)
         }
 
         for delay, draw in enumerate(reversed(dataset.draws)):
