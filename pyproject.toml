@@ -86,6 +86,7 @@ source = ["src/sae"]
 [tool.coverage.report]
 show_missing = true
 skip_covered = false
+fail_under = 97
 
 [tool.ruff.lint.per-file-ignores]
 "src/sae/kernel/foundation/base.py" = ["B024"]
