@@ -1,3 +1,5 @@
+import pytest
+
 from sae.reporting.model import Report, ReportRow
 
 
@@ -12,9 +14,5 @@ def test_report_is_immutable() -> None:
     assert report.draw_count == 10
     assert report.rows == (ReportRow(label="Number 1", value="3"),)
 
-    try:
+    with pytest.raises(AttributeError):
         report.title = "Other"  # type: ignore[misc]
-    except AttributeError:
-        pass
-    else:
-        raise AssertionError("Report must be immutable")
