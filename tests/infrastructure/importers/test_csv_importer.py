@@ -320,6 +320,19 @@ def test_import_dataset_rejects_invalid_dates(
         assert exc_info.value.__cause__ is None
 
 
+def test_import_dataset_translates_number_domain_error() -> None:
+    from sae.infrastructure.importers.csv_importer import CSVImporter
+    from sae.infrastructure.importers.exceptions import CSVMainNumberError
+    from sae.kernel import InvalidNumberError
+
+    csv_content = f"{VALID_HEADER}\n1,03/01/1998,91,2,3,4,5,6,7,-\n"
+
+    with pytest.raises(CSVMainNumberError) as exc_info:
+        CSVImporter.import_dataset(StringIO(csv_content))
+
+    assert isinstance(exc_info.value.__cause__, InvalidNumberError)
+
+
 @pytest.mark.parametrize(
     "number_value",
     [

@@ -224,7 +224,7 @@ A failure involving a field must identify the relevant field whenever possible.
 
 ### 6.4 Contest number
 
-The contest number must be an integer from 1 through 999 inclusive.
+The contest number must be an integer from 1 through 999 inclusive. The importer must express this importer-specific upper bound through a named constant rather than a magic number.
 
 The calendar year must be derived from the parsed draw date.
 
@@ -254,7 +254,7 @@ Each of the six main numbers must satisfy the existing `Number` domain constrain
 
 The six numbers must be distinct.
 
-The importer must use the existing `Number` and `Combination` constructors to enforce domain validity. It must not duplicate their validation rules as an alternative source of truth.
+The importer must use the existing `Number` and `Combination` constructors to enforce domain validity. It must not duplicate their validation rules as an alternative source of truth. In particular, the `Number` constructor is authoritative for the main-number range; an `InvalidNumberError` must be translated to `CSVMainNumberError` with exception chaining. Shared `MIN_NUMBER` and `MAX_NUMBER` constants must be used when validating the discarded Jolly and Superstar fields.
 
 The original order of the six CSV columns does not need to be preserved in the domain: `Combination` stores its numbers in ascending order.
 
@@ -328,11 +328,11 @@ A failed import must not leave any persistent or external partial state because 
 
 CSV import failures must be represented by an infrastructure-level exception hierarchy.
 
-The public base exception is `CSVImportError`.
+The public base exception is `CSVImportError`. It must derive from the project-wide `SAEError` base exception defined by the Kernel, whose documented contract is to provide the common base for SAE exceptions.
 
 All importer-specific exceptions exposed by the public import operation must derive from `CSVImportError`.
 
-The importer must not expose infrastructure-specific exceptions as part of the Kernel's domain contract.
+This inheritance provides callers with a common exception boundary without moving CSV-specific exception types into the Kernel. The Kernel must not import or depend on the infrastructure importer or its exception classes.
 
 ### 10.2 Error categories
 

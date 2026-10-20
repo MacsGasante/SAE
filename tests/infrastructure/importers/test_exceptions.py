@@ -21,6 +21,11 @@ from sae.infrastructure.importers.exceptions import (
     CSVStreamPositionError,
     CSVSuperstarError,
 )
+from sae.kernel import SAEError
+
+
+def test_csv_import_error_derives_from_sae_error() -> None:
+    assert issubclass(CSVImportError, SAEError)
 
 
 def test_all_importer_exceptions_derive_from_csv_import_error() -> None:
