@@ -10,6 +10,8 @@ from datetime import date, datetime
 from pathlib import Path
 from typing import TextIO
 
+from sae.kernel.foundation.constants import MAX_NUMBER, MIN_NUMBER
+
 from sae.infrastructure.importers.exceptions import (
     CSVContestNumberError,
     CSVDatasetValidationError,
@@ -32,6 +34,7 @@ from sae.kernel import Combination, Draw, DrawDate, DrawId, Number
 from sae.kernel.dataset import Dataset, InvalidDatasetError
 from sae.kernel.domain.exceptions import (
     InvalidDrawDateError,
+    InvalidNumberError,
     InvalidDrawError,
     InvalidDrawIdError,
 )
@@ -65,6 +68,7 @@ FIELD_NAMES = (
 INTEGER_PATTERN = re.compile(r"[0-9]+")
 DATE_PATTERN = re.compile(r"[0-9]{2}/[0-9]{2}/[0-9]{4}")
 SUPERSTAR_INTRODUCTION_DATE = date(2006, 3, 28)
+MAX_CONTEST_NUMBER = 999
 
 
 class CSVImporter:
@@ -217,10 +221,10 @@ class CSVImporter:
                     f"{contest_value!r}."
                 ) from exc
 
-            if not 1 <= contest_number <= 999:
+            if not MIN_NUMBER <= contest_number <= MAX_CONTEST_NUMBER:
                 raise CSVContestNumberError(
                     f"Contest number at CSV record {record_number}, "
-                    f"field 'Concorso' must be between 1 and 999; "
+                    f"field 'Concorso' must be between {MIN_NUMBER} and {MAX_CONTEST_NUMBER}; "
                     f"received {contest_value!r}."
                 )
 
@@ -260,10 +264,10 @@ class CSVImporter:
                     f"field 'Jolly': {jolly_value!r}."
                 ) from exc
 
-            if not 1 <= jolly_number <= 90:
+            if not MIN_NUMBER <= jolly_number <= MAX_NUMBER:
                 raise CSVJollyError(
                     f"Jolly at CSV record {record_number}, "
-                    f"field 'Jolly' must be between 1 and 90; "
+                    f"field 'Jolly' must be between {MIN_NUMBER} and {MAX_NUMBER}; "
                     f"received {jolly_value!r}."
                 )
 
@@ -291,10 +295,10 @@ class CSVImporter:
                         f"field 'Superstar': {superstar_value!r}."
                     ) from exc
 
-                if not 1 <= superstar_number <= 90:
+                if not MIN_NUMBER <= superstar_number <= MAX_NUMBER:
                     raise CSVSuperstarError(
                         f"Superstar at CSV record {record_number}, "
-                        f"field 'Superstar' must be between 1 and 90; "
+                        f"field 'Superstar' must be between {MIN_NUMBER} and {MAX_NUMBER}; "
                         f"received {superstar_value!r}."
                     )
 
@@ -360,7 +364,7 @@ class CSVImporter:
 
                 try:
                     parsed_numbers.append(Number(number_value))
-                except (TypeError, ValueError) as exc:
+                except InvalidNumberError as exc:
                     raise CSVMainNumberError(
                         f"Invalid main number at CSV record {record_number}, "
                         f"field 'N{index}': {value!r}."
