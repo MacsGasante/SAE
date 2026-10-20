@@ -77,14 +77,15 @@ Current Version:
 
 # Quality Gates
 
-| Gate            | Status |
-| --------------- | ------ |
-| Ruff            | ✅     |
-| MyPy            | ✅     |
-| Pytest          | ✅     |
-| Coverage ≥ 97%  | ✅     |
-| GitHub Actions  | ✅     |
-| Documentation   | ✅     |
+| Gate                    | Status |
+| ----------------------- | ------ |
+| Ruff                    | ✅     |
+| MyPy                    | ✅     |
+| Pytest                  | ✅     |
+| Overall Coverage ≥ 97%  | ✅     |
+| Kernel Coverage = 100%  | ✅     |
+| GitHub Actions          | ✅     |
+| Documentation           | ✅     |
 
 ---
 
@@ -103,5 +104,6 @@ quality pipeline and the 97% coverage quality gate.
 
 Last update:
 
-D3 CI and Coverage implemented, including GitHub Actions automation,
-coverage enforcement at 97%, and contributor documentation alignment.
+D3 CI and Coverage includes GitHub Actions automation, a 97% repository-wide
+coverage gate, and a separately enforced 100% Kernel coverage gate. The full
+quality pipeline is run through `make check`.

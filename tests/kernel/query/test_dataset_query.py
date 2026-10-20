@@ -92,6 +92,32 @@ def test_query_result_preserves_dataset_order(
     )
 
 
+def test_before_selects_draws_strictly_before_date(dataset) -> None:
+    """before excludes draws on the specified date."""
+    result = dataset.query.before(
+        DrawDate.from_ymd(2024, 2, 10),
+    ).dataset
+
+    assert result.draws == (dataset.draws[0],)
+
+
+def test_between_includes_both_date_boundaries(dataset) -> None:
+    """between selects draws in the closed date interval."""
+    result = dataset.query.between(
+        DrawDate.from_ymd(2024, 2, 10),
+        DrawDate.from_ymd(2025, 3, 1),
+    ).dataset
+
+    assert result.draws == dataset.draws[1:]
+
+
+def test_by_month_selects_matching_month(dataset) -> None:
+    """by_month selects draws whose date has the requested month."""
+    result = dataset.query.by_month(6).dataset
+
+    assert result.draws == (dataset.draws[2],)
+
+
 def test_query_with_no_matches_returns_empty_dataset(
     dataset,
 ) -> None:
