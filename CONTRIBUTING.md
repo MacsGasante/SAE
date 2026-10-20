@@ -225,6 +225,9 @@ Run the complete quality check:
 make check
 ```
 
+`make check` runs Ruff, Ruff format verification, MyPy, the test suite,
+and the coverage gate. The configured minimum coverage threshold is 97%.
+
 A contribution that modifies Python source code should pass:
 
 ```bash
@@ -242,8 +245,12 @@ Every production-code contribution must:
 - pass Ruff;
 - pass MyPy;
 - pass Pytest;
+- satisfy the 97% coverage threshold;
 - include appropriate tests;
 - include documentation when behaviour or public APIs change.
+
+The same quality checks are executed automatically by GitHub Actions for
+pushes to `main` and for Pull Requests targeting `main`.
 
 Tests should primarily verify observable behaviour and domain contracts
 rather than implementation details.
