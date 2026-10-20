@@ -155,7 +155,26 @@ Jolly and Superstar are not represented in the current domain model. Their value
 
 The columns must nevertheless be present in the header and in the expected position.
 
-### 5.4 Header validation
+### 5.4 Date-dependent Superstar validation
+
+The official historical CSV archive uses `-` for the Superstar field before
+28 March 2006, when the Superstar feature had not yet been introduced. The
+first draw date for which a numeric Superstar value is expected is
+28/03/2006.
+
+Validation must be based on the parsed value of the `Data` column:
+
+* For draw dates before 28/03/2006, `Superstar` must be exactly `-`.
+  Empty values, numeric values, and all other representations are invalid.
+* For draw dates on or after 28/03/2006, `Superstar` must be an integer
+  from 1 through 90 inclusive. A hyphen, an empty value, a non-integer
+  representation, or a value outside this range is invalid.
+
+The importer must validate this rule for every record independently of its
+row position or contest number. As specified above, a valid Superstar value
+is discarded after validation and is not retained in the domain model.
+
+### 5.5 Header validation
 
 The first CSV record must match the required header exactly.
 
@@ -401,6 +420,8 @@ At minimum, tests must cover:
 * invalid contest number representations;
 * valid dates and invalid calendar dates;
 * invalid date formats;
+* Superstar is `-` before 28/03/2006 and rejects numeric values before that date;
+* Superstar accepts integers from 1 through 90 on and after 28/03/2006 and rejects `-`, empty, non-integer, and out-of-range values;
 * main numbers at the valid boundaries 1 and 90;
 * main numbers outside the valid range;
 * non-integer main number representations;
@@ -448,6 +469,7 @@ C2 CSV Import is ready for certification when all of the following are satisfied
 * [ ] Contest number, draw date, and main numbers are validated through the existing domain contracts.
 * [ ] `DrawId.from_official()` is used without duplicating its formula or introducing `DrawId.from_csv()`.
 * [ ] Jolly and Superstar are recognized but are not retained in the domain.
+* [ ] Superstar validation follows the 28/03/2006 introduction-date boundary.
 * [ ] The resulting Dataset satisfies all existing Dataset invariants.
 * [ ] Duplicate identifiers and duplicate dates cause the import to fail.
 * [ ] Importation is atomic and never returns a partial Dataset.
