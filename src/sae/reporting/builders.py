@@ -1,5 +1,7 @@
 """Build presentation-neutral reports from analytics results."""
 
+from collections.abc import Mapping
+
 from sae.analytics.delay.result import DelayResult
 from sae.analytics.frequency.result import FrequencyResult
 from sae.analytics.probability.result import ProbabilityResult
@@ -40,9 +42,6 @@ def build_probability_report(result: ProbabilityResult) -> Report:
     return Report(title="Probability Report", draw_count=result.draw_count, rows=rows)
 
 
-def _valid_numbers(mapping: object) -> tuple[Number, ...]:
+def _valid_numbers(mapping: Mapping[Number, object]) -> tuple[Number, ...]:
     """Return the valid number keys in numeric order."""
-    if not hasattr(mapping, "keys"):
-        raise TypeError("Analytics result must expose a number mapping.")
-
-    return tuple(sorted(mapping.keys(), key=lambda number: number.value))  # type: ignore[union-attr]
+    return tuple(sorted(mapping, key=lambda number: number.value))
