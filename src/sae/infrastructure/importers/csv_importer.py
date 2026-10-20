@@ -68,6 +68,27 @@ DATE_PATTERN = re.compile(r"[0-9]{2}/[0-9]{2}/[0-9]{4}")
 SUPERSTAR_INTRODUCTION_DATE = date(2006, 3, 28)
 MAX_CONTEST_NUMBER = 999
 
+def _parse_integer_field(
+    value: str,
+    *,
+    field_name: str,
+    record_number: int,
+    error_type: type[CSVFieldError],
+) -> int:
+    """Parse an ASCII decimal field with a field-specific import error."""
+    message = (
+        f"Invalid value at CSV record {record_number}, "
+        f"field '{field_name}': {value!r}."
+    )
+    if INTEGER_PATTERN.fullmatch(value) is None:
+        raise error_type(message)
+
+    try:
+        return int(value)
+    except ValueError as exc:
+        raise error_type(message) from exc
+
+
 
 class CSVImporter:
     """
@@ -203,21 +224,12 @@ class CSVImporter:
                     )
 
             contest_value = row[0]
-
-            if INTEGER_PATTERN.fullmatch(contest_value) is None:
-                raise CSVContestNumberError(
-                    f"Invalid contest number at CSV record {record_number}, "
-                    f"field 'Concorso': {contest_value!r}."
-                )
-
-            try:
-                contest_number = int(contest_value)
-            except ValueError as exc:
-                raise CSVContestNumberError(
-                    f"Invalid contest number at CSV record "
-                    f"{record_number}, field 'Concorso': "
-                    f"{contest_value!r}."
-                ) from exc
+            contest_number = _parse_integer_field(
+                contest_value,
+                field_name="Concorso",
+                record_number=record_number,
+                error_type=CSVContestNumberError,
+            )
 
             if not MIN_NUMBER <= contest_number <= MAX_CONTEST_NUMBER:
                 raise CSVContestNumberError(
@@ -247,20 +259,12 @@ class CSVImporter:
                 ) from exc
 
             jolly_value = row[8]
-
-            if INTEGER_PATTERN.fullmatch(jolly_value) is None:
-                raise CSVJollyError(
-                    f"Invalid Jolly at CSV record {record_number}, "
-                    f"field 'Jolly': {jolly_value!r}."
-                )
-
-            try:
-                jolly_number = int(jolly_value)
-            except ValueError as exc:
-                raise CSVJollyError(
-                    f"Invalid Jolly at CSV record {record_number}, "
-                    f"field 'Jolly': {jolly_value!r}."
-                ) from exc
+            jolly_number = _parse_integer_field(
+                jolly_value,
+                field_name="Jolly",
+                record_number=record_number,
+                error_type=CSVJollyError,
+            )
 
             if not MIN_NUMBER <= jolly_number <= MAX_NUMBER:
                 raise CSVJollyError(
@@ -279,19 +283,12 @@ class CSVImporter:
                         f"28/03/2006; received {superstar_value!r}."
                     )
             else:
-                if INTEGER_PATTERN.fullmatch(superstar_value) is None:
-                    raise CSVSuperstarError(
-                        f"Invalid Superstar at CSV record {record_number}, "
-                        f"field 'Superstar': {superstar_value!r}."
-                    )
-
-                try:
-                    superstar_number = int(superstar_value)
-                except ValueError as exc:
-                    raise CSVSuperstarError(
-                        f"Invalid Superstar at CSV record {record_number}, "
-                        f"field 'Superstar': {superstar_value!r}."
-                    ) from exc
+                superstar_number = _parse_integer_field(
+                    superstar_value,
+                    field_name="Superstar",
+                    record_number=record_number,
+                    error_type=CSVSuperstarError,
+                )
 
                 if not MIN_NUMBER <= superstar_number <= MAX_NUMBER:
                     raise CSVSuperstarError(
@@ -338,20 +335,12 @@ class CSVImporter:
             parsed_numbers: list[Number] = []
 
             for index, value in enumerate(row[2:8], start=1):
-                if INTEGER_PATTERN.fullmatch(value) is None:
-                    raise CSVMainNumberError(
-                        f"Invalid main number at CSV record {record_number}, "
-                        f"field 'N{index}': {value!r}."
-                    )
-
-                try:
-                    number_value = int(value)
-                except ValueError as exc:
-                    raise CSVMainNumberError(
-                        f"Invalid main number at CSV record "
-                        f"{record_number}, field 'N{index}': "
-                        f"{value!r}."
-                    ) from exc
+                number_value = _parse_integer_field(
+                    value,
+                    field_name=f"N{index}",
+                    record_number=record_number,
+                    error_type=CSVMainNumberError,
+                )
 
                 try:
                     parsed_numbers.append(Number(number_value))
