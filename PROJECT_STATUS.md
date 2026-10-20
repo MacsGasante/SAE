@@ -83,7 +83,7 @@ Current Version:
 | MyPy                    | ✅     |
 | Pytest                  | ✅     |
 | Overall Coverage ≥ 97%  | ✅     |
-| Kernel Coverage = 100%  | 🔄     |
+| Kernel Coverage = 100%  | ✅     |
 | GitHub Actions          | ✅     |
 | Documentation           | ✅     |
 
@@ -104,6 +104,6 @@ quality pipeline and the 97% coverage quality gate.
 
 Last update:
 
-D3 CI and Coverage includes GitHub Actions automation and a 97% repository-wide
-coverage gate. A separate 100% Kernel coverage gate is being added to the
-required local quality checks; CI continues to invoke `make check`.
+D3 CI and Coverage includes GitHub Actions automation, a 97% repository-wide
+coverage gate, and a separately enforced 100% Kernel coverage gate. The full
+quality pipeline is run through `make check`.
