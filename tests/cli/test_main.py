@@ -30,6 +30,24 @@ def test_main_info_returns_zero(capsys) -> None:
     assert "Analytics: Frequency, Delay, Probability" in captured.out
 
 
+def test_main_report_frequency_imports_analyzes_and_renders(tmp_path, capsys) -> None:
+    source = tmp_path / "dataset.csv"
+    source.write_text(
+        "Concorso,Data,N1,N2,N3,N4,N5,N6,Jolly,Superstar\n"
+        "1,01/01/2005,1,2,3,4,5,6,90,-\n",
+        encoding="utf-8",
+    )
+
+    assert main(["report", "frequency", str(source)]) == 0
+
+    output = capsys.readouterr().out
+
+    assert output.startswith("Frequency Report\nDraws: 1\n")
+    assert "Number 1: 1" in output
+    assert "Number 7: 0" in output
+    assert "Number 90: 0" in output
+
+
 def test_main_help_returns_zero(capsys) -> None:
     try:
         main(["--help"])
@@ -43,6 +61,7 @@ def test_main_help_returns_zero(capsys) -> None:
     assert "usage:" in captured.out
     assert "--version" in captured.out
     assert "info" in captured.out
+    assert "report" in captured.out
 
 
 def test_main_unknown_command_exits_with_error() -> None:
