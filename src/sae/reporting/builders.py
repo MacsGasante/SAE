@@ -23,7 +23,11 @@ def build_delay_report(result: DelayResult) -> Report:
     rows = tuple(
         ReportRow(
             label=f"Number {number.value}",
-            value="Never" if result.delay(number) is None else str(result.delay(number)),
+            value=(
+                "Never"
+                if result.delay(number) is None
+                else str(result.delay(number))
+            ),
         )
         for number in _valid_numbers(result.delays)
     )
