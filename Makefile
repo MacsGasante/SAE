@@ -25,6 +25,7 @@ check:
 	ruff format --check .
 	mypy src
 	pytest --cov=src/sae --cov-report=term-missing
+	coverage report --include="src/sae/kernel/*" --fail-under=100
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
