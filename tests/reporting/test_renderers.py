@@ -13,10 +13,7 @@ def test_text_report_renderer_uses_stable_line_format() -> None:
     )
 
     assert TextReportRenderer().render(report) == (
-        "Frequency Report\n"
-        "Draws: 42\n"
-        "Number 1: 7\n"
-        "Number 2: 5"
+        "Frequency Report\nDraws: 42\nNumber 1: 7\nNumber 2: 5"
     )
 
 
