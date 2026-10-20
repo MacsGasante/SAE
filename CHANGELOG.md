@@ -19,11 +19,14 @@ Semantic Versioning is adopted.
 - Validation of Jolly and Superstar fields with discard semantics at the domain boundary
 - Atomic construction of imported Dataset instances
 - Dedicated CSV importer exception hierarchy
+- GitHub Actions quality pipeline for pushes to `main` and Pull Requests
 
 ### Engineering
 
 - C2 Import Tools completed and certified
 - CSV Dataset Importer test suite completed
+- D3 CI and Coverage completed with a 97% minimum coverage gate
+- Development quality checks consolidated through `make check`
 
 ---
 
