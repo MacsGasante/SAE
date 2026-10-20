@@ -24,7 +24,7 @@ check:
 	ruff check .
 	ruff format --check .
 	mypy src
-	pytest
+	pytest --cov=src/sae --cov-report=term-missing
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
