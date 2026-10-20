@@ -2,8 +2,19 @@
 
 import argparse
 from collections.abc import Sequence
+from pathlib import Path
 
 from sae import __version__
+from sae.analytics.delay.engine import DelayEngine
+from sae.analytics.frequency.engine import FrequencyEngine
+from sae.analytics.probability.engine import ProbabilityEngine
+from sae.infrastructure.importers.csv_importer import CSVImporter
+from sae.reporting import (
+    TextReportRenderer,
+    build_delay_report,
+    build_frequency_report,
+    build_probability_report,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -26,7 +37,36 @@ def build_parser() -> argparse.ArgumentParser:
         help="Show basic information about SAE.",
     )
 
+    report_parser = subparsers.add_parser(
+        "report",
+        help="Generate an analytics report from a CSV dataset.",
+    )
+    report_parser.add_argument(
+        "analysis",
+        choices=("frequency", "delay", "probability"),
+        help="Analytics result to report.",
+    )
+    report_parser.add_argument(
+        "input",
+        type=Path,
+        help="Path to the official SuperEnalotto CSV dataset.",
+    )
+
     return parser
+
+
+def _run_report(analysis: str, input_path: Path) -> None:
+    """Import a dataset, run the selected analysis, and render its report."""
+    dataset = CSVImporter.import_dataset(input_path)
+
+    if analysis == "frequency":
+        report = build_frequency_report(FrequencyEngine.analyze(dataset))
+    elif analysis == "delay":
+        report = build_delay_report(DelayEngine.analyze(dataset))
+    else:
+        report = build_probability_report(ProbabilityEngine.analyze(dataset))
+
+    print(TextReportRenderer().render(report))
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -39,6 +79,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"Version: {__version__}")
         print("Status: Pre-Alpha")
         print("Analytics: Frequency, Delay, Probability")
+    elif args.command == "report":
+        _run_report(args.analysis, args.input)
 
     return 0
 
