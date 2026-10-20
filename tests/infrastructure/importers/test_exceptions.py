@@ -21,7 +21,6 @@ from sae.infrastructure.importers.exceptions import (
     CSVStreamPositionError,
     CSVSuperstarError,
 )
-
 from sae.kernel import SAEError
 
 
