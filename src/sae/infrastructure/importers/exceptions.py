@@ -6,6 +6,8 @@ Defines the public exception hierarchy for CSV import failures.
 
 from __future__ import annotations
 
+from sae.kernel import SAEError
+
 __all__ = [
     "CSVImportError",
     "CSVFileAccessError",
@@ -27,7 +29,7 @@ __all__ = [
 ]
 
 
-class CSVImportError(Exception):
+class CSVImportError(SAEError):
     """
     Base class for all CSV importer errors.
     """
