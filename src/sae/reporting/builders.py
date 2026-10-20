@@ -21,14 +21,7 @@ def build_frequency_report(result: FrequencyResult) -> Report:
 def build_delay_report(result: DelayResult) -> Report:
     """Build a report from a delay analysis result."""
     rows = tuple(
-        ReportRow(
-            label=f"Number {number.value}",
-            value=(
-                "Never"
-                if result.delay(number) is None
-                else str(result.delay(number))
-            ),
-        )
+        ReportRow(label=f"Number {number.value}", value=_delay_value(result, number))
         for number in _valid_numbers(result.delays)
     )
     return Report(title="Delay Report", draw_count=result.draw_count, rows=rows)
@@ -44,6 +37,12 @@ def build_probability_report(result: ProbabilityResult) -> Report:
         for number in _valid_numbers(result.probabilities)
     )
     return Report(title="Probability Report", draw_count=result.draw_count, rows=rows)
+
+
+def _delay_value(result: DelayResult, number: Number) -> str:
+    """Return the display value for one number's delay."""
+    delay = result.delay(number)
+    return "Never" if delay is None else str(delay)
 
 
 def _valid_numbers(mapping: Mapping[Number, object]) -> tuple[Number, ...]:
