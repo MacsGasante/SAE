@@ -85,7 +85,7 @@ Current Version:
 | Overall Coverage ≥ 97%  | ✅     |
 | Kernel Coverage = 100%  | 🔄     |
 | GitHub Actions          | ✅     |
-| Documentation           | 🔄     |
+| Documentation           | ✅     |
 
 ---
 
