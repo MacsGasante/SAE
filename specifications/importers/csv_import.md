@@ -328,11 +328,11 @@ A failed import must not leave any persistent or external partial state because 
 
 CSV import failures must be represented by an infrastructure-level exception hierarchy.
 
-The public base exception is `CSVImportError`.
+The public base exception is `CSVImportError`. It must derive from the project-wide `SAEError` base exception defined by the Kernel, whose documented contract is to provide the common base for SAE exceptions.
 
 All importer-specific exceptions exposed by the public import operation must derive from `CSVImportError`.
 
-The importer must not expose infrastructure-specific exceptions as part of the Kernel's domain contract.
+This inheritance provides callers with a common exception boundary without moving CSV-specific exception types into the Kernel. The Kernel must not import or depend on the infrastructure importer or its exception classes.
 
 ### 10.2 Error categories
 
