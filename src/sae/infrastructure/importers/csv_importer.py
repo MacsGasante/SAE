@@ -29,13 +29,13 @@ from sae.infrastructure.importers.exceptions import (
     CSVSuperstarError,
 )
 from sae.kernel import Combination, Draw, DrawDate, DrawId, InvalidNumberError, Number
-from sae.kernel.foundation.constants import MAX_NUMBER, MIN_NUMBER
 from sae.kernel.dataset import Dataset, InvalidDatasetError
 from sae.kernel.domain.exceptions import (
     InvalidDrawDateError,
     InvalidDrawError,
     InvalidDrawIdError,
 )
+from sae.kernel.foundation.constants import MAX_NUMBER, MIN_NUMBER
 
 EXPECTED_HEADER = (
     "Concorso",
@@ -67,6 +67,7 @@ INTEGER_PATTERN = re.compile(r"[0-9]+")
 DATE_PATTERN = re.compile(r"[0-9]{2}/[0-9]{2}/[0-9]{4}")
 SUPERSTAR_INTRODUCTION_DATE = date(2006, 3, 28)
 MAX_CONTEST_NUMBER = 999
+
 
 def _parse_integer_field(
     value: str,
@@ -234,8 +235,8 @@ class CSVImporter:
             if not MIN_NUMBER <= contest_number <= MAX_CONTEST_NUMBER:
                 raise CSVContestNumberError(
                     f"Contest number at CSV record {record_number}, "
-                    f"field 'Concorso' must be between {MIN_NUMBER} and {MAX_CONTEST_NUMBER}; "
-                    f"received {contest_value!r}."
+                    f"field 'Concorso' must be between {MIN_NUMBER} and "
+                    f"{MAX_CONTEST_NUMBER}; received {contest_value!r}."
                 )
 
             date_value = row[1]
@@ -293,8 +294,8 @@ class CSVImporter:
                 if not MIN_NUMBER <= superstar_number <= MAX_NUMBER:
                     raise CSVSuperstarError(
                         f"Superstar at CSV record {record_number}, "
-                        f"field 'Superstar' must be between {MIN_NUMBER} and {MAX_NUMBER}; "
-                        f"received {superstar_value!r}."
+                        f"field 'Superstar' must be between {MIN_NUMBER} and "
+                        f"{MAX_NUMBER}; received {superstar_value!r}."
                     )
 
             try:
