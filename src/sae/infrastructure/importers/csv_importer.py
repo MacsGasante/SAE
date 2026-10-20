@@ -10,8 +10,6 @@ from datetime import date, datetime
 from pathlib import Path
 from typing import TextIO
 
-from sae.kernel.foundation.constants import MAX_NUMBER, MIN_NUMBER
-
 from sae.infrastructure.importers.exceptions import (
     CSVContestNumberError,
     CSVDatasetValidationError,
@@ -30,11 +28,11 @@ from sae.infrastructure.importers.exceptions import (
     CSVStreamPositionError,
     CSVSuperstarError,
 )
-from sae.kernel import Combination, Draw, DrawDate, DrawId, Number
+from sae.kernel import Combination, Draw, DrawDate, DrawId, InvalidNumberError, Number
+from sae.kernel.foundation.constants import MAX_NUMBER, MIN_NUMBER
 from sae.kernel.dataset import Dataset, InvalidDatasetError
 from sae.kernel.domain.exceptions import (
     InvalidDrawDateError,
-    InvalidNumberError,
     InvalidDrawError,
     InvalidDrawIdError,
 )
@@ -354,13 +352,6 @@ class CSVImporter:
                         f"{record_number}, field 'N{index}': "
                         f"{value!r}."
                     ) from exc
-
-                if not 1 <= number_value <= 90:
-                    raise CSVMainNumberError(
-                        f"Main number at CSV record {record_number}, "
-                        f"field 'N{index}' must be between 1 and 90; "
-                        f"received {value!r}."
-                    )
 
                 try:
                     parsed_numbers.append(Number(number_value))
