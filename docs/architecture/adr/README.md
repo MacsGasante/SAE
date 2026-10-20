@@ -45,6 +45,7 @@ ADR-0003-domain-layer.md
 ADR-0004-dataset-aggregate-root.md
 
 ADR-0005-csv-import-boundary-and-domain-mapping.md
+ADR-0006-reporting-boundary-and-rendering.md
 
 ---
 
@@ -54,6 +55,7 @@ ADR-0005-csv-import-boundary-and-domain-mapping.md
 |------|--------|-------------|
 | ADR-0004 | Accepted | Dataset Aggregate Root |
 | ADR-0005 | Accepted | CSV Import Boundary and Domain Mapping |
+| ADR-0006 | Proposed | Reporting Boundary and Rendering |
 
 ---
 
