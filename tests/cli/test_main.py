@@ -1,5 +1,15 @@
+from pathlib import Path
+
 from sae import __version__
 from sae.cli.main import main
+
+
+def _write_dataset(path: Path) -> None:
+    path.write_text(
+        "Concorso,Data,N1,N2,N3,N4,N5,N6,Jolly,Superstar\n"
+        "1,01/01/2005,1,2,3,4,5,6,90,-\n",
+        encoding="utf-8",
+    )
 
 
 def test_main_without_arguments_returns_zero() -> None:
@@ -32,11 +42,7 @@ def test_main_info_returns_zero(capsys) -> None:
 
 def test_main_report_frequency_imports_analyzes_and_renders(tmp_path, capsys) -> None:
     source = tmp_path / "dataset.csv"
-    source.write_text(
-        "Concorso,Data,N1,N2,N3,N4,N5,N6,Jolly,Superstar\n"
-        "1,01/01/2005,1,2,3,4,5,6,90,-\n",
-        encoding="utf-8",
-    )
+    _write_dataset(source)
 
     assert main(["report", "frequency", str(source)]) == 0
 
@@ -46,6 +52,32 @@ def test_main_report_frequency_imports_analyzes_and_renders(tmp_path, capsys) ->
     assert "Number 1: 1" in output
     assert "Number 7: 0" in output
     assert "Number 90: 0" in output
+
+
+def test_main_report_delay_renders_selected_analysis(tmp_path, capsys) -> None:
+    source = tmp_path / "dataset.csv"
+    _write_dataset(source)
+
+    assert main(["report", "delay", str(source)]) == 0
+
+    output = capsys.readouterr().out
+
+    assert output.startswith("Delay Report\nDraws: 1\n")
+    assert "Number 1: 0" in output
+    assert "Number 7: Never" in output
+
+
+def test_main_report_probability_renders_selected_analysis(tmp_path, capsys) -> None:
+    source = tmp_path / "dataset.csv"
+    _write_dataset(source)
+
+    assert main(["report", "probability", str(source)]) == 0
+
+    output = capsys.readouterr().out
+
+    assert output.startswith("Probability Report\nDraws: 1\n")
+    assert "Number 1: 1.000000" in output
+    assert "Number 7: 0.000000" in output
 
 
 def test_main_help_returns_zero(capsys) -> None:
