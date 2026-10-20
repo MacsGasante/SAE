@@ -59,7 +59,7 @@ Current Version:
 | Milestone                       | Status         |
 | ------------------------------- | -------------- |
 | E1 — Repository Consolidation   | 🟡 In Progress |
-| E2 — Development Infrastructure | ⏳ Planned     |
+| E2 — Development Infrastructure | 🟡 In Progress |
 
 ---
 
@@ -77,13 +77,14 @@ Current Version:
 
 # Quality Gates
 
-| Gate          | Status |
-| ------------- | ------ |
-| Ruff          | ✅     |
-| MyPy          | ✅     |
-| Pytest        | ✅     |
-| Coverage      | ⏳     |
-| Documentation | ✅     |
+| Gate            | Status |
+| --------------- | ------ |
+| Ruff            | ✅     |
+| MyPy            | ✅     |
+| Pytest          | ✅     |
+| Coverage ≥ 97%  | ✅     |
+| GitHub Actions  | ✅     |
+| Documentation   | ✅     |
 
 ---
 
@@ -95,6 +96,12 @@ Next functional milestone:
 
 C3 — Reporting.
 
+Engineering focus:
+
+D3 — CI and Coverage has been implemented, including the GitHub Actions
+quality pipeline and the 97% coverage quality gate.
+
 Last update:
 
-C2 Import Tools implemented and certified, including the CSV Dataset Importer, CSV validation, external-to-domain mapping, Jolly/Superstar field validation and discard semantics, atomic Dataset construction, importer exception hierarchy, and importer test coverage.
+D3 CI and Coverage implemented, including GitHub Actions automation,
+coverage enforcement at 97%, and contributor documentation alignment.
