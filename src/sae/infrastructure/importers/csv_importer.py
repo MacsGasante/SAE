@@ -89,7 +89,6 @@ def _parse_integer_field(
         raise error_type(message) from exc
 
 
-
 class CSVImporter:
     """
     Import the official SuperEnalotto CSV dataset.
