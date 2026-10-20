@@ -78,8 +78,7 @@ def _parse_integer_field(
 ) -> int:
     """Parse an ASCII decimal field with a field-specific import error."""
     message = (
-        f"Invalid value at CSV record {record_number}, "
-        f"field '{field_name}': {value!r}."
+        f"Invalid value at CSV record {record_number}, field '{field_name}': {value!r}."
     )
     if INTEGER_PATTERN.fullmatch(value) is None:
         raise error_type(message)
