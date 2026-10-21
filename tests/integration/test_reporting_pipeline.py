@@ -40,9 +40,7 @@ def test_report_pipeline_from_csv_to_output(
     source = tmp_path / "historical-dataset.csv"
     _write_dataset(source)
 
-    assert main(
-        ["report", analysis, str(source), "--format", output_format]
-    ) == 0
+    assert main(["report", analysis, str(source), "--format", output_format]) == 0
 
     output = capsys.readouterr().out
 
