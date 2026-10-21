@@ -74,12 +74,14 @@ def _run_report(analysis: str, input_path: Path, output_format: str) -> None:
     else:
         report = build_probability_report(ProbabilityEngine.analyze(dataset))
 
-    renderers = {
-        "text": TextReportRenderer(),
-        "json": JsonReportRenderer(),
-        "csv": CsvReportRenderer(),
-    }
-    print(renderers[output_format].render(report), end="")
+    if output_format == "text":
+        renderer = TextReportRenderer()
+    elif output_format == "json":
+        renderer = JsonReportRenderer()
+    else:
+        renderer = CsvReportRenderer()
+
+    print(renderer.render(report), end="")
 
 
 def main(argv: Sequence[str] | None = None) -> int:
