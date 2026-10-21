@@ -24,7 +24,8 @@ def _existing_file(value: str) -> Path:
     path = Path(value)
 
     if not path.is_file():
-        raise argparse.ArgumentTypeError(f"file does not exist or is not a file: {value!r}")
+        message = f"file does not exist or is not a file: {value!r}"
+        raise argparse.ArgumentTypeError(message)
 
     return path
 
