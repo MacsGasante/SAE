@@ -49,7 +49,7 @@ This document describes the long-term evolution of the project.
 
 - R1.1 Experiment identity, immutable configuration, and execution context ✅
 - R1.2 Immutable ResearchResult and provenance ✅
-- R1.3 ResearchModule protocol and controlled execution — in progress until PR merge and CI verification
+- R1.3 ResearchModule protocol and controlled execution ✅
 
 ### R2 — First Concrete Research Module
 
