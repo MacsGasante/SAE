@@ -53,7 +53,7 @@ def test_main_report_frequency_imports_analyzes_and_renders(tmp_path, capsys) ->
 
     output = capsys.readouterr().out
 
-    assert output.startswith("Frequency Report\\nDraws: 1\\n")
+    assert output.startswith("Frequency Report\nDraws: 1\n")
     assert "Number 1: 1" in output
     assert "Number 7: 0" in output
     assert "Number 90: 0" in output
@@ -67,7 +67,7 @@ def test_main_report_delay_renders_selected_analysis(tmp_path, capsys) -> None:
 
     output = capsys.readouterr().out
 
-    assert output.startswith("Delay Report\\nDraws: 1\\n")
+    assert output.startswith("Delay Report\nDraws: 1\n")
     assert "Number 1: 0" in output
     assert "Number 7: Never" in output
 
@@ -80,7 +80,7 @@ def test_main_report_probability_renders_selected_analysis(tmp_path, capsys) -> 
 
     output = capsys.readouterr().out
 
-    assert output.startswith("Probability Report\\nDraws: 1\\n")
+    assert output.startswith("Probability Report\nDraws: 1\n")
     assert "Number 1: 1.000000" in output
     assert "Number 7: 0.000000" in output
 
@@ -103,7 +103,7 @@ def test_main_report_rejects_directory_as_input(tmp_path, capsys) -> None:
 
     assert exc_info.value.code == 2
     captured = capsys.readouterr()
-    assert "is not a file" in captured.err or "file does not exist or is not a file" in captured.err
+    assert "file does not exist or is not a file" in captured.err
     assert "Traceback" not in captured.err
 
 
@@ -119,7 +119,7 @@ def test_main_report_json_renders_selected_format(tmp_path, capsys) -> None:
     assert payload["title"] == "Frequency Report"
     assert payload["draw_count"] == 1
     assert payload["rows"][0] == {"label": "Number 1", "value": "1"}
-    assert output.endswith("\\n")
+    assert output.endswith("\n")
 
 
 def test_main_report_csv_renders_selected_format(tmp_path, capsys) -> None:
