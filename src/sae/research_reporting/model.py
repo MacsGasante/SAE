@@ -1,14 +1,8 @@
 """Presentation-neutral report model for Research Results."""
 
 from dataclasses import dataclass
-from typing import TypeAlias
-
 from sae.research.result import ResearchProvenance
 
-JSONScalar: TypeAlias = str | int | float | bool | None
-JSONValue: TypeAlias = (
-    JSONScalar | tuple["JSONValue", ...] | dict[str, "JSONValue"]
-)
 
 
 @dataclass(frozen=True, slots=True)
