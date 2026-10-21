@@ -30,6 +30,10 @@ This document describes the long-term evolution of the project.
 - C1 Basic Commands ✅
 - C2 Import Tools ✅
 - C3 Reporting
+  - C3.1 Reporting core ✅
+  - C3.2 CLI reporting ✅
+  - C3.3 JSON and CSV output formats ✅
+  - C3.4 End-to-end integration and validation — in progress
 
 ---
 
