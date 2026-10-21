@@ -3,12 +3,9 @@
 import csv
 import io
 import json
-from collections.abc import Mapping, Sequence
-from typing import TypeAlias
+from collections.abc import Mapping
 
 from sae.research_reporting.model import ResearchReport
-
-JSONScalar: TypeAlias = str | int | float | bool | None
 
 
 def _plain(value: object) -> object:
