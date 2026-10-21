@@ -18,6 +18,7 @@ The initial research architecture is intentionally technology-neutral. External 
 - `experiment-context.md` — implemented R1.1 contracts for immutable experiment identity, configuration, and execution context.
 - `research-module.md` — implemented R1.3 protocol and controlled execution boundary.
 - `result.md` — implemented R1.2 contract for immutable research results and provenance.
+- `monte-carlo.md` — initial R2 module for seeded simulation of independent six-number draws.
 
 ## Architectural Boundary
 
@@ -37,4 +38,4 @@ Research Modules must not:
 
 ## Status
 
-R0 established the architectural foundation. R1.1 implemented experiment identity, immutable configuration, and execution context. R1.2 implemented immutable research results and explicit provenance. R1.3 implements the ResearchModule protocol and validates controlled execution and result provenance. The first concrete research algorithm remains in R2.
+R0 established the architectural foundation. R1.1 implemented experiment identity, immutable configuration, and execution context. R1.2 implemented immutable research results and explicit provenance. R1.3 implements the ResearchModule protocol and validates controlled execution and result provenance. R2 introduces the first concrete Research Module, a seeded Monte Carlo simulation that reports properties of its simulated sample only.
