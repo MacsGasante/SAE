@@ -13,6 +13,10 @@ Semantic Versioning is adopted.
 
 ### Added
 
+- Reporting model and builders for Frequency, Delay, and Probability analytics
+- CLI `sae report` command with text, JSON, and CSV output formats
+- End-to-end integration tests covering CSV import through report output across all supported analyses and formats
+- User guide for reporting commands and output contracts
 - CSV Dataset Importer for file-path and stream sources
 - CSV validation for the official dataset format
 - Mapping from external contest data to DrawId, DrawDate, and Combination
@@ -23,6 +27,7 @@ Semantic Versioning is adopted.
 
 ### Engineering
 
+- C3 Reporting completed: reporting core, CLI integration, JSON/CSV renderers, end-to-end tests, and documentation
 - C2 Import Tools completed and certified
 - CSV Dataset Importer test suite completed
 - D3 CI and Coverage completed with a 97% minimum coverage gate
