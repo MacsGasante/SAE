@@ -111,6 +111,23 @@ The functional contract for these components is defined in:
 
 ---
 
+# Research Documentation
+
+Research architecture is documented under:
+
+docs/architecture/adr/
+
+Research functional specifications are available under:
+
+* specifications/research/
+* specifications/research/experiment.md
+* specifications/research/research-module.md
+* specifications/research/result.md
+
+These documents define the research boundary, experiment reproducibility, Research Module contract, and Research Result provenance.
+
+---
+
 # Specifications
 
 Specifications are organized by architectural and functional scope.
@@ -122,8 +139,11 @@ Locations:
 * specifications/dataset/
 * specifications/analytics/
 * specifications/importers/
+* specifications/research/
 
 Analytics specifications define the calculations, public result semantics, and boundary cases independently from the Kernel implementation.
+
+Research specifications define experimental behaviour and reproducibility independently from implementation details.
 
 ---
 
