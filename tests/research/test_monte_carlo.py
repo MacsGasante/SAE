@@ -60,8 +60,8 @@ def test_simulation_records_frequency_totals_and_provenance() -> None:
     )
 
     assert isinstance(result, ResearchResult)
+    assert isinstance(result.payload, Mapping)
     payload = result.payload
-    assert isinstance(payload, Mapping)
     assert payload["draw_count"] == 100
     assert payload["number_domain_max"] == 90
     assert payload["numbers_per_draw"] == 6
@@ -72,6 +72,7 @@ def test_simulation_records_frequency_totals_and_provenance() -> None:
     assert sum(frequencies.values()) == 600
     assert all(0 <= count <= 100 for count in frequencies.values())
     assert result.provenance.execution_context.random_seed == 42
+    assert isinstance(result.execution_metadata, Mapping)
     assert result.execution_metadata["random_seed"] == 42
 
 
@@ -79,8 +80,8 @@ def test_simulation_records_frequency_totals_and_provenance() -> None:
 def test_simulation_rejects_invalid_draw_count(draw_count: object) -> None:
     experiment = Experiment(
         experiment_id="mc-invalid-config",
-        module_id=MonteCarloDrawSimulation.module_id,
-        module_version=MonteCarloDrawSimulation.module_version,
+        module_id=MonteCarloDrawSimulation().module_id,
+        module_version=MonteCarloDrawSimulation().module_version,
         input_fingerprint="self-contained:none",
         configuration=ExperimentConfiguration({"draw_count": draw_count}),
         execution_context=ExecutionContext(random_seed=1),
@@ -118,7 +119,9 @@ def test_simulation_rejects_incompatible_module_version() -> None:
 
 def test_simulation_result_is_immutable() -> None:
     result = MonteCarloDrawSimulation().execute(None, _experiment())
+    assert isinstance(result.payload, Mapping)
     frequencies = result.payload["number_frequencies"]
+    assert isinstance(frequencies, Mapping)
 
     with pytest.raises(TypeError):
         frequencies["1"] = 999  # type: ignore[index]
