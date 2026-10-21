@@ -14,8 +14,9 @@ SAE is organized into the following principal areas:
 
 - **Kernel** — domain foundations, collections, builders, domain objects, and Dataset.
 - **Analytics** — analytical engines operating on the Dataset, including Frequency, Delay, and Probability.
-- **CLI** — application-facing command layer, currently providing C1 Basic Commands.
-- **Infrastructure** — external adapters, currently including the CSV Dataset Importer boundary.
+- **CLI** — application-facing command layer, providing C1 Basic Commands and C3 Reporting commands.
+- **Infrastructure** — external adapters, including the CSV Dataset Importer boundary.
+- **Reporting** — application-facing report model, builders, and dedicated text, JSON, and CSV renderers.
 - **Research** — future area that must remain separated from the Kernel and analytical domain logic.
 
 The current implemented analytical components are:
@@ -27,12 +28,13 @@ The current implemented analytical components are:
 The current implemented CLI components are:
 
 - C1 — Basic Commands
+- C3 — Reporting: `sae report <frequency|delay|probability> <dataset.csv> [--format text|json|csv]` (text is the default)
 
 The current implemented Infrastructure component is:
 
 - C2 — CSV Dataset Importer
 
-The CLI provides the application-facing entry point for SAE and currently exposes basic informational commands.
+The CLI provides the application-facing entry point for SAE. Its reporting command imports a CSV Dataset, invokes the selected Analytics engine, builds a presentation-neutral report, and delegates output to a dedicated renderer.
 
 The CSV Dataset Importer translates the official CSV representation into domain objects and Dataset instances while keeping CSV-specific concerns outside the Kernel.
 

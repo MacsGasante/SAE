@@ -77,7 +77,7 @@ docs/glossary/
 
 # User Documentation
 
-Documentation intended for end users.
+Documentation intended for end users, including the `sae report` command and its text, JSON, and CSV output contracts.
 
 Location:
 
@@ -121,6 +121,7 @@ Locations:
 * specifications/domain/
 * specifications/dataset/
 * specifications/analytics/
+* specifications/importers/
 
 Analytics specifications define the calculations, public result semantics, and boundary cases independently from the Kernel implementation.
 

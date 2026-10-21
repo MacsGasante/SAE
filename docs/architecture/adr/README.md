@@ -55,7 +55,7 @@ ADR-0006-reporting-boundary-and-rendering.md
 |------|--------|-------------|
 | ADR-0004 | Accepted | Dataset Aggregate Root |
 | ADR-0005 | Accepted | CSV Import Boundary and Domain Mapping |
-| ADR-0006 | Proposed | Reporting Boundary and Rendering |
+| ADR-0006 | Accepted | Reporting Boundary and Rendering |
 
 ---
 
