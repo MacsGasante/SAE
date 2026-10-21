@@ -20,8 +20,10 @@ The public `ResearchModule` protocol in `sae.research.module` defines:
 @property
 def module_id(self) -> str: ...
 
+
 @property
 def module_version(self) -> str: ...
+
 
 def execute(self, input_data: object, experiment: Experiment) -> ResearchResult: ...
 ```
