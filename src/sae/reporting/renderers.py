@@ -25,9 +25,7 @@ class JsonReportRenderer:
         payload = {
             "title": report.title,
             "draw_count": report.draw_count,
-            "rows": [
-                {"label": row.label, "value": row.value} for row in report.rows
-            ],
+            "rows": [{"label": row.label, "value": row.value} for row in report.rows],
         }
         return json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
 
