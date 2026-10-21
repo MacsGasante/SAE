@@ -1,6 +1,7 @@
 """Presentation-neutral report model for Research Results."""
 
 from dataclasses import dataclass
+
 from sae.research.result import ResearchProvenance
 
 
