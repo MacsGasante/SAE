@@ -50,7 +50,10 @@ Current Version:
 | ------------------- | -------------- |
 | C1 — Basic Commands | ✅ Implemented |
 | C2 — Import Tools   | ✅ Implemented |
-| C3 — Reporting      | ⏳ Planned     |
+| C3.1 — Reporting core | ✅ Complete |
+| C3.2 — CLI reporting | ✅ Complete |
+| C3.3 — JSON and CSV formats | ✅ Complete |
+| C3.4 — End-to-end integration | ✅ Complete |
 
 ---
 
@@ -91,11 +94,11 @@ Current Version:
 
 # Current Focus
 
-C2 — Import Tools has been implemented and certified.
+C3 Reporting is complete, including the reporting core, CLI command, text/JSON/CSV renderers, end-to-end integration coverage, and user documentation.
 
-Next functional milestone:
+Next functional direction:
 
-C3 — Reporting.
+Research Modules are planned, but detailed scope and sequencing have not yet been scheduled.
 
 Engineering focus:
 
@@ -103,6 +106,8 @@ D3 — CI and Coverage has been implemented, including the GitHub Actions
 quality pipeline and the 97% coverage quality gate.
 
 Last update:
+
+C3 Reporting is complete. The `sae report` command supports Frequency, Delay, and Probability analyses with text (default), JSON, and CSV output. Integration tests exercise the CSV-import-to-CLI-output pipeline across all three analyses and all three formats.
 
 D3 CI and Coverage includes GitHub Actions automation, a 97% repository-wide
 coverage gate, and a separately enforced 100% Kernel coverage gate. The full
