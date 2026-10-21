@@ -6,13 +6,10 @@ import json
 import math
 from collections.abc import Mapping
 from types import MappingProxyType
-from typing import TypeAlias
 
-_JSONScalar: TypeAlias = str | int | float | bool | None
-_FrozenJSON: TypeAlias = (
-    _JSONScalar
-    | tuple["_FrozenJSON", ...]
-    | Mapping[str, "_FrozenJSON"]
+type _JSONScalar = str | int | float | bool | None
+type _FrozenJSON = (
+    _JSONScalar | tuple[_FrozenJSON, ...] | Mapping[str, _FrozenJSON]
 )
 
 
