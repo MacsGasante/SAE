@@ -53,9 +53,9 @@ This document describes the long-term evolution of the project.
 
 ### R2 — First Concrete Research Module
 
-- Implement a controlled simulation-oriented experiment.
-- Define module-specific input, configuration, seed handling, result payload, and reproducibility tests.
-- Do not introduce a prediction API or betting recommendations.
+- Seeded Monte Carlo simulation of independent six-number draws ✅
+- Explicit configuration, seed handling, immutable result payload, and provenance ✅
+- Reproducibility and input/configuration validation tests ✅
 
 ### R3 — Research Reporting and CLI
 
