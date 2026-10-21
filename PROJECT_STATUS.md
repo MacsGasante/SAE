@@ -46,14 +46,14 @@ Current Version:
 
 # CLI Milestones
 
-| Milestone                   | Status         |
-| --------------------------- | -------------- |
-| C1 — Basic Commands         | ✅ Implemented |
-| C2 — Import Tools           | ✅ Implemented |
-| C3.1 — Reporting core       | ✅ Complete    |
-| C3.2 — CLI reporting        | ✅ Complete    |
-| C3.3 — JSON and CSV formats | ✅ Complete    |
-| C3.4 — End-to-end integration | ✅ Complete  |
+| Milestone                     | Status         |
+| ----------------------------- | -------------- |
+| C1 — Basic Commands           | ✅ Implemented |
+| C2 — Import Tools             | ✅ Implemented |
+| C3.1 — Reporting core         | ✅ Complete    |
+| C3.2 — CLI reporting          | ✅ Complete    |
+| C3.3 — JSON and CSV formats   | ✅ Complete    |
+| C3.4 — End-to-end integration | ✅ Complete    |
 
 ---
 
@@ -64,12 +64,12 @@ Current Version:
 | R0 — Research architecture | ✅ Complete |
 | R1.1 — Experiment and execution context | ✅ Complete |
 | R1.2 — Research result and provenance | ✅ Complete |
-| R1.3 — Module contract and controlled execution | ✅ Implemented |
-| R2 — First concrete research module | ⏳ Planned |
+| R1.3 — Module contract and controlled execution | ✅ Complete |
+| R2 — First concrete research module | ✅ Implemented |
 | R3 — Research reporting and CLI | ⏳ Planned |
 | R4 — Advanced research | ⏳ Planned |
 
-R1.3 provides a technology-neutral ResearchModule protocol and an executor that validates module identity, execution result type, and experiment provenance. It does not implement a concrete algorithm, input fingerprinting, persistence, scheduling, or statistical interpretation.
+R2 introduces `MonteCarloDrawSimulation`, a seeded simulation of independent six-number draws. It requires explicit random seed and validates its draw-count configuration. The immutable result reports simulated number frequencies and provenance. It does not consume historical Dataset data, predict official draws, or recommend bets.
 
 ---
 
@@ -110,10 +110,10 @@ R1.3 provides a technology-neutral ResearchModule protocol and an executor that 
 
 # Current Focus
 
-R1 Research Core is in progress. R1.1, R1.2, and the R1.3 module contract/execution boundary are implemented; the next milestone is R2, the first concrete simulation-oriented Research Module, after R1.3 is merged and its CI is verified.
+R1 Research Core is complete. R2 introduces the initial reproducible simulation module. The next milestone is R3, which will define Research reporting and CLI integration without coupling Research outputs to existing Analytics result types.
 
 Engineering focus remains D3 — CI and Coverage, including GitHub Actions automation, the 97% repository-wide coverage gate, and the separately enforced 100% Kernel coverage gate. The full quality pipeline is run through `make check`.
 
 Last update:
 
-C3 Reporting is complete. The `sae report` command supports Frequency, Delay, and Probability analyses with text (default), JSON, and CSV output. Integration tests exercise the CSV-import-to-CLI-output pipeline across all three analyses and all three formats. Research R1.3 adds controlled module execution and result provenance validation without modifying Kernel or Analytics contracts.
+C3 Reporting is complete. The `sae report` command supports Frequency, Delay, and Probability analyses with text (default), JSON, and CSV output. Integration tests exercise the CSV-import-to-CLI-output pipeline across all three analyses and all three formats. Research R1.1–R1.3 establish immutable experiment configuration, provenance, and controlled execution; R2 adds a seeded Monte Carlo module behind the Research boundary.
