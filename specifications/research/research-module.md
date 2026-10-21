@@ -1,58 +1,58 @@
 # Research Module Specification
 
-Version: 0.1
+Version: 0.2
 
-Status: Proposed
+Status: Implemented (R1.3)
 
 ---
 
 ## Purpose
 
-A Research Module is an autonomous experimental capability that executes a defined research procedure over declared inputs and configuration and returns a Research Result.
+A Research Module is an autonomous experimental capability that executes a defined research procedure over declared input data and an explicit Experiment, returning a Research Result.
 
 A module owns the experimental procedure, not the Kernel domain model or the existing Analytics contracts.
 
-## Module Contract
+## Python Contract
 
-A Research Module must expose a conceptual operation equivalent to:
+The public `ResearchModule` protocol in `sae.research.module` defines:
 
-```text
-execute(input, configuration, execution_context) -> ResearchResult
+```python
+@property
+def module_id(self) -> str: ...
+
+@property
+def module_version(self) -> str: ...
+
+def execute(self, input_data: object, experiment: Experiment) -> ResearchResult: ...
 ```
 
-The concrete Python interface is an implementation decision for the R1 Research Core milestone.
+Module identity and version must be stable, non-empty strings and must match the supplied Experiment. The concrete input type and its interpretation belong to each module's own specification. The core deliberately does not infer, fingerprint, or mutate input data.
+
+## Controlled Execution
+
+`execute_research_module(module, input_data, experiment)` is the public execution boundary. It validates the experiment and protocol, checks that module identity/version match the experiment, executes the module, and verifies that the returned value is a ResearchResult whose provenance exactly matches the supplied experiment.
+
+Module exceptions are exposed as ResearchExecutionError with the original exception preserved as the cause. Contract violations are reported as ResearchExecutionError. Invalid top-level argument types and invalid module identity values are rejected before execution.
+
+The executor does not retry, schedule, parallelize, persist, serialize, or instrument executions. It does not compute input fingerprints; the caller is responsible for ensuring that the Experiment fingerprint identifies the supplied input.
 
 ## Inputs
 
-A module must declare the input types it requires.
+A module must document the input types it requires.
 
-When a module consumes the SAE historical Dataset, it must consume the established Dataset contract and treat the Dataset as read-only.
+When a module consumes the SAE historical Dataset, it must consume the established Dataset contract and treat the Dataset as read-only. A module may consume Analytics results when they are part of the declared experiment input or procedure.
 
-A module may consume Analytics results when they are part of the declared experiment input or procedure.
+## Configuration and Execution Context
 
-## Configuration
-
-Module-specific parameters belong to the experiment configuration rather than hidden module state.
-
-Configuration must be immutable during execution.
-
-## Execution Context
-
-Execution context contains reproducibility information that is not itself part of the research hypothesis, including a random seed when required.
-
-A module must not silently generate or discard a seed when randomness affects the result.
+Module-specific parameters belong to the immutable Experiment configuration rather than hidden module state. Execution context contains reproducibility information, including an explicit random seed when required. A module must not silently generate or discard a seed when randomness affects the result.
 
 ## Result
 
-Every successful module execution returns a Research Result with sufficient provenance to identify the experiment that produced it.
-
-A Research Module must not return an existing Analytics result type as its primary research result when the execution represents an experiment. Research results have a separate contract.
+Every successful module execution returns a ResearchResult with provenance matching the supplied Experiment. A Research Module must not return an existing Analytics result type as its primary research result when the execution represents an experiment.
 
 ## Determinism
 
-A deterministic module must produce the same semantic result for the same declared input and configuration.
-
-A randomized module must produce the same semantic result for the same declared input, configuration, module version, and seed, subject to the module's documented numerical tolerances.
+A deterministic module should produce the same semantic result for the same declared input and experiment configuration. A randomized module should produce the same semantic result for the same declared input, configuration, module version, and seed, subject to its documented numerical tolerances.
 
 ## Isolation
 
@@ -67,12 +67,12 @@ Research Modules must not:
 
 ## Technology Boundary
 
-The module contract is technology-neutral.
-
-Scientific computing, statistical, numerical, or machine-learning dependencies may be used by individual modules when justified by their research requirements. Such dependencies must remain behind the Research boundary and must not become implicit Kernel dependencies.
+The module contract is technology-neutral. Scientific computing, statistical, numerical, or machine-learning dependencies may be used by individual modules when justified by their research requirements. Such dependencies must remain behind the Research boundary and must not become implicit Kernel dependencies.
 
 ## Initial Module Direction
 
-The first concrete Research Module should be a controlled simulation-oriented module because it exercises the core requirements of the Research architecture: explicit configuration, random seed handling, reproducibility, execution context, result provenance, and performance.
+The first concrete Research Module is planned as a controlled simulation-oriented module, exercising explicit configuration, random seed handling, reproducibility, result provenance, and performance. It belongs to R2 and is not implemented by R1.3.
 
-The concrete module contract is deferred to the R2 milestone and is not defined by this specification.
+## Verification Expectations
+
+Tests cover successful execution, module identity/version mismatch, invalid module contracts, invalid result types, provenance mismatch, and module execution failures. Input-specific validation, scientific correctness, and deterministic replay must be tested by each concrete module.
