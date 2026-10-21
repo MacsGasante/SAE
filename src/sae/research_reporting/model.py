@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from sae.research.result import ResearchProvenance
 
 
-
 @dataclass(frozen=True, slots=True)
 class ResearchReport:
     """Immutable presentation model for a Research Result.
