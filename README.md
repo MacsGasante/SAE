@@ -55,10 +55,14 @@ Completed milestones:
   * A3 — Probability Engine
 * C1 — Basic Commands
 * C2 — Import Tools
+* C3 — Reporting
+  * C3.1 — Reporting core
+  * C3.2 — CLI reporting
+  * C3.3 — JSON and CSV formats
 
 Current focus:
 
-* C3 — Reporting
+* C3.4 — Reporting integration and end-to-end validation
 
 ---
 
@@ -151,6 +155,10 @@ make check
 * C1 Basic Commands ✅
 * C2 Import Tools ✅
 * C3 Reporting
+  * C3.1 Reporting core ✅
+  * C3.2 CLI reporting ✅
+  * C3.3 JSON and CSV formats ✅
+  * C3.4 Integration and end-to-end validation — in progress
 * Research Modules
 
 ---
