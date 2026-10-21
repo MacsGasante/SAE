@@ -8,9 +8,7 @@ from collections.abc import Mapping
 from types import MappingProxyType
 
 type _JSONScalar = str | int | float | bool | None
-type _FrozenJSON = (
-    _JSONScalar | tuple[_FrozenJSON, ...] | Mapping[str, _FrozenJSON]
-)
+type _FrozenJSON = _JSONScalar | tuple[_FrozenJSON, ...] | Mapping[str, _FrozenJSON]
 
 
 def _freeze(value: object) -> _FrozenJSON:
