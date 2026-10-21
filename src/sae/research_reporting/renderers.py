@@ -94,11 +94,14 @@ class CsvResearchReportRenderer:
             values = data[section]
             if isinstance(values, Mapping):
                 for key, value in values.items():
-                    rendered = (
-                        json.dumps(value, ensure_ascii=False, separators=(",", ":"))
-                        if isinstance(value, (Mapping, list))
-                        else "" if value is None else str(value)
-                    )
+                    if isinstance(value, (Mapping, list)):
+                        rendered = json.dumps(
+                            value, ensure_ascii=False, separators=(",", ":")
+                        )
+                    elif value is None:
+                        rendered = ""
+                    else:
+                        rendered = str(value)
                     writer.writerow((section, key, rendered))
             else:
                 writer.writerow((section, "value", str(values)))
