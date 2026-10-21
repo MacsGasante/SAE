@@ -2,8 +2,8 @@
 
 from dataclasses import dataclass
 
-from .experiment_configuration import ExperimentConfiguration
 from .execution_context import ExecutionContext
+from .experiment_configuration import ExperimentConfiguration
 
 
 @dataclass(frozen=True, slots=True)
