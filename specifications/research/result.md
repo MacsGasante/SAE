@@ -2,7 +2,7 @@
 
 Version: 0.1
 
-Status: Proposed
+Status: Implemented (R1.2)
 
 ---
 
@@ -14,40 +14,46 @@ It is distinct from the deterministic result objects returned by the Analytics l
 
 ## Result Content
 
-A Research Result must contain:
+A Research Result contains:
 
-- the experiment identity or execution identity;
-- the Research Module identity and version;
+- experiment identity;
+- Research Module identity and version;
 - the research payload produced by the module;
 - provenance describing the input and configuration;
 - reproducibility context, including the random seed when applicable;
-- execution metadata required to interpret the result.
+- a schema/contract version;
+- optional execution metadata needed to interpret the result.
 
-The exact representation of the research payload is module-specific.
+The core contract does not execute a module or assign scientific meaning to the payload.
 
 ## Provenance
 
-Provenance must identify the context required to understand how the result was produced.
+ResearchProvenance identifies the context required to understand how the result was produced.
 
 At minimum it includes:
 
-- input identity or content fingerprint;
-- configuration;
-- module identity and version;
-- relevant schema or contract version;
-- random seed when randomness was used.
+- experiment identifier;
+- module identifier and version;
+- input content fingerprint;
+- immutable experiment configuration;
+- execution context, including the random seed when applicable;
+- result schema version (research-result/v1 by default).
 
-Additional metadata may be recorded without changing the semantic result contract.
+ResearchProvenance.from_experiment(experiment) captures the identity and reproducibility context from the declared Experiment without recomputing or mutating it.
 
-## Immutability
+Execution metadata is separate from provenance: it may contain optional descriptive details such as runtime or environment information. The core does not require timestamps or environment discovery.
 
-Once produced, a Research Result is treated as immutable experimental evidence.
+## Immutability and Payload Boundary
 
-Subsequent interpretation, comparison, rendering, or reporting must not alter the original result.
+ResearchResult and ResearchProvenance are frozen value objects.
+
+Payload and execution metadata accept JSON-compatible scalars, mappings, and sequences. Input structures are defensively copied; nested mappings become read-only and sequences become tuples. Non-string mapping keys, unsupported object types, and non-finite floats are rejected.
+
+This intentionally technology-neutral representation supports structured observations without introducing serialization or scientific-library dependencies.
 
 ## Analytics Separation
 
-A Research Result must not be confused with an Analytics result.
+A Research Result is not an Analytics result.
 
 Analytics results answer deterministic questions about a supplied Dataset, such as frequency, delay, or empirical probability. Research Results describe the outcome of an explicitly defined experimental procedure and include its provenance.
 
@@ -61,16 +67,15 @@ Any statistical significance, model quality, confidence interval, or other inter
 
 ## Serialization
 
-The core result contract does not require a specific serialization format.
-
-Serialization and presentation are application concerns and may be introduced by a later Research Reporting milestone.
+The core result contract does not require a specific serialization format. Serialization and presentation remain application concerns for a later Research Reporting milestone.
 
 ## Verification Expectations
 
-Implementations should verify:
+Tests verify:
 
-- result immutability;
-- preservation of provenance;
-- preservation of random seed when applicable;
+- immutable result and provenance objects;
+- deep immutability and defensive copying of payload and execution metadata;
+- preservation of experiment identity, configuration, input fingerprint, module version, and random seed;
+- rejection of invalid identity fields and unsupported payload values;
 - distinction from Analytics result types;
-- non-mutation during reporting or interpretation.
+- absence of execution, persistence, reporting, or statistical logic in the core result contract.
