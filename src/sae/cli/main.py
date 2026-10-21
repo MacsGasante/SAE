@@ -74,6 +74,7 @@ def _run_report(analysis: str, input_path: Path, output_format: str) -> None:
     else:
         report = build_probability_report(ProbabilityEngine.analyze(dataset))
 
+    renderer: TextReportRenderer | JsonReportRenderer | CsvReportRenderer
     if output_format == "text":
         renderer = TextReportRenderer()
     elif output_format == "json":
