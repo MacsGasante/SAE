@@ -10,6 +10,8 @@ from sae.analytics.frequency.engine import FrequencyEngine
 from sae.analytics.probability.engine import ProbabilityEngine
 from sae.infrastructure.importers.csv_importer import CSVImporter
 from sae.reporting import (
+    CsvReportRenderer,
+    JsonReportRenderer,
     TextReportRenderer,
     build_delay_report,
     build_frequency_report,
@@ -51,11 +53,17 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         help="Path to the official SuperEnalotto CSV dataset.",
     )
+    report_parser.add_argument(
+        "--format",
+        choices=("text", "json", "csv"),
+        default="text",
+        help="Output format (default: text).",
+    )
 
     return parser
 
 
-def _run_report(analysis: str, input_path: Path) -> None:
+def _run_report(analysis: str, input_path: Path, output_format: str) -> None:
     """Import a dataset, run the selected analysis, and render its report."""
     dataset = CSVImporter.import_dataset(input_path)
 
@@ -66,7 +74,15 @@ def _run_report(analysis: str, input_path: Path) -> None:
     else:
         report = build_probability_report(ProbabilityEngine.analyze(dataset))
 
-    print(TextReportRenderer().render(report))
+    renderer: TextReportRenderer | JsonReportRenderer | CsvReportRenderer
+    if output_format == "text":
+        renderer = TextReportRenderer()
+    elif output_format == "json":
+        renderer = JsonReportRenderer()
+    else:
+        renderer = CsvReportRenderer()
+
+    print(renderer.render(report), end="")
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -80,7 +96,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         print("Status: Pre-Alpha")
         print("Analytics: Frequency, Delay, Probability")
     elif args.command == "report":
-        _run_report(args.analysis, args.input)
+        _run_report(args.analysis, args.input, args.format)
 
     return 0
 

@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context
 
@@ -14,32 +14,42 @@ The CLI is an application-facing layer and may consume reporting capabilities, w
 
 ## Decision
 
-Reporting will be introduced as a separate application-facing package.
+Reporting is a separate application-facing package.
 
 The Reporting boundary will:
 
 - consume existing Analytics result objects without changing their contracts;
 - transform analytical results into presentation-neutral report data;
-- keep terminal/text formatting inside dedicated renderers;
+- keep output formatting inside dedicated renderers;
 - keep presentation formatting out of the Kernel and Analytics packages;
-- allow additional renderers or output formats to be added without changing analytical engines;
+- support stable text, JSON, and CSV output formats without changing analytical engines;
 - be consumable by the CLI as the application-facing reporting entry point.
 
-The first C3 implementation will target a stable text report. Other formats, such as JSON or CSV, are deferred until explicitly required by the C3 contract.
+The report model remains presentation-neutral. Its row values are strings, preserving the existing builders' formatted values across output formats.
+
+### Output contracts
+
+- **Text:** title, draw count, then one `label: value` line per report row. The CLI's default format remains text for backward compatibility.
+- **JSON:** one object with `title`, `draw_count`, and `rows`; each row contains `label` and `value`. Output is UTF-8-friendly, indented, deterministic, and newline-terminated. Values remain strings.
+- **CSV:** header `title,draw_count,label,value`; report title and draw count are repeated for each row. An empty report emits one row with empty label and value fields to preserve metadata. CSV uses standard quoting and a newline terminator.
+
+The CLI selects the output format with `sae report <analysis> <input> --format <text|json|csv>`. If omitted, `text` is used.
 
 ## Consequences
 
 ### Positive
 
 - Analytics remain focused on computation and immutable results.
-- Reporting becomes independently testable.
+- Reporting is independently testable.
 - CLI code remains thin and delegates presentation work.
 - Additional output formats can be added without modifying Analytics engines.
+- Consumers can parse JSON and CSV while existing text output remains unchanged.
 
 ### Negative
 
 - A new architectural package is introduced between Analytics and the CLI.
 - Report models and renderers add some indirection compared with formatting directly in the CLI.
+- JSON and CSV expose the presentation-neutral model's string values rather than retyping analytics values.
 
 ## Alternatives
 
@@ -61,3 +71,4 @@ Rejected because the Kernel must remain independent from application-facing pres
 - `docs/architecture/README.md`
 - `src/sae/analytics/`
 - `src/sae/cli/`
+- `src/sae/reporting/`
