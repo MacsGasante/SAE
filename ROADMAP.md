@@ -33,11 +33,13 @@ This document describes the long-term evolution of the project.
   - C3.1 Reporting core ✅
   - C3.2 CLI reporting ✅
   - C3.3 JSON and CSV output formats ✅
-  - C3.4 End-to-end integration and validation — in progress
+  - C3.4 End-to-end integration and validation ✅
 
 ---
 
 ## Research
+
+Planned functional direction after C3 Reporting completion; detailed scope and sequencing have not yet been scheduled.
 
 - Experimental Algorithms
 - Statistical and Probabilistic Models
