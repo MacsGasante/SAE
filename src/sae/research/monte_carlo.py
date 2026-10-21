@@ -6,10 +6,7 @@ import random
 from collections import Counter
 from collections.abc import Mapping
 
-from .execution_context import ExecutionContext
 from .experiment import Experiment
-from .experiment_configuration import ExperimentConfiguration
-from .module import ResearchModule
 from .result import ResearchProvenance, ResearchResult
 
 
@@ -21,11 +18,21 @@ class MonteCarloDrawSimulation:
     The input_data argument must be None because the simulation is self-contained.
     """
 
-    module_id = "sae.research.monte-carlo-draw-simulation"
-    module_version = "1.0.0"
+    _MODULE_ID = "sae.research.monte-carlo-draw-simulation"
+    _MODULE_VERSION = "1.0.0"
     _NUMBER_DOMAIN_MAX = 90
     _NUMBERS_PER_DRAW = 6
     _DEFAULT_DRAW_COUNT = 10_000
+
+    @property
+    def module_id(self) -> str:
+        """Return this module's stable identifier."""
+        return self._MODULE_ID
+
+    @property
+    def module_version(self) -> str:
+        """Return this module's stable version."""
+        return self._MODULE_VERSION
 
     def execute(self, input_data: object, experiment: Experiment) -> ResearchResult:
         """Run the simulation with explicit configuration and random seed."""
@@ -38,8 +45,7 @@ class MonteCarloDrawSimulation:
         if experiment.module_version != self.module_version:
             raise ValueError("Experiment module_version does not match this module.")
 
-        configuration = experiment.configuration.values
-        draw_count = self._read_draw_count(configuration)
+        draw_count = self._read_draw_count(experiment.configuration.values)
         seed = experiment.execution_context.random_seed
         if seed is None:
             raise ValueError("Monte Carlo simulation requires an explicit random_seed.")
@@ -83,7 +89,3 @@ class MonteCarloDrawSimulation:
         if type(value) is not int or value < 1:
             raise ValueError("configuration draw_count must be a positive integer.")
         return value
-
-
-# Keep static protocol checks visible to type checkers without runtime coupling.
-_RESEARCH_MODULE_CONTRACT: type[ResearchModule] = MonteCarloDrawSimulation
