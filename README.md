@@ -59,10 +59,13 @@ Completed milestones:
   * C3.1 — Reporting core
   * C3.2 — CLI reporting
   * C3.3 — JSON and CSV formats
+  * C3.4 — Integration and end-to-end validation
 
-Current focus:
+All C3 Reporting sub-milestones are complete. The end-to-end pipeline is covered by integration tests, and the CLI supports text (default), JSON, and CSV output.
 
-* C3.4 — Reporting integration and end-to-end validation
+Current functional direction:
+
+* Research Modules — planned; detailed scope not yet scheduled
 
 ---
 
@@ -158,7 +161,7 @@ make check
   * C3.1 Reporting core ✅
   * C3.2 CLI reporting ✅
   * C3.3 JSON and CSV formats ✅
-  * C3.4 Integration and end-to-end validation — in progress
+  * C3.4 Integration and end-to-end validation ✅
 * Research Modules
 
 ---
