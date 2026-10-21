@@ -3,6 +3,8 @@ import io
 import json
 from pathlib import Path
 
+import pytest
+
 from sae import __version__
 from sae.cli.main import main
 
@@ -83,6 +85,28 @@ def test_main_report_probability_renders_selected_analysis(tmp_path, capsys) -> 
     assert "Number 7: 0.000000" in output
 
 
+def test_main_report_rejects_missing_input_file(tmp_path, capsys) -> None:
+    missing = tmp_path / "missing.csv"
+
+    with pytest.raises(SystemExit) as exc_info:
+        main(["report", "probability", str(missing)])
+
+    assert exc_info.value.code == 2
+    captured = capsys.readouterr()
+    assert f"file does not exist or is not a file: '{missing}'" in captured.err
+    assert "Traceback" not in captured.err
+
+
+def test_main_report_rejects_directory_as_input(tmp_path, capsys) -> None:
+    with pytest.raises(SystemExit) as exc_info:
+        main(["report", "probability", str(tmp_path)])
+
+    assert exc_info.value.code == 2
+    captured = capsys.readouterr()
+    assert "file does not exist or is not a file" in captured.err
+    assert "Traceback" not in captured.err
+
+
 def test_main_report_json_renders_selected_format(tmp_path, capsys) -> None:
     source = tmp_path / "dataset.csv"
     _write_dataset(source)
@@ -133,7 +157,7 @@ def test_main_report_help_lists_supported_formats(capsys) -> None:
     except SystemExit as exc:
         assert exc.code == 0
     else:
-        raise AssertionError("Expected report help to exit")
+        raise AssertionError("Expected report --help to exit")
 
     captured = capsys.readouterr()
 

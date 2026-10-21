@@ -19,6 +19,17 @@ from sae.reporting import (
 )
 
 
+def _existing_file(value: str) -> Path:
+    """Return an existing regular file path or raise an argparse error."""
+    path = Path(value)
+
+    if not path.is_file():
+        message = f"file does not exist or is not a file: {value!r}"
+        raise argparse.ArgumentTypeError(message)
+
+    return path
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Build the SAE command-line argument parser."""
     parser = argparse.ArgumentParser(
@@ -50,7 +61,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     report_parser.add_argument(
         "input",
-        type=Path,
+        type=_existing_file,
         help="Path to the official SuperEnalotto CSV dataset.",
     )
     report_parser.add_argument(
