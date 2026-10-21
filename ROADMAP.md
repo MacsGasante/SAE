@@ -39,12 +39,33 @@ This document describes the long-term evolution of the project.
 
 ## Research
 
-Planned functional direction after C3 Reporting completion; detailed scope and sequencing have not yet been scheduled.
+### R0 — Research Architecture ✅
 
-- Experimental Algorithms
-- Statistical and Probabilistic Models
-- Machine Learning Research
-- Predictive Model Research
+- Establish Research as an application-level consumer of Kernel/Dataset and Analytics.
+- Define module boundaries, experiment reproducibility, and evidence interpretation.
+- Keep Research results distinct from Analytics results.
+
+### R1 — Research Core
+
+- R1.1 Experiment identity, immutable configuration, and execution context ✅
+- R1.2 Immutable ResearchResult and provenance ✅
+- R1.3 ResearchModule protocol and controlled execution ✅
+
+### R2 — First Concrete Research Module
+
+- Implement a controlled simulation-oriented experiment.
+- Define module-specific input, configuration, seed handling, result payload, and reproducibility tests.
+- Do not introduce a prediction API or betting recommendations.
+
+### R3 — Research Reporting and CLI
+
+- Present Research results and provenance through an explicit reporting boundary.
+- Add CLI integration only after the result and module contracts are stable.
+
+### R4 — Advanced Research
+
+- Evaluate additional statistical, probabilistic, numerical, or machine-learning approaches only when justified by concrete research questions.
+- Keep optional research dependencies behind the Research boundary.
 
 ---
 

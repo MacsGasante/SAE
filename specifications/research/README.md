@@ -16,7 +16,7 @@ The initial research architecture is intentionally technology-neutral. External 
 
 - `experiment.md` — experiment identity, configuration, execution context, and reproducibility requirements.
 - `experiment-context.md` — implemented R1.1 contracts for immutable experiment identity, configuration, and execution context.
-- `research-module.md` — contract for an autonomous research module.
+- `research-module.md` — implemented R1.3 protocol and controlled execution boundary.
 - `result.md` — implemented R1.2 contract for immutable research results and provenance.
 
 ## Architectural Boundary
@@ -37,4 +37,4 @@ Research Modules must not:
 
 ## Status
 
-R0 established the architectural foundation. R1.1 implemented the experiment identity, configuration, and execution context. R1.2 implements immutable research results and explicit provenance. Research Module execution remains a subsequent R1 increment.
+R0 established the architectural foundation. R1.1 implemented experiment identity, immutable configuration, and execution context. R1.2 implemented immutable research results and explicit provenance. R1.3 implements the ResearchModule protocol and validates controlled execution and result provenance. The first concrete research algorithm remains in R2.
