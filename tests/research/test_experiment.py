@@ -5,9 +5,9 @@ from __future__ import annotations
 import pytest
 
 from sae.research import (
+    ExecutionContext,
     Experiment,
     ExperimentConfiguration,
-    ExecutionContext,
 )
 
 
@@ -33,7 +33,10 @@ def test_configuration_is_immutable_at_every_level() -> None:
         configuration.values["options"]["new"] = "value"  # type: ignore[index]
 
 
-@pytest.mark.parametrize("invalid", [object(), {1: "non-string key"}, {"x": float("nan")}])
+@pytest.mark.parametrize(
+    "invalid",
+    [object(), {1: "non-string key"}, {"x": float("nan")}],
+)
 def test_configuration_rejects_non_json_values(invalid: object) -> None:
     with pytest.raises((TypeError, ValueError)):
         ExperimentConfiguration({"parameter": invalid})
