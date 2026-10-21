@@ -16,7 +16,7 @@ Current Version:
 | Kernel     | 🟢 Frozen      |
 | Analytics  | 🟢 Implemented |
 | CLI        | 🟢 Implemented |
-| Research   | ⏳ Planned     |
+| Research   | 🟡 In Progress |
 
 ---
 
@@ -36,8 +36,8 @@ Current Version:
 
 # Analytics Components
 
-| Component          | Status         |
-| ------------------ | -------------- |
+| Component          | Status |
+| ------------------ | ------ |
 | A1 — Frequency     | ✅ Implemented |
 | A2 — Delay         | ✅ Implemented |
 | A3 — Probability   | ✅ Implemented |
@@ -46,14 +46,30 @@ Current Version:
 
 # CLI Milestones
 
-| Milestone           | Status         |
-| ------------------- | -------------- |
-| C1 — Basic Commands | ✅ Implemented |
-| C2 — Import Tools   | ✅ Implemented |
-| C3.1 — Reporting core | ✅ Complete |
-| C3.2 — CLI reporting | ✅ Complete |
-| C3.3 — JSON and CSV formats | ✅ Complete |
-| C3.4 — End-to-end integration | ✅ Complete |
+| Milestone                   | Status         |
+| --------------------------- | -------------- |
+| C1 — Basic Commands         | ✅ Implemented |
+| C2 — Import Tools           | ✅ Implemented |
+| C3.1 — Reporting core       | ✅ Complete    |
+| C3.2 — CLI reporting        | ✅ Complete    |
+| C3.3 — JSON and CSV formats | ✅ Complete    |
+| C3.4 — End-to-end integration | ✅ Complete  |
+
+---
+
+# Research Milestones
+
+| Milestone | Status |
+| --------- | ------ |
+| R0 — Research architecture | ✅ Complete |
+| R1.1 — Experiment and execution context | ✅ Complete |
+| R1.2 — Research result and provenance | ✅ Complete |
+| R1.3 — Module contract and controlled execution | ✅ Implemented |
+| R2 — First concrete research module | ⏳ Planned |
+| R3 — Research reporting and CLI | ⏳ Planned |
+| R4 — Advanced research | ⏳ Planned |
+
+R1.3 provides a technology-neutral ResearchModule protocol and an executor that validates module identity, execution result type, and experiment provenance. It does not implement a concrete algorithm, input fingerprinting, persistence, scheduling, or statistical interpretation.
 
 ---
 
@@ -80,35 +96,24 @@ Current Version:
 
 # Quality Gates
 
-| Gate                    | Status |
-| ----------------------- | ------ |
-| Ruff                    | ✅     |
-| MyPy                    | ✅     |
-| Pytest                  | ✅     |
-| Overall Coverage ≥ 97%  | ✅     |
-| Kernel Coverage = 100%  | ✅     |
-| GitHub Actions          | ✅     |
-| Documentation           | ✅     |
+| Gate                   | Status |
+| ---------------------- | ------ |
+| Ruff                   | ✅     |
+| MyPy                   | ✅     |
+| Pytest                 | ✅     |
+| Overall Coverage ≥ 97% | ✅     |
+| Kernel Coverage = 100% | ✅     |
+| GitHub Actions         | ✅     |
+| Documentation          | ✅     |
 
 ---
 
 # Current Focus
 
-C3 Reporting is complete, including the reporting core, CLI command, text/JSON/CSV renderers, end-to-end integration coverage, and user documentation.
+R1 Research Core is in progress. R1.1, R1.2, and the R1.3 module contract/execution boundary are implemented; the next milestone is R2, the first concrete simulation-oriented Research Module, after R1.3 is merged and its CI is verified.
 
-Next functional direction:
-
-Research Modules are planned, but detailed scope and sequencing have not yet been scheduled.
-
-Engineering focus:
-
-D3 — CI and Coverage has been implemented, including the GitHub Actions
-quality pipeline and the 97% coverage quality gate.
+Engineering focus remains D3 — CI and Coverage, including GitHub Actions automation, the 97% repository-wide coverage gate, and the separately enforced 100% Kernel coverage gate. The full quality pipeline is run through `make check`.
 
 Last update:
 
-C3 Reporting is complete. The `sae report` command supports Frequency, Delay, and Probability analyses with text (default), JSON, and CSV output. Integration tests exercise the CSV-import-to-CLI-output pipeline across all three analyses and all three formats.
-
-D3 CI and Coverage includes GitHub Actions automation, a 97% repository-wide
-coverage gate, and a separately enforced 100% Kernel coverage gate. The full
-quality pipeline is run through `make check`.
+C3 Reporting is complete. The `sae report` command supports Frequency, Delay, and Probability analyses with text (default), JSON, and CSV output. Integration tests exercise the CSV-import-to-CLI-output pipeline across all three analyses and all three formats. Research R1.3 adds controlled module execution and result provenance validation without modifying Kernel or Analytics contracts.
