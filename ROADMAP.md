@@ -70,11 +70,12 @@ This document describes the long-term evolution of the project.
 
 ### R4 — Advanced Research (active)
 
-- **R4.1 — Historical Frequencies vs Theoretical Null Model: methodology proposal in review.**
-  - Research question: are historical marginal frequencies compatible with independent uniform six-of-90 draws?
-  - Pre-specify a maximum absolute standardized frequency-deviation statistic.
-  - Estimate its null distribution by simulating complete six-number draws and use a finite-simulation Monte Carlo p-value.
-  - Specify Dataset fingerprinting, seed/configuration provenance, validation, interpretation limits, and runtime benchmarking before implementation.
+- **R4.1 — Historical Frequencies vs Theoretical Null Model: implementation added; CI review pending.**
+  - Compares historical marginal frequencies with independent uniform six-of-90 draws using the pre-specified maximum absolute standardized-deviation statistic.
+  - Estimates the null distribution through seeded complete-draw simulations and reports the finite-simulation Monte Carlo p-value.
+  - Records the canonical Dataset fingerprint, seed, replicate count, and Research provenance.
+  - CLI: `sae research historical-test <csv> --seed <integer> --replicate-count <positive integer> [--format text|json|csv]`.
+  - No default replicate count is set until a representative historical-data runtime benchmark is completed.
 - Implementation must not modify Kernel or Analytics contracts.
 - Research outputs must not be framed as predictions or betting recommendations.
 ---

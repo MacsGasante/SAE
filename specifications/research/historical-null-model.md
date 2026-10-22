@@ -2,7 +2,7 @@
 
 Version: 0.1
 
-Status: Methodology proposal — review before implementation
+Status: Implemented in the Research layer; validation pending CI review
 
 ---
 
@@ -45,7 +45,7 @@ p_hat = (R + 1) / (B + 1).
 
 The +1 correction avoids a reported p-value of zero and treats the observed statistic consistently with the finite Monte Carlo reference sample. Equality counts as an exceedance. The result must report B, R, the seed, the observed statistic, and p_hat. It must describe p_hat as a Monte Carlo estimate, not an exact probability.
 
-The random seed must be explicitly supplied and recorded. The simulation count B must be an explicit positive configuration value; a default may be selected only after a runtime benchmark. The implementation must not silently change B, seed, or the analysis window.
+The random seed must be explicitly supplied and recorded. The simulation count B must be an explicit positive configuration value and is therefore required on the CLI; no default is supplied until a benchmark on a representative historical Dataset justifies one. The implementation must not silently change B, seed, or the analysis window.
 
 ## Dataset and provenance
 
@@ -74,7 +74,7 @@ The six numbers within each draw are sampled without replacement and therefore a
 - R is an integer in [0, B] and p_hat equals (R + 1)/(B + 1).
 - Invalid input types, empty Datasets, invalid B values, and missing/invalid seeds fail clearly; booleans are not accepted as integers.
 - Tests use small controlled examples and deterministic seeds; the full CI must verify typing, lint, coverage, and regression safety.
-- Runtime and memory must be benchmarked on a representative historical Dataset before choosing the default B. If performance is insufficient, optimize the implementation without changing the declared null model or statistic.
+- No default replicate count is currently defined. Runtime and memory must be benchmarked on a representative historical Dataset before considering one. If performance is insufficient, optimize the implementation without changing the declared null model or statistic.
 
 ## Architectural boundaries
 
@@ -82,11 +82,21 @@ This is a Research-layer experiment. It may consume Kernel Dataset APIs and the 
 
 The result is evidence about the supplied historical sample, not a prediction or betting recommendation.
 
+## Implemented interface
+
+The module is exposed as `sae.research.HistoricalFrequencyNullModel`; its stable module ID is `sae.research.historical-frequency-null-model` and version is `1.0.0`. The CLI entry point is:
+
+```bash
+sae research historical-test storico.csv --seed 1729 --replicate-count 999 --format json
+```
+
+`--seed` and `--replicate-count` are required. Output uses the existing Research reporting boundary and supports `text`, `json`, and `csv`. The observed Dataset fingerprint is verified against the experiment before execution. The existing `sae research simulate` module is unchanged.
+
 ## Acceptance criteria for implementation
 
-1. Implement the statistic and null simulation exactly as specified above.
-2. Record complete input/configuration/seed provenance and the Dataset fingerprint.
-3. Expose the result through the dedicated Research reporting boundary, preserving text/JSON/CSV support.
-4. Add focused unit tests and end-to-end tests for determinism, invariants, validation, and report provenance.
-5. Benchmark runtime before fixing the default replicate count.
-6. Align the README, roadmap, project status, and Research specifications after implementation and verify the pull-request CI.
+1. Implemented: statistic and null simulation follow the pre-specified method.
+2. Implemented: input/configuration/seed provenance and Dataset fingerprint are recorded.
+3. Implemented: output uses the Research reporting boundary and supports text/JSON/CSV.
+4. Implemented: focused unit and CLI tests cover determinism, invariants, validation, and report provenance.
+5. Pending: benchmark runtime on a representative historical Dataset before considering a default replicate count.
+6. Pending: verify the pull-request CI and review the complete change set.

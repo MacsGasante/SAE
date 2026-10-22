@@ -253,3 +253,68 @@ def test_research_simulate_rejects_invalid_numeric_arguments(
 
     assert exc_info.value.code == 2
     assert expected_message in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("output_format", ["text", "json", "csv"])
+def test_research_historical_test_renders_supported_formats(
+    tmp_path, capsys, output_format: str
+) -> None:
+    source = tmp_path / "dataset.csv"
+    _write_dataset(source)
+
+    assert (
+        main(
+            [
+                "research",
+                "historical-test",
+                str(source),
+                "--seed",
+                "17",
+                "--replicate-count",
+                "5",
+                "--format",
+                output_format,
+            ]
+        )
+        == 0
+    )
+    output = capsys.readouterr().out
+    assert output
+
+    if output_format == "json":
+        data = json.loads(output)
+        assert (
+            data["provenance"]["module_id"]
+            == "sae.research.historical-frequency-null-model"
+        )
+        assert data["provenance"]["execution_context"]["random_seed"] == 17
+        assert data["provenance"]["configuration"]["replicate_count"] == 5
+        assert data["payload"]["replicate_count"] == 5
+        assert data["payload"]["draw_count"] == 1
+        assert data["payload"]["monte_carlo_p_value"] == (
+            (data["payload"]["exceedance_count"] + 1) / 6
+        )
+        assert len(data["execution_metadata"]["dataset_fingerprint"]) == 64
+    elif output_format == "csv":
+        records = list(csv.reader(io.StringIO(output)))
+        assert records[0] == ["section", "key", "value"]
+        assert ["payload", "replicate_count", "5"] in records
+        assert ["execution_metadata", "random_seed", "17"] in records
+    else:
+        assert "historical-frequency-null-model" in output
+        assert "Provenance:" in output
+        assert "Payload:" in output
+        assert '"replicate_count": 5' in output
+
+
+def test_research_historical_test_requires_explicit_replicate_count(
+    tmp_path, capsys
+) -> None:
+    source = tmp_path / "dataset.csv"
+    _write_dataset(source)
+
+    with pytest.raises(SystemExit) as exc_info:
+        main(["research", "historical-test", str(source), "--seed", "1"])
+
+    assert exc_info.value.code == 2
+    assert "--replicate-count" in capsys.readouterr().err
