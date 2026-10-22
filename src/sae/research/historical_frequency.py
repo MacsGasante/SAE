@@ -65,9 +65,13 @@ class HistoricalFrequencyNullModel:
     def execute(self, input_data: object, experiment: Experiment) -> ResearchResult:
         """Run the pre-specified frequency-profile test on a historical Dataset."""
         if not isinstance(input_data, Dataset):
-            raise TypeError("HistoricalFrequencyNullModel input_data must be a Dataset.")
+            raise TypeError(
+                "HistoricalFrequencyNullModel input_data must be a Dataset."
+            )
         if input_data.is_empty:
-            raise ValueError("HistoricalFrequencyNullModel requires a non-empty Dataset.")
+            raise ValueError(
+                "HistoricalFrequencyNullModel requires a non-empty Dataset."
+            )
         if not isinstance(experiment, Experiment):
             raise TypeError("experiment must be an Experiment.")
         if experiment.module_id != self.module_id:
@@ -82,7 +86,9 @@ class HistoricalFrequencyNullModel:
         replicate_count = self._read_replicate_count(experiment.configuration.values)
         seed = experiment.execution_context.random_seed
         if seed is None:
-            raise ValueError("Historical frequency test requires an explicit random_seed.")
+            raise ValueError(
+                "Historical frequency test requires an explicit random_seed."
+            )
 
         draw_count = input_data.size
         observed_result = FrequencyEngine.analyze(input_data)
@@ -97,7 +103,9 @@ class HistoricalFrequencyNullModel:
         for _ in range(replicate_count):
             simulated_frequencies = dict.fromkeys(self._NUMBER_DOMAIN, 0)
             for _ in range(draw_count):
-                for number in generator.sample(self._NUMBER_DOMAIN, self._NUMBERS_PER_DRAW):
+                for number in generator.sample(
+                    self._NUMBER_DOMAIN, self._NUMBERS_PER_DRAW
+                ):
                     simulated_frequencies[number] += 1
             simulated_statistic = self._statistic(simulated_frequencies, draw_count)
             if simulated_statistic >= observed_statistic:
@@ -138,8 +146,12 @@ class HistoricalFrequencyNullModel:
                 "algorithm": "python.random.Random.sample",
                 "random_seed": seed,
                 "dataset_fingerprint": fingerprint,
-                "statistic": "maximum absolute standardized marginal-frequency deviation",
-                "null_model": "independent uniform draws of six distinct numbers from 1..90",
+                "statistic": (
+                    "maximum absolute standardized marginal-frequency deviation"
+                ),
+                "null_model": (
+                    "independent uniform draws of six distinct numbers from 1..90"
+                ),
             },
         )
 
@@ -159,5 +171,7 @@ class HistoricalFrequencyNullModel:
         """Validate the number of null-model Monte Carlo replicates."""
         value = configuration.get("replicate_count")
         if type(value) is not int or value < 1:
-            raise ValueError("configuration replicate_count must be a positive integer.")
+            raise ValueError(
+                "configuration replicate_count must be a positive integer."
+            )
         return value
