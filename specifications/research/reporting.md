@@ -20,14 +20,14 @@ The Research reporting package provides deterministic text, JSON, and CSV render
 
 - Text output labels provenance, execution metadata, and payload as distinct sections.
 - JSON output includes title, structured provenance, payload, and execution metadata.
-- CSV output uses `section,key,value` records. Nested mappings and sequences are represented as compact JSON values instead of imposing a statistical schema on arbitrary Research payloads.
+- CSV output uses `section,key,value` records, including a `report,title` record so the report title is not lost. Nested mappings and sequences are represented as compact JSON values instead of imposing a statistical schema on arbitrary Research payloads.
 
 The report provenance includes experiment and module identity, module version, input fingerprint, result schema version, immutable configuration, and execution context including the random seed when present.
 
 ## Boundaries
 
-Research reporting is separate from `sae.reporting`, which continues to present Analytics results. This milestone does not add CLI commands, persistence, new statistical logic, payload-specific visualizations, or dependencies.
+Research reporting is separate from `sae.reporting`, which continues to present Analytics results. This milestone does not add persistence, new statistical logic, payload-specific visualizations, or dependencies. CLI integration is specified separately in `cli.md`.
 
 ## Verification
 
-Tests cover preservation of provenance and payload and the three output formats, including the explicit seed and nested payload values.
+Tests cover preservation of title, provenance, payload, and execution metadata in the three output formats, including the explicit seed and nested payload values.

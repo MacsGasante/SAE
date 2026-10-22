@@ -84,11 +84,12 @@ class CsvResearchReportRenderer:
     """
 
     def render(self, report: ResearchReport) -> str:
-        """Return CSV containing provenance, metadata, and payload entries."""
+        """Return CSV containing the title, provenance, metadata, and payload."""
         data = _report_data(report)
         output = io.StringIO(newline="")
         writer = csv.writer(output, lineterminator="\n")
         writer.writerow(("section", "key", "value"))
+        writer.writerow(("report", "title", data["title"]))
 
         for section in ("provenance", "execution_metadata", "payload"):
             values = data[section]

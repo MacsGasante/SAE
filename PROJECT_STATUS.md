@@ -66,12 +66,16 @@ Current Version:
 | R1.2 — Research result and provenance | ✅ Complete |
 | R1.3 — Module contract and controlled execution | ✅ Complete |
 | R2 — First concrete research module | ✅ Implemented |
-| R3.1 — Research reporting core | ✅ Implemented |
-| R3.2 — Research CLI integration | 🟡 In review |
-| R3.3 — End-to-end integration and validation | ⏳ Planned |
+| R3.1 — Research reporting core | ✅ Complete |
+| R3.2 — Research CLI integration | ✅ Complete |
+| R3.3 — End-to-end integration and validation | 🟡 In progress |
 | R4 — Advanced research | ⏳ Planned |
 
-R2 introduces `MonteCarloDrawSimulation`, a seeded simulation of independent six-number draws. It requires explicit random seed and validates its draw-count configuration. The immutable result reports simulated number frequencies and provenance. It does not consume historical Dataset data, predict official draws, or recommend bets.
+R2 provides `MonteCarloDrawSimulation`, a seeded simulation of independent six-number draws. It requires an explicit random seed, validates its draw-count configuration, and returns an immutable result with provenance. It does not consume historical Dataset data, predict official draws, or recommend bets.
+
+R3.1 adds a dedicated Research reporting model and text, JSON, and CSV renderers. R3.2 exposes the simulation through `sae research simulate`, with an explicit seed, configurable draw count, and the same three output formats. Research reporting remains separate from the Analytics reporting API.
+
+R3.3 validates the end-to-end CLI-to-module-to-result-to-report path, output consistency, reproducibility, provenance, and documentation alignment.
 
 ---
 
@@ -106,16 +110,16 @@ R2 introduces `MonteCarloDrawSimulation`, a seeded simulation of independent six
 | Overall Coverage ≥ 97% | ✅     |
 | Kernel Coverage = 100% | ✅     |
 | GitHub Actions         | ✅     |
-| Documentation          | ✅     |
+| Documentation          | 🟡 R3.3 validation in progress |
 
 ---
 
 # Current Focus
 
-R1 Research Core is complete. R2 introduces the initial reproducible simulation module. R3.1 introduces a separate Research reporting model and text, JSON, and CSV renderers. It preserves provenance, payload, and execution metadata without changing the Analytics reporting API. R3.2 will add CLI integration.
+R3.3 — End-to-end integration, validation, and documentation. The current work adds integration-level assertions for deterministic replay, explicit seed/configuration provenance, and simulation frequency invariants; it also ensures that CSV output includes the report title. These changes must pass the repository CI before R3.3 can be marked complete.
 
-Engineering focus remains D3 — CI and Coverage, including GitHub Actions automation, the 97% repository-wide coverage gate, and the separately enforced 100% Kernel coverage gate. The full quality pipeline is run through `make check`.
+The full quality pipeline is run through `make check`. Local checks are not claimed unless actually executed.
 
 Last update:
 
-C3 Reporting is complete. The `sae report` command supports Frequency, Delay, and Probability analyses with text (default), JSON, and CSV output. Integration tests exercise the CSV-import-to-CLI-output pipeline across all three analyses and all three formats. Research R1.1–R1.3 establish immutable experiment configuration, provenance, and controlled execution; R2 adds a seeded Monte Carlo module behind the Research boundary; R3.1 adds a dedicated reporting layer for Research results. R3.2 adds the seeded Monte Carlo simulation CLI command.
+C3 Reporting is complete. Research R1.1–R1.3 establish immutable experiment configuration, provenance, and controlled execution; R2 adds the seeded Monte Carlo module; R3.1 adds dedicated Research reporting; R3.2 adds the Research simulation CLI. R3.3 is in progress.
