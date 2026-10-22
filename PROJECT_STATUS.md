@@ -10,26 +10,26 @@ Current Version:
 
 # Overall Status
 
-| Area       | Status         |
-| ---------- | -------------- |
+| Area       | Status |
+| ---------- | ------ |
 | Repository | 🟡 Engineering |
-| Kernel     | 🟢 Frozen      |
+| Kernel     | 🟢 Frozen |
 | Analytics  | 🟢 Implemented |
 | CLI        | 🟢 Implemented |
-| Research   | 🟢 R3.3 Complete |
+| Research   | 🟡 R4.1 methodology in review |
 
 ---
 
 # Functional Milestones
 
-| Milestone          | Status         |
-| ------------------ | -------------- |
-| M0                 | ✅ Frozen      |
-| M1.1 — Number      | ✅ Frozen      |
-| M1.2 — Combination | ✅ Frozen      |
-| M1.3 — Builders    | ✅ Frozen      |
-| M1.4 — Domain      | ✅ Frozen      |
-| M1.5 — Dataset     | ✅ Verified    |
+| Milestone          | Status |
+| ------------------ | ------ |
+| M0                 | ✅ Frozen |
+| M1.1 — Number      | ✅ Frozen |
+| M1.2 — Combination | ✅ Frozen |
+| M1.3 — Builders    | ✅ Frozen |
+| M1.4 — Domain      | ✅ Frozen |
+| M1.5 — Dataset     | ✅ Verified |
 | M1.6 — Analytics   | ✅ Implemented |
 
 ---
@@ -46,14 +46,14 @@ Current Version:
 
 # CLI Milestones
 
-| Milestone                     | Status         |
-| ----------------------------- | -------------- |
+| Milestone                     | Status |
+| ----------------------------- | ------ |
 | C1 — Basic Commands           | ✅ Implemented |
 | C2 — Import Tools             | ✅ Implemented |
-| C3.1 — Reporting core         | ✅ Complete    |
-| C3.2 — CLI reporting          | ✅ Complete    |
-| C3.3 — JSON and CSV formats   | ✅ Complete    |
-| C3.4 — End-to-end integration | ✅ Complete    |
+| C3.1 — Reporting core         | ✅ Complete |
+| C3.2 — CLI reporting          | ✅ Complete |
+| C3.3 — JSON and CSV formats   | ✅ Complete |
+| C3.4 — End-to-end integration | ✅ Complete |
 
 ---
 
@@ -69,7 +69,7 @@ Current Version:
 | R3.1 — Research reporting core | ✅ Complete |
 | R3.2 — Research CLI integration | ✅ Complete |
 | R3.3 — End-to-end integration and validation | ✅ Complete |
-| R4 — Advanced research | ⏳ Planned |
+| R4.1 — Historical frequencies vs null model | 🟡 Methodology in review |
 
 R2 provides `MonteCarloDrawSimulation`, a seeded simulation of independent six-number draws. It requires an explicit random seed, validates its draw-count configuration, and returns an immutable result with provenance. It does not consume historical Dataset data, predict official draws, or recommend bets.
 
@@ -77,12 +77,14 @@ R3.1 adds a dedicated Research reporting model and text, JSON, and CSV renderers
 
 R3.3 is complete: the end-to-end CLI-to-module-to-result-to-report path is covered by integration tests for reproducibility, seed/configuration provenance, frequency invariants, and CSV title preservation. The PR and post-merge CI passed.
 
+R4.1 defines a proposed omnibus comparison between historical marginal frequencies and a null model of independent uniform six-of-90 draws. Its methodology is documented for review before implementation; no historical hypothesis test is claimed as implemented.
+
 ---
 
 # Engineering Milestones
 
-| Milestone                       | Status         |
-| ------------------------------- | -------------- |
+| Milestone                       | Status |
+| ------------------------------- | ------ |
 | E1 — Repository Consolidation   | 🟡 In Progress |
 | E2 — Development Infrastructure | 🟡 In Progress |
 
@@ -90,12 +92,12 @@ R3.3 is complete: the end-to-end CLI-to-module-to-result-to-report path is cover
 
 # Kernel Components
 
-| Component   | Status     |
-| ----------- | ---------- |
-| Foundation  | ✅ Frozen  |
-| Collections | ✅ Frozen  |
-| Builders    | ✅ Frozen  |
-| Domain      | ✅ Frozen  |
+| Component   | Status |
+| ----------- | ------ |
+| Foundation  | ✅ Frozen |
+| Collections | ✅ Frozen |
+| Builders    | ✅ Frozen |
+| Domain      | ✅ Frozen |
 | Dataset     | ✅ Verified |
 
 ---
@@ -103,23 +105,23 @@ R3.3 is complete: the end-to-end CLI-to-module-to-result-to-report path is cover
 # Quality Gates
 
 | Gate                   | Status |
-| ---------------------- | ------ |
+| ----------------------- | ------ |
 | Ruff                   | ✅     |
 | MyPy                   | ✅     |
 | Pytest                 | ✅     |
 | Overall Coverage ≥ 97% | ✅     |
-| Kernel Coverage = 100% | ✅     |
+| Kernel Coverage = 100%  | ✅     |
 | GitHub Actions         | ✅     |
-| Documentation          | ✅ R3.3 aligned and validated |
+| Documentation          | 🟡 R4.1 methodology proposal added; implementation pending |
 
 ---
 
 # Current Focus
 
-R3.3 is complete and merged to `main`. End-to-end assertions cover deterministic replay, explicit seed/configuration provenance, and simulation frequency invariants; CSV output preserves the report title. Pull-request CI and post-merge CI passed.
+R4.1 is in methodology review. The immediate goal is to agree on a pre-specified omnibus statistic and a valid Monte Carlo null distribution before implementing the historical-data experiment. Kernel and Analytics contracts remain frozen; no implementation or statistical result is claimed yet.
 
 The full quality pipeline is run through `make check`. Local checks are not claimed unless actually executed.
 
 Last update:
 
-C3 Reporting and Research R0–R3.3 are complete. Research R1.1–R1.3 establish immutable experiment configuration, provenance, and controlled execution; R2 adds the seeded Monte Carlo module; R3.1 adds dedicated Research reporting; R3.2 adds the Research simulation CLI; R3.3 validates integration, reproducibility, output invariants, and documentation. R4 Advanced Research is planned.
+C3 Reporting and Research R0–R3.3 are complete. R4.1 — Historical Frequencies vs Theoretical Null Model — is the active research design proposal; implementation, runtime benchmarking, and end-to-end validation remain pending.
