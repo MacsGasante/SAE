@@ -241,9 +241,7 @@ def _run_historical_test(
         module_id=module.module_id,
         module_version=module.module_version,
         input_fingerprint=fingerprint,
-        configuration=ExperimentConfiguration(
-            {"replicate_count": replicate_count}
-        ),
+        configuration=ExperimentConfiguration({"replicate_count": replicate_count}),
         execution_context=ExecutionContext(random_seed=seed),
     )
     result = execute_research_module(module, dataset, experiment)
@@ -279,9 +277,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     elif args.command == "research" and args.research_command == "simulate":
         _run_research_simulation(args.seed, args.draw_count, args.format)
     elif args.command == "research" and args.research_command == "historical-test":
-        _run_historical_test(
-            args.input, args.seed, args.replicate_count, args.format
-        )
+        _run_historical_test(args.input, args.seed, args.replicate_count, args.format)
 
     return 0
 
