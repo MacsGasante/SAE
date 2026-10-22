@@ -68,11 +68,15 @@ This document describes the long-term evolution of the project.
 - Research reporting remains separate from Analytics reporting.
 - `sae research simulate` exposes the seeded Monte Carlo module with explicit seed, configurable draw count, and text/JSON/CSV output.
 
-### R4 — Advanced Research (planned)
+### R4 — Advanced Research (active)
 
-- First define a concrete research question, hypothesis, and acceptance criteria before choosing an algorithm.
-- Evaluate statistical, probabilistic, numerical, or machine-learning approaches only when justified by that question.
-- Keep optional research dependencies behind the Research boundary; avoid adding an algorithm solely to increase module count.
+- **R4.1 — Historical Frequencies vs Theoretical Null Model: methodology proposal in review.**
+  - Research question: are historical marginal frequencies compatible with independent uniform six-of-90 draws?
+  - Pre-specify a maximum absolute standardized frequency-deviation statistic.
+  - Estimate its null distribution by simulating complete six-number draws and use a finite-simulation Monte Carlo p-value.
+  - Specify Dataset fingerprinting, seed/configuration provenance, validation, interpretation limits, and runtime benchmarking before implementation.
+- Implementation must not modify Kernel or Analytics contracts.
+- Research outputs must not be framed as predictions or betting recommendations.
 ---
 
 # Engineering Roadmap
