@@ -51,7 +51,6 @@ class HistoricalFrequencyNullModel:
     _MODULE_VERSION = "1.0.0"
     _NUMBER_DOMAIN = tuple(range(MIN_NUMBER, MAX_NUMBER + 1))
     _NUMBERS_PER_DRAW = 6
-    _DEFAULT_REPLICATE_COUNT = 999
 
     @property
     def module_id(self) -> str:
@@ -158,7 +157,7 @@ class HistoricalFrequencyNullModel:
     @classmethod
     def _read_replicate_count(cls, configuration: Mapping[str, object]) -> int:
         """Validate the number of null-model Monte Carlo replicates."""
-        value = configuration.get("replicate_count", cls._DEFAULT_REPLICATE_COUNT)
+        value = configuration.get("replicate_count")
         if type(value) is not int or value < 1:
             raise ValueError("configuration replicate_count must be a positive integer.")
         return value
