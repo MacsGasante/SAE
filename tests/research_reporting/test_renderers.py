@@ -62,11 +62,13 @@ def test_text_renderer_labels_sections_and_keeps_provenance() -> None:
     assert '"random_seed": 17' in rendered
 
 
-def test_csv_renderer_preserves_all_report_sections() -> None:
-    rendered = CsvResearchReportRenderer().render(_report())
+def test_csv_renderer_preserves_all_report_sections_including_title() -> None:
+    report = _report()
+    rendered = CsvResearchReportRenderer().render(report)
     records = list(csv.reader(io.StringIO(rendered)))
 
     assert records[0] == ["section", "key", "value"]
+    assert ["report", "title", report.title] in records
     assert ["provenance", "experiment_id", "experiment-42"] in records
     assert ["provenance", "execution_context", '{"random_seed":17}'] in records
     assert [
