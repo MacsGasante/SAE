@@ -53,7 +53,7 @@ The random seed must be explicitly supplied and recorded. The simulation count B
 - All six main numbers in each included draw contribute once to the corresponding marginal frequency.
 - Jolly and Superstar are outside this research question and are excluded.
 - The initial study uses all draws in the supplied Dataset; any future date-window selection must be explicit and separately recorded.
-- The experiment input fingerprint must be a stable SHA-256 digest of a documented canonical representation of the ordered draw identifiers, dates, and six main numbers. It must not depend on Python object identity, repr output, or CSV formatting.
+- The experiment input fingerprint must be SHA-256 over UTF-8 bytes of a canonical JSON array, in Dataset iteration order. Each draw is represented as `[draw.id.to_int(), draw.date.isoformat(), [n.value for n in draw.numbers]]`; JSON uses `ensure_ascii=False` and separators `(',', ':')`, with no trailing newline. This avoids dependence on Python object identity, repr output, or CSV formatting.
 - Result provenance must preserve module identity/version, input fingerprint, configuration, and random seed through the existing Research contracts.
 
 ## Interpretation
