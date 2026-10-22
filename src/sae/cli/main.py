@@ -21,7 +21,9 @@ from sae.research import (
     ExecutionContext,
     Experiment,
     ExperimentConfiguration,
+    HistoricalFrequencyNullModel,
     MonteCarloDrawSimulation,
+    dataset_fingerprint,
     execute_research_module,
 )
 from sae.research_reporting import (
@@ -127,6 +129,34 @@ def build_parser() -> argparse.ArgumentParser:
         default=10_000,
         help="Number of simulated draws (default: 10000).",
     )
+    historical_parser = research_subparsers.add_parser(
+        "historical-test",
+        help="Compare historical frequencies with the uniform six-of-90 null model.",
+    )
+    historical_parser.add_argument(
+        "input",
+        type=_existing_file,
+        help="Path to the official SuperEnalotto CSV dataset.",
+    )
+    historical_parser.add_argument(
+        "--seed",
+        type=_non_negative_int,
+        required=True,
+        help="Explicit non-negative random seed for reproducibility.",
+    )
+    historical_parser.add_argument(
+        "--replicate-count",
+        type=_positive_int,
+        required=True,
+        help="Number of Monte Carlo null-model replicates; required explicitly.",
+    )
+    historical_parser.add_argument(
+        "--format",
+        choices=("text", "json", "csv"),
+        default="text",
+        help="Output format (default: text).",
+    )
+
     simulate_parser.add_argument(
         "--format",
         choices=("text", "json", "csv"),
@@ -193,6 +223,47 @@ def _run_research_simulation(seed: int, draw_count: int, output_format: str) -> 
     print(renderer.render(report), end="")
 
 
+def _run_historical_test(
+    input_path: Path,
+    seed: int,
+    replicate_count: int,
+    output_format: str,
+) -> None:
+    """Run the historical frequency null-model test and render its report."""
+    dataset = CSVImporter.import_dataset(input_path)
+    module = HistoricalFrequencyNullModel()
+    fingerprint = dataset_fingerprint(dataset)
+    experiment = Experiment(
+        experiment_id=(
+            f"historical-frequency-null-seed-{seed}-"
+            f"replicates-{replicate_count}-{fingerprint[:12]}"
+        ),
+        module_id=module.module_id,
+        module_version=module.module_version,
+        input_fingerprint=fingerprint,
+        configuration=ExperimentConfiguration(
+            {"replicate_count": replicate_count}
+        ),
+        execution_context=ExecutionContext(random_seed=seed),
+    )
+    result = execute_research_module(module, dataset, experiment)
+    report = build_research_report(result)
+
+    renderer: (
+        TextResearchReportRenderer
+        | JsonResearchReportRenderer
+        | CsvResearchReportRenderer
+    )
+    if output_format == "text":
+        renderer = TextResearchReportRenderer()
+    elif output_format == "json":
+        renderer = JsonResearchReportRenderer()
+    else:
+        renderer = CsvResearchReportRenderer()
+
+    print(renderer.render(report), end="")
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """Run the SAE command-line interface."""
     parser = build_parser()
@@ -207,6 +278,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         _run_report(args.analysis, args.input, args.format)
     elif args.command == "research" and args.research_command == "simulate":
         _run_research_simulation(args.seed, args.draw_count, args.format)
+    elif args.command == "research" and args.research_command == "historical-test":
+        _run_historical_test(
+            args.input, args.seed, args.replicate_count, args.format
+        )
 
     return 0
 
