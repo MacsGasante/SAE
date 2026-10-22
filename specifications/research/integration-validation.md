@@ -2,7 +2,7 @@
 
 Version: 0.1
 
-Status: In progress
+Status: Complete (merged to main; CI passed)
 
 ---
 
@@ -30,4 +30,4 @@ The Monte Carlo module consumes no historical Dataset. It describes a simulated 
 
 ## Verification
 
-Automated tests exercise the CLI-to-module-to-result-to-report path, reproducibility, seed/configuration provenance, frequency invariants, and CSV title preservation. The milestone is complete only after the GitHub CI quality workflow passes on the pull request and the merge commit.
+Automated tests exercise the CLI-to-module-to-result-to-report path, reproducibility, seed/configuration provenance, frequency invariants, and CSV title preservation. The pull-request CI and post-merge CI quality workflow passed for merge commit `f4094ba13ec20ac6d58f425b44cf74f52b260a12`. R3.3 is complete.

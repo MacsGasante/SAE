@@ -16,7 +16,7 @@ Current Version:
 | Kernel     | 🟢 Frozen      |
 | Analytics  | 🟢 Implemented |
 | CLI        | 🟢 Implemented |
-| Research   | 🟡 In Progress |
+| Research   | 🟢 R3.3 Complete |
 
 ---
 
@@ -68,14 +68,14 @@ Current Version:
 | R2 — First concrete research module | ✅ Implemented |
 | R3.1 — Research reporting core | ✅ Complete |
 | R3.2 — Research CLI integration | ✅ Complete |
-| R3.3 — End-to-end integration and validation | 🟡 In progress |
+| R3.3 — End-to-end integration and validation | ✅ Complete |
 | R4 — Advanced research | ⏳ Planned |
 
 R2 provides `MonteCarloDrawSimulation`, a seeded simulation of independent six-number draws. It requires an explicit random seed, validates its draw-count configuration, and returns an immutable result with provenance. It does not consume historical Dataset data, predict official draws, or recommend bets.
 
 R3.1 adds a dedicated Research reporting model and text, JSON, and CSV renderers. R3.2 exposes the simulation through `sae research simulate`, with an explicit seed, configurable draw count, and the same three output formats. Research reporting remains separate from the Analytics reporting API.
 
-R3.3 validates the end-to-end CLI-to-module-to-result-to-report path, output consistency, reproducibility, provenance, and documentation alignment.
+R3.3 is complete: the end-to-end CLI-to-module-to-result-to-report path is covered by integration tests for reproducibility, seed/configuration provenance, frequency invariants, and CSV title preservation. The PR and post-merge CI passed.
 
 ---
 
@@ -110,16 +110,16 @@ R3.3 validates the end-to-end CLI-to-module-to-result-to-report path, output con
 | Overall Coverage ≥ 97% | ✅     |
 | Kernel Coverage = 100% | ✅     |
 | GitHub Actions         | ✅     |
-| Documentation          | 🟡 R3.3 validation in progress |
+| Documentation          | ✅ R3.3 aligned and validated |
 
 ---
 
 # Current Focus
 
-R3.3 — End-to-end integration, validation, and documentation. The current work adds integration-level assertions for deterministic replay, explicit seed/configuration provenance, and simulation frequency invariants; it also ensures that CSV output includes the report title. These changes must pass the repository CI before R3.3 can be marked complete.
+R3.3 is complete and merged to `main`. End-to-end assertions cover deterministic replay, explicit seed/configuration provenance, and simulation frequency invariants; CSV output preserves the report title. Pull-request CI and post-merge CI passed.
 
 The full quality pipeline is run through `make check`. Local checks are not claimed unless actually executed.
 
 Last update:
 
-C3 Reporting is complete. Research R1.1–R1.3 establish immutable experiment configuration, provenance, and controlled execution; R2 adds the seeded Monte Carlo module; R3.1 adds dedicated Research reporting; R3.2 adds the Research simulation CLI. R3.3 is in progress.
+C3 Reporting and Research R0–R3.3 are complete. Research R1.1–R1.3 establish immutable experiment configuration, provenance, and controlled execution; R2 adds the seeded Monte Carlo module; R3.1 adds dedicated Research reporting; R3.2 adds the Research simulation CLI; R3.3 validates integration, reproducibility, output invariants, and documentation. R4 Advanced Research is planned.

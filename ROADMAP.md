@@ -57,22 +57,22 @@ This document describes the long-term evolution of the project.
 - Explicit configuration, seed handling, immutable result payload, and provenance ✅
 - Reproducibility and input/configuration validation tests ✅
 
-### R3 — Research Reporting and CLI
+### R3 — Research Reporting and CLI ✅
 
 - R3.1 Research reporting model and text/JSON/CSV renderers ✅
 - R3.2 Research CLI integration ✅
-- R3.3 End-to-end integration, validation, and documentation ⏳
-  - Verify reproducibility and provenance through the CLI-to-report pipeline.
-  - Validate result invariants and consistency across text, JSON, and CSV.
-  - Align README, project status, roadmap, and Research specifications with implementation.
-- Keep Research reporting separate from Analytics reporting.
-- Expose the seeded Monte Carlo module through `sae research simulate` with explicit seed, configurable draw count, and text/JSON/CSV output.
+- R3.3 End-to-end integration, validation, and documentation ✅
+  - Verified reproducibility and provenance through the CLI-to-report pipeline.
+  - Added end-to-end assertions for result invariants and seed/configuration provenance.
+  - Preserved the report title in CSV and aligned project documentation.
+- Research reporting remains separate from Analytics reporting.
+- `sae research simulate` exposes the seeded Monte Carlo module with explicit seed, configurable draw count, and text/JSON/CSV output.
 
-### R4 — Advanced Research
+### R4 — Advanced Research (planned)
 
-- Evaluate additional statistical, probabilistic, numerical, or machine-learning approaches only when justified by concrete research questions.
-- Keep optional research dependencies behind the Research boundary.
-
+- First define a concrete research question, hypothesis, and acceptance criteria before choosing an algorithm.
+- Evaluate statistical, probabilistic, numerical, or machine-learning approaches only when justified by that question.
+- Keep optional research dependencies behind the Research boundary; avoid adding an algorithm solely to increase module count.
 ---
 
 # Engineering Roadmap
