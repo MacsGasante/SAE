@@ -6,18 +6,21 @@ from sae.cli.main import main
 
 
 def _run_json(seed: int, draw_count: int, capsys) -> dict[str, object]:
-    assert main(
-        [
-            "research",
-            "simulate",
-            "--seed",
-            str(seed),
-            "--draw-count",
-            str(draw_count),
-            "--format",
-            "json",
-        ]
-    ) == 0
+    assert (
+        main(
+            [
+                "research",
+                "simulate",
+                "--seed",
+                str(seed),
+                "--draw-count",
+                str(draw_count),
+                "--format",
+                "json",
+            ]
+        )
+        == 0
+    )
     return json.loads(capsys.readouterr().out)
 
 
