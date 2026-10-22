@@ -32,6 +32,28 @@ from sae.research_reporting import (
 )
 
 
+def _non_negative_int(value: str) -> int:
+    """Parse a non-negative integer CLI argument."""
+    try:
+        parsed = int(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("must be an integer") from exc
+    if parsed < 0:
+        raise argparse.ArgumentTypeError("must be non-negative")
+    return parsed
+
+
+def _positive_int(value: str) -> int:
+    """Parse a positive integer CLI argument."""
+    try:
+        parsed = int(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("must be an integer") from exc
+    if parsed < 1:
+        raise argparse.ArgumentTypeError("must be positive")
+    return parsed
+
+
 def _existing_file(value: str) -> Path:
     """Return an existing regular file path or raise an argparse error."""
     path = Path(value)
@@ -95,13 +117,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     simulate_parser.add_argument(
         "--seed",
-        type=int,
+        type=_non_negative_int,
         required=True,
         help="Explicit non-negative random seed for reproducibility.",
     )
     simulate_parser.add_argument(
         "--draw-count",
-        type=int,
+        type=_positive_int,
         default=10_000,
         help="Number of simulated draws (default: 10000).",
     )
