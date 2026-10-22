@@ -175,3 +175,13 @@ def test_rejects_incompatible_module_version(small_dataset: Dataset) -> None:
             small_dataset,
             _experiment(small_dataset, module_version="99.0"),
         )
+
+
+def test_dataset_fingerprint_rejects_non_dataset_input() -> None:
+    with pytest.raises(TypeError, match="dataset"):
+        dataset_fingerprint([])  # type: ignore[arg-type]
+
+
+def test_rejects_non_experiment_context(small_dataset: Dataset) -> None:
+    with pytest.raises(TypeError, match="experiment"):
+        HistoricalFrequencyNullModel().execute(small_dataset, object())
