@@ -20,7 +20,8 @@ The initial research architecture is intentionally technology-neutral. External 
 - `result.md` — implemented R1.2 contract for immutable research results and provenance.
 - `monte-carlo.md` — initial R2 module for seeded simulation of independent six-number draws.
 - `reporting.md` — R3.1 Research reporting model and text, JSON, and CSV renderers.
-- `cli.md` — R3.2 seeded Monte Carlo CLI command and output contract.\n- `integration-validation.md` — R3.3 end-to-end validation requirements, output invariants, and documentation alignment.
+- `cli.md` — R3.2 seeded Monte Carlo CLI command and output contract.
+- `integration-validation.md` — R3.3 end-to-end validation requirements, output invariants, and documentation alignment.
 
 ## Architectural Boundary
 
