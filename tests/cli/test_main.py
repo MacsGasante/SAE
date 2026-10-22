@@ -175,6 +175,7 @@ def test_main_unknown_command_exits_with_error() -> None:
     else:
         raise AssertionError("Expected unknown command to exit with error")
 
+
 @pytest.mark.parametrize("output_format", ["text", "json", "csv"])
 def test_research_simulate_renders_all_supported_formats(
     output_format: str, capsys
@@ -204,12 +205,22 @@ def test_research_simulate_renders_all_supported_formats(
     elif output_format == "csv":
         records = list(csv.reader(io.StringIO(output)))
         assert records[0] == ["section", "key", "value"]
-        assert ["provenance", "experiment_id", "monte-carlo-seed-17-draws-25"] in records
-        assert ["provenance", "execution_context", '{"random_seed":17}'] in records
+        assert [
+            "provenance",
+            "experiment_id",
+            "monte-carlo-seed-17-draws-25",
+        ] in records
+        assert [
+            "provenance",
+            "execution_context",
+            '{"random_seed":17}',
+        ] in records
         assert ["payload", "draw_count", "25"] in records
         assert ["execution_metadata", "random_seed", "17"] in records
     else:
-        assert output.startswith("Research Report — sae.research.monte-carlo-draw-simulation")
+        assert output.startswith(
+            "Research Report — sae.research.monte-carlo-draw-simulation"
+        )
         assert "Provenance:" in output
         assert "Execution metadata:" in output
         assert "Payload:" in output
@@ -239,4 +250,3 @@ def test_research_simulate_rejects_invalid_numeric_arguments(
 
     assert exc_info.value.code == 2
     assert expected_message in capsys.readouterr().err
-
