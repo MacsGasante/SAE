@@ -67,7 +67,7 @@ Current Version:
 | R1.3 — Module contract and controlled execution | ✅ Complete |
 | R2 — First concrete research module | ✅ Implemented |
 | R3.1 — Research reporting core | ✅ Implemented |
-| R3.2 — Research CLI integration | ⏳ Planned |
+| R3.2 — Research CLI integration | 🟡 In review |
 | R3.3 — End-to-end integration and validation | ⏳ Planned |
 | R4 — Advanced research | ⏳ Planned |
 
@@ -118,4 +118,4 @@ Engineering focus remains D3 — CI and Coverage, including GitHub Actions autom
 
 Last update:
 
-C3 Reporting is complete. The `sae report` command supports Frequency, Delay, and Probability analyses with text (default), JSON, and CSV output. Integration tests exercise the CSV-import-to-CLI-output pipeline across all three analyses and all three formats. Research R1.1–R1.3 establish immutable experiment configuration, provenance, and controlled execution; R2 adds a seeded Monte Carlo module behind the Research boundary; R3.1 adds a dedicated reporting layer for Research results.
+C3 Reporting is complete. The `sae report` command supports Frequency, Delay, and Probability analyses with text (default), JSON, and CSV output. Integration tests exercise the CSV-import-to-CLI-output pipeline across all three analyses and all three formats. Research R1.1–R1.3 establish immutable experiment configuration, provenance, and controlled execution; R2 adds a seeded Monte Carlo module behind the Research boundary; R3.1 adds a dedicated reporting layer for Research results. R3.2 adds the seeded Monte Carlo simulation CLI command.
