@@ -61,11 +61,13 @@ Completed milestones:
   * C3.3 — JSON and CSV formats
   * C3.4 — Integration and end-to-end validation
 
-All C3 Reporting sub-milestones are complete. The end-to-end pipeline is covered by integration tests, and the CLI supports text (default), JSON, and CSV output.
+All C3 Reporting sub-milestones are complete. The end-to-end pipeline is covered by integration tests, and the Analytics CLI supports text (default), JSON, and CSV output.
+
+Research is now implemented through the initial Research core, a seeded Monte Carlo simulation module, a dedicated reporting boundary, and the `sae research simulate` CLI command. Research output supports text, JSON, and CSV while preserving experiment provenance and execution metadata. R3.3 is validating the complete integration path and aligning documentation.
 
 Current functional direction:
 
-* Research Modules — planned; detailed scope not yet scheduled
+* R3.3 — Research end-to-end integration, validation, and documentation
 
 ---
 
