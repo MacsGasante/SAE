@@ -180,18 +180,21 @@ def test_main_unknown_command_exits_with_error() -> None:
 def test_research_simulate_renders_all_supported_formats(
     output_format: str, capsys
 ) -> None:
-    assert main(
-        [
-            "research",
-            "simulate",
-            "--seed",
-            "17",
-            "--draw-count",
-            "25",
-            "--format",
-            output_format,
-        ]
-    ) == 0
+    assert (
+        main(
+            [
+                "research",
+                "simulate",
+                "--seed",
+                "17",
+                "--draw-count",
+                "25",
+                "--format",
+                output_format,
+            ]
+        )
+        == 0
+    )
 
     output = capsys.readouterr().out
     assert output
