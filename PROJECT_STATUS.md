@@ -16,7 +16,7 @@ Current Version:
 | Kernel     | 🟢 Frozen |
 | Analytics  | 🟢 Implemented |
 | CLI        | 🟢 Implemented |
-| Research   | 🟡 R4.1 methodology in review |
+| Research   | 🟡 R4.1 implementation awaiting CI verification |
 
 ---
 
@@ -69,7 +69,7 @@ Current Version:
 | R3.1 — Research reporting core | ✅ Complete |
 | R3.2 — Research CLI integration | ✅ Complete |
 | R3.3 — End-to-end integration and validation | ✅ Complete |
-| R4.1 — Historical frequencies vs null model | 🟡 Methodology in review |
+| R4.1 — Historical frequencies vs null model | 🟡 Implemented; CI/benchmark review pending |
 
 R2 provides `MonteCarloDrawSimulation`, a seeded simulation of independent six-number draws. It requires an explicit random seed, validates its draw-count configuration, and returns an immutable result with provenance. It does not consume historical Dataset data, predict official draws, or recommend bets.
 
@@ -77,7 +77,7 @@ R3.1 adds a dedicated Research reporting model and text, JSON, and CSV renderers
 
 R3.3 is complete: the end-to-end CLI-to-module-to-result-to-report path is covered by integration tests for reproducibility, seed/configuration provenance, frequency invariants, and CSV title preservation. The PR and post-merge CI passed.
 
-R4.1 defines a proposed omnibus comparison between historical marginal frequencies and a null model of independent uniform six-of-90 draws. Its methodology is documented for review before implementation; no historical hypothesis test is claimed as implemented.
+R4.1 now includes `HistoricalFrequencyNullModel`, a seeded Monte Carlo test comparing historical marginal frequencies against independent uniform six-of-90 draws. It reports the maximum absolute standardized deviation, exceedance count, finite-simulation p-value, observed frequencies, canonical Dataset fingerprint, seed, replicate count, and provenance. The CLI supports text, JSON, and CSV. The replicate count is required explicitly; no default is set until a representative historical Dataset benchmark is completed. CI verification is pending.
 
 ---
 
@@ -112,16 +112,16 @@ R4.1 defines a proposed omnibus comparison between historical marginal frequenci
 | Overall Coverage ≥ 97% | ✅     |
 | Kernel Coverage = 100%  | ✅     |
 | GitHub Actions         | ✅     |
-| Documentation          | 🟡 R4.1 methodology proposal added; implementation pending |
+| Documentation          | 🟡 R4.1 implementation and methodology updated; CI verification pending |
 
 ---
 
 # Current Focus
 
-R4.1 is in methodology review. The immediate goal is to agree on a pre-specified omnibus statistic and a valid Monte Carlo null distribution before implementing the historical-data experiment. Kernel and Analytics contracts remain frozen; no implementation or statistical result is claimed yet.
+R4.1 implementation is in review. The historical-data test uses a pre-specified omnibus statistic and a seeded Monte Carlo null distribution. Kernel and Analytics contracts remain unchanged. No conclusion about the official historical Dataset is claimed until the CLI is run on that Dataset and its result is reviewed.
 
 The full quality pipeline is run through `make check`. Local checks are not claimed unless actually executed.
 
 Last update:
 
-C3 Reporting and Research R0–R3.3 are complete. R4.1 — Historical Frequencies vs Theoretical Null Model — is the active research design proposal; implementation, runtime benchmarking, and end-to-end validation remain pending.
+C3 Reporting and Research R0–R3.3 are complete. R4.1 — Historical Frequencies vs Theoretical Null Model — has an initial implementation and CLI integration; CI verification and a representative-data runtime benchmark remain pending.
