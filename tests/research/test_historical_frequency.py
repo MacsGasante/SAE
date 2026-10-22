@@ -107,9 +107,7 @@ def test_test_is_reproducible_and_records_statistical_invariants(
     assert sum(frequencies.values()) == 6 * small_dataset.size
     assert payload["replicate_count"] == 40
     assert 0 <= payload["exceedance_count"] <= 40
-    assert payload["monte_carlo_p_value"] == (
-        (payload["exceedance_count"] + 1) / 41
-    )
+    assert payload["monte_carlo_p_value"] == ((payload["exceedance_count"] + 1) / 41)
     assert payload["observed_max_absolute_standardized_deviation"] >= 0
     assert first.provenance.execution_context.random_seed == 42
     assert first.provenance.input_fingerprint == dataset_fingerprint(small_dataset)
