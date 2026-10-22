@@ -65,7 +65,7 @@ All C3 Reporting sub-milestones are complete. The end-to-end pipeline is covered
 
 Research R0–R3.3 are complete: the initial Research core, seeded Monte Carlo simulation, dedicated reporting boundary, `sae research simulate` CLI, and end-to-end integration validation are implemented. Research output supports text, JSON, and CSV while preserving experiment provenance and execution metadata.
 
-R4.1 introduces the first historical-data research test: it compares the observed marginal number-frequency profile with a null model of independent uniform six-of-90 draws. The test uses a pre-specified maximum absolute standardized deviation and seeded Monte Carlo replicates. It is available as `sae research historical-test <csv> --seed <integer> --replicate-count <positive integer> [--format text|json|csv]`. The replicate count is explicit because no default will be selected before a representative historical-data runtime benchmark. Results assess only compatibility of the marginal frequency profile; they do not predict future draws or recommend bets. CI verification is pending.
+R4.1 introduces the first historical-data research test: it compares the observed marginal number-frequency profile with a null model of independent uniform six-of-90 draws. The test uses a pre-specified maximum absolute standardized deviation and seeded Monte Carlo replicates. It is available as `sae research historical-test <csv> --seed <integer> --replicate-count <positive integer> [--format text|json|csv]`. The replicate count is explicit because no default will be selected before a representative historical-data runtime benchmark. Results assess only compatibility of the marginal frequency profile; they do not predict future draws or recommend bets. R4.1 is merged and the post-merge CI passed. Runtime benchmarking on a representative historical Dataset remains pending before a default replicate count is considered.
 
 ---
 
@@ -162,7 +162,7 @@ make check
   * C3.2 CLI reporting ✅
   * C3.3 JSON and CSV formats ✅
   * C3.4 Integration and end-to-end validation ✅
-* R4.1 Historical frequency vs null-model research — implementation in review
+* R4.1 Historical frequency vs null-model research — implemented; representative-data benchmark pending
 
 ---
 

@@ -70,12 +70,12 @@ This document describes the long-term evolution of the project.
 
 ### R4 — Advanced Research (active)
 
-- **R4.1 — Historical Frequencies vs Theoretical Null Model: implementation added; CI review pending.**
+- **R4.1 — Historical Frequencies vs Theoretical Null Model: implementation merged; CI green.**
   - Compares historical marginal frequencies with independent uniform six-of-90 draws using the pre-specified maximum absolute standardized-deviation statistic.
   - Estimates the null distribution through seeded complete-draw simulations and reports the finite-simulation Monte Carlo p-value.
   - Records the canonical Dataset fingerprint, seed, replicate count, and Research provenance.
   - CLI: `sae research historical-test <csv> --seed <integer> --replicate-count <positive integer> [--format text|json|csv]`.
-  - No default replicate count is set until a representative historical-data runtime benchmark is completed.
+  - Remaining: benchmark runtime on a representative historical Dataset before deciding whether to define a default replicate count.
 - Implementation must not modify Kernel or Analytics contracts.
 - Research outputs must not be framed as predictions or betting recommendations.
 ---
