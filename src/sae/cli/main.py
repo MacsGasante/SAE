@@ -159,9 +159,7 @@ def _run_report(analysis: str, input_path: Path, output_format: str) -> None:
     print(renderer.render(report), end="")
 
 
-def _run_research_simulation(
-    seed: int, draw_count: int, output_format: str
-) -> None:
+def _run_research_simulation(seed: int, draw_count: int, output_format: str) -> None:
     """Execute and render a reproducible Monte Carlo research experiment."""
     if seed < 0:
         raise ValueError("seed must be a non-negative integer.")
