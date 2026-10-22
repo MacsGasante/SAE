@@ -60,9 +60,10 @@ This document describes the long-term evolution of the project.
 ### R3 — Research Reporting and CLI
 
 - R3.1 Research reporting model and text/JSON/CSV renderers ✅
-- R3.2 Research CLI integration ⏳
+- R3.2 Research CLI integration ✅
 - R3.3 End-to-end integration, validation, and documentation ⏳
 - Present Research results and provenance through an explicit reporting boundary.
+- Expose the seeded Monte Carlo module through `sae research simulate` with explicit seed, configurable draw count, and text/JSON/CSV output.
 - Add CLI integration only after the result and module contracts are stable.
 
 ### R4 — Advanced Research
