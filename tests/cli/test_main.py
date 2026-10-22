@@ -174,3 +174,69 @@ def test_main_unknown_command_exits_with_error() -> None:
         assert exc.code == 2
     else:
         raise AssertionError("Expected unknown command to exit with error")
+
+@pytest.mark.parametrize("output_format", ["text", "json", "csv"])
+def test_research_simulate_renders_all_supported_formats(
+    output_format: str, capsys
+) -> None:
+    assert main(
+        [
+            "research",
+            "simulate",
+            "--seed",
+            "17",
+            "--draw-count",
+            "25",
+            "--format",
+            output_format,
+        ]
+    ) == 0
+
+    output = capsys.readouterr().out
+    assert output
+
+    if output_format == "json":
+        data = json.loads(output)
+        assert data["provenance"]["execution_context"]["random_seed"] == 17
+        assert data["provenance"]["configuration"]["draw_count"] == 25
+        assert data["payload"]["draw_count"] == 25
+        assert data["execution_metadata"]["random_seed"] == 17
+    elif output_format == "csv":
+        records = list(csv.reader(io.StringIO(output)))
+        assert records[0] == ["section", "key", "value"]
+        assert ["provenance", "experiment_id", "monte-carlo-seed-17-draws-25"] in records
+        assert ["provenance", "execution_context", '{"random_seed":17}'] in records
+        assert ["payload", "draw_count", "25"] in records
+        assert ["execution_metadata", "random_seed", "17"] in records
+    else:
+        assert output.startswith("Research Report — sae.research.monte-carlo-draw-simulation")
+        assert "Provenance:" in output
+        assert "Execution metadata:" in output
+        assert "Payload:" in output
+        assert '"random_seed": 17' in output
+
+
+def test_research_simulate_requires_explicit_seed() -> None:
+    with pytest.raises(SystemExit) as exc_info:
+        main(["research", "simulate", "--draw-count", "10"])
+
+    assert exc_info.value.code == 2
+
+
+@pytest.mark.parametrize(
+    ("arguments", "expected_message"),
+    [
+        (["--seed", "-1"], "must be non-negative"),
+        (["--seed", "1", "--draw-count", "0"], "must be positive"),
+        (["--seed", "invalid"], "must be an integer"),
+    ],
+)
+def test_research_simulate_rejects_invalid_numeric_arguments(
+    arguments: list[str], expected_message: str, capsys
+) -> None:
+    with pytest.raises(SystemExit) as exc_info:
+        main(["research", "simulate", *arguments])
+
+    assert exc_info.value.code == 2
+    assert expected_message in capsys.readouterr().err
+
